@@ -15,6 +15,7 @@ _Käsittelylaitos voi:_
 - nähdä ja muokata tyhjien lavapaikkojen määrät
 - nähdä ja muokata **oma** varastointihinta per lava **(muuttuuko kerran kuukaudessa vai useimmin)**
 - laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista
+- tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
 - **Ei saa nähdä mitään tietoja kuljetusliikkeistä**
 
 
@@ -25,7 +26,8 @@ _Kuljetusliike voi:_
 - muokata oman varaston saldoa
 - nähdä montako **vapaata** lavaa käsittelylaitoksen varastossa on ja **varata** niitä
 - nähdä ja muokata **oma** varastointihinta per lava **(muuttuuko kerran kuukaudessa vai useimmin)**
-- laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista 
+- laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista
+- tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
 
 #### Käyttäjätarinat
 
@@ -33,6 +35,7 @@ _Kuljetusliike voi:_
 |---|---|---|
 |Yritys |Haluaa kirjautua järjestelmään | Näkee käsittelylaitoksen ja kuljetusliikkeiden varastotietoja|
 |Yritys |Haluaa nähdä varaston historiaa | Voi seurata paljonko keräysvälineitä on ollut ja missä |
+|Käsittelylaitos |Haluaa nähdä yhteenvedon | Pystyy laskuttamaan yritystä|
 |Käsittelylaitos| Haluaa kirjautua järjestelmään | Näkee ja pääsee muokkaamaan varastotietoja|
 |Käsittelylaitos| Haluaa nähdä ja muokata lavasäilytyshinta | Pystyy laskuttamaan yritystä ajantasaisesti |
 |Käsittelylaitos | Näkee omia varastotietoja | Pystyy laskuttamaan yritystä |
@@ -40,5 +43,6 @@ _Kuljetusliike voi:_
 |Kuljetusliike | Näkee omia varastotietoja | Pystyy laskuttamaan yritystä |
 |Kuljetusliike | Haluaa nähdä käsittelylaitoksen varastossa olevat vapaat lavat | Pysty varaamaan lavat | 
 |Kuljetusliike | Haluaa varata tyhjiä lavoja | Voi kuljettaa **kokonaisen** kuorman omaan varastoon | 
+|Kuljetusliike |Haluaa nähdä yhteenvedon | Pystyy laskuttamaan yritystä|
 |Kuljetusliike | Haluaa nähdä ja muokata lavasäilytyshinta | Pystyy laskuttamaan yritystä ajantasaisesti |
 | | | | 
