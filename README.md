@@ -6,6 +6,7 @@ _Yritys (Admin) voi:_
 
 - nähdä **missä** varastossa lavat ovat (käsittelylaitos/kuljetusliike)
 - nähdä **montako** lavaa jokaisessa varastossa on ja **kauanko** ne siellä säilytetään.
+- muokata lavapaikkahintoja
 
 
 _Käsittelylaitos voi:_
@@ -13,7 +14,7 @@ _Käsittelylaitos voi:_
 - nähdä montako tyhjiä/ varattuja lavoja omassa varastossa on
 - muokata oman varaston saldoa
 - nähdä ja muokata tyhjien lavapaikkojen määrät
-- nähdä ja muokata **oma** varastointihinta per lava **(muuttuuko kerran kuukaudessa vai useimmin)**
+- nähdä ja **muokata(?) oma** varastointihinta per lava **(muuttuuko kerran kuukaudessa vai useimmin)**
 - laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista
 - tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
 - **Ei saa nähdä mitään tietoja kuljetusliikkeistä**
@@ -25,7 +26,7 @@ _Kuljetusliike voi:_
 - nähdä montako lavaa omassa varastossa on
 - muokata oman varaston saldoa
 - nähdä montako **vapaata** lavaa käsittelylaitoksen varastossa on ja **varata** niitä
-- nähdä ja muokata **oma** varastointihinta per lava **(muuttuuko kerran kuukaudessa vai useimmin)**
+- nähdä **oma** varastointihinta per lava ** (muuttuuko kerran kuukaudessa vai useimmin)**
 - laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista
 - tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
 
