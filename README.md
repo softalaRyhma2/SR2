@@ -161,8 +161,9 @@ käynnistämiseen tai käyttöön liittyy joitain muita toimenpiteitä tai toimi
 
 Usko tai älä, tulet tarvitsemaan tätä itsekin, kun tauon jälkeen palaat
 järjestelmän pariin !
--->
+
 
 Back end sovellus käynnistyy komentorivillä komennolla "./mvnw" osoitteessa "localhost:8080" ja front end -sovellus käynnistyy komennolla "npm start" osoitteessa "localhost:"
 
 Sovellus on käytettävissä myös osoitteessa: "tähän tulee heroku tms. osoite"
+-->
