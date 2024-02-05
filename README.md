@@ -13,6 +13,11 @@ tekniikoita käytetään ja mitä konkreettisesti on valmiina, kun projekti pä�
     -   Palvelinpuolen ratkaisut ja teknologiat (esim. palvelinteknologia, mikä tietokantajärjestelmä on käytössä)
     -   Käyttöliittymäratkaisut ja teknologiat (esim. päätelaitteet: puhelin,
     täppäri, desktop)
+    
+Web-sovelluksen tarkoituksena on antaa yritykselle, kuljetusliikkeille ja käsittelylaitokselle yhteinen sovellus, jonka kautta voidaan hallinnoida, varata ja laskuttaa akku- ja paristokierrätyksen tarvittavia lavoja. Ennen tätä sovellusta eri toimijoilla on ollut käytössä vaihtelevia tapoja tehdä näitä toimintoja. Projektin tarkoituksena on tehdä asiakkaalle prototyyppi. 
+Sovelluksen tekemiseen käytetään JHipsteriä -kehitystyökalu, joka tarjoaa mm. valmiin käyttäjänhallinnan, tietokantarajapinnat sekä tietoturvan.
+
+Sovelluksessa on palvelinpuolella käytössä Spring Boot ja kehitysvaiheessa käytössä on H2-tietokanta. Käyttöliittymäratkaisuna on React TypeScriptillä ja sovellusta on tarkoitus käyttää pääasiallisesti tietokoneella, mutta sen skaalautuvuus on suunniteltu siten, että sitä voi käyttää myös mobiililaitteella. 
 
 ## Järjestelmän määrittely
 
@@ -21,6 +26,7 @@ toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, ja ku
 käyttäjäryhmät.
 
 -   Lyhyt kuvaus käyttäjäryhmistä (rooleista)
+Sovelluksen käyttäjät: Yritys, Käsittelylaitos, Kuljetusliikkeet 1-4
 -   Käyttäjäroolit ja roolien tarvitsemat toiminnot, esim. käyttötapauskaaviona
     (use case diagram) tai käyttäjätarinoina.
 -   Lyhyt kuvaus käyttötapauksista tai käyttäjätarinat
@@ -156,3 +162,7 @@ käynnistämiseen tai käyttöön liittyy joitain muita toimenpiteitä tai toimi
 Usko tai älä, tulet tarvitsemaan tätä itsekin, kun tauon jälkeen palaat
 järjestelmän pariin !
 -->
+
+Back end sovellus käynnistyy komentorivillä komennolla "./mvnw" osoitteessa "localhost:8080" ja front end -sovellus käynnistyy komennolla "npm start" osoitteessa "localhost:"
+
+Sovellus on käytettävissä myös osoitteessa: "tähän tulee heroku tms. osoite"
