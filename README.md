@@ -88,9 +88,10 @@ _Kuljetusliike voi:_
 |Kuljetusliike |Haluaa nähdä yhteenvedon | Pystyy laskuttamaan yritystä|
 |Kuljetusliike | Haluaa nähdä ja muokata lavasäilytyshinta | Pystyy laskuttamaan yritystä ajantasaisesti |
 | | | | 
-<!--
-## Tietokanta
 
+
+## Tietokanta
+<!--
 Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
 kuvataan käsitekaaviolla. Käsitemalliin sisältyy myös taulujen välisten viiteyhteyksien ja avainten
 määritykset. Tietokanta kuvataan käyttäen jotain kuvausmenetelmää, joko ER-kaaviota ja UML-luokkakaaviota.
@@ -98,16 +99,65 @@ määritykset. Tietokanta kuvataan käyttäen jotain kuvausmenetelmää, joko ER
 Lisäksi kukin järjestelmän tietoelementti ja sen attribuutit kuvataan
 tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elementin (taulun) ja niiden
 attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
+-->
+## Tietohakemisto
 
-> ### _Tilit_
-> _Tilit-taulu sisältää käyttäjätilit. Käyttäjällä voi olla monta tiliä. Tili kuuluu aina vain yhdelle käyttäjälle._
+> ### _Company_
+> _Company-taulu sisältää järjestelmää käyttävän organisaation tiedot. Organisaatio voi olla: yritys, käsittelylaitos ja kuljetusliike._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> id | int PK | Tilin id
-> nimimerkki | varchar(30) |  Tilin nimimerkki
-> avatar | int FK | Tilin avatar, viittaus [avatar](#Avatar)-tauluun
-> kayttaja | int FK | Viittaus käyttäjään [käyttäjä](#Kayttaja)-taulussa
+> companyId | Long PK | Organisaation id-tunniste
+> companyName | varchar(50) | Organisaation nimi
+
+> ### _User_
+> _User-taulu sisältää järjestelmää käyttävän käyttäjän tiedot. Käyttäjä liittyy organisaatioon. Yksi käyttäjä voi kulua vain yhteen organisaatioon, mutta organisaatiossa voi olla useampi käyttäjä. Eri organisaatioiden käyttäjillä on eri käyttöoikeudet_
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> userId | Long PK | Käyttäjän id-tunniste.
+> companyId | int FK | Organisaation, johon käyttäjä kuluu id-tunniste. Viittaus [_company_](#company)-tauluun.
+> userName | varchar(50) | Käyttäjänimi.
+> userPassword | varchar(50) | Käyttäjän salasana.
+
+> ### _Invoice_
+> _Invoice-taulu sisältää laskutustiedot._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> invoiceId | Long PK | Laskun id-tunniste
+> companyId | int FK | Organisaation id-tunniste, viittaus [_company_](#company)-tauluun.
+> totalSum | decimal(5,2) | Laskun loppusumma
+> invoiceDate | Date | Laskun päivämäärä
+
+> ### _Stock_
+> _Stock-taulu sisältää varastotiedot. Varasto kuuluu vain yhdelle yritykselle (käsittelylaitos/kuljetusliike)._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> stockId | Long PK | Varastotietojen rivin id-tunniste.
+> invoiceId | int FK | Laskun id, viittaus  [_invoice_](#invoice)-tauluun.
+> quantity | int |  Varaston kokonaislavamäärä.
+> available | int | Varaston varattavissa oleva lavamäärä.
+> price | decimal(5,2) | Varastointihinta per päivä.
+> date | Date | Varastoinnin päivämäärä.
+
+> ### _Reservation_
+> _Reservation-taulu sisältää tietyn kuljetusliikkeen/käyttäjän käsittelylaitokselta tekemän varauksen tietoja, kuten varattu lavamäärä, varauspäivämäärä, onko varaus noudettu. Kun varaus on noudettu käsittelylaitokselta, lavamäärä siirtyy kuljetusliikkeen varastoon._
+>
+> Kenttä | Tyyppi | Kuvaus |
+> ---|---|---|
+> reservationId | Long PK | Varauksen id-tunniste |
+> stockId | int FK | Laskun id-tunniste |
+> companyId | int FK | Varausta tehneen kuljetusliikkeen id-tunniste, viittaus [_company_](#company)-tauluun|
+> reservedQuantity | int | Varattu lavamäärä |
+> reservationDate | Date | Varauksen päivämäärä |
+> isPickedUp | Boolean | Tieto, onko varaus noudettu, oletuksena False |
+
+
+<!--
+
+
 
 ## Tekninen kuvaus
 
