@@ -1,9 +1,9 @@
 # SR2
 
 Tiimi: [Bozic Zorana](https://github.com/zokaas), [Lairi Piia](https://github.com/piialairi), [Martinonyte Dovile](https://github.com/dovile-mart), [Montonen Joonas](https://github.com/F0rsu), [Muittari Samuel](https://github.com/samuelmuittari), [Rautiainen Aleksis](https://github.com/aleraut), [Rusi Romeo](https://github.com/romeorusi).
-<!--
-## Johdanto
 
+## Johdanto
+<!--
 Johdantoon kirjoitetaan lyhyt, ytimekäs kuvaus siitä, mikä on projektin aihe,
 kuka on asiakas (käyttäjä), mitä hän haluaa ja saa järjestelmältä, mitä
 tekniikoita käytetään ja mitä konkreettisesti on valmiina, kun projekti päättyy.
@@ -93,6 +93,9 @@ _Kuljetusliike voi:_
 
 
 ## Tietokanta
+#### Luokkakaavio
+![batteryV2-luokkakaavio drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/e891cb36-1515-4cb8-ac70-edafe5854788)
+<!-- #### Javakaavio -->
 <!--
 Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
 kuvataan käsitekaaviolla. Käsitemalliin sisältyy myös taulujen välisten viiteyhteyksien ja avainten
