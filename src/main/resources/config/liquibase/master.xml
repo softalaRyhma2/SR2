@@ -27,5 +27,5 @@
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
         <include file="classpath:config/liquibase/changelog/20240208_add_company_id_to_user.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20240208ç_add_user_id_to_reservation.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20240208_add_user_id_to_reservation.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
