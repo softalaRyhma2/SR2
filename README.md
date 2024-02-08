@@ -47,18 +47,17 @@ Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
 
 _Yritys (Admin) voi:_
 
-- nähdä **missä** varastossa lavat ovat (käsittelylaitos/kuljetusliike)
-- nähdä **montako** lavaa jokaisessa varastossa on ja **kauanko** ne siellä säilytetään.
-- muokata lavapaikkahintoja
-
+- nähdä käsittelylaitoksen ja kuljetusliikkeen varastosaldot ja muokata niitä.
+- muokata käsittelylaitoksen ja kuljetusliikkeen lavapaikkahintoja.
+- nähdä käsittelylaitoksen ja kuljetusliikkeen laskuhistoriat.
+- nähdä käsittelylaitoksen ja kuljetusliikkeen organisaatiotietoja.
 
 _Käsittelylaitos voi:_
 
-- nähdä montako tyhjiä/ varattuja lavoja omassa varastossa on
-- muokata oman varaston saldoa
-- nähdä ja muokata tyhjien lavapaikkojen määrät
-- nähdä ja **muokata(?) oma** varastointihinta per lava **(muuttuuko kerran kuukaudessa vai useimmin)**
-- laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista
+- nähdä oman varaston tyhjät ja varatut lavat.
+- muokata oman varaston saldoa.
+- nähdä oma varastointihinta per lava.
+- laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista.
 - tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
 - **Ei saa nähdä mitään tietoja kuljetusliikkeistä**
 
@@ -66,11 +65,10 @@ _Käsittelylaitos voi:_
 
 _Kuljetusliike voi:_
 
-- nähdä montako lavaa omassa varastossa on
-- muokata oman varaston saldoa
-- nähdä montako **vapaata** lavaa käsittelylaitoksen varastossa on ja **varata** niitä
-- nähdä **oma** varastointihinta per lava ** (muuttuuko kerran kuukaudessa vai useimmin)**
-- laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista
+- nähdä ja muokata oman varaston saldoa.
+- nähdä montako varattavissa olevaa lavaa käsittelylaitoksen varastossa on, varata niitä ja **merkata noudetuksi**.
+- nähdä oma varastointihinta per lava.
+- laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista.
 - tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
 
 #### Käyttäjätarinat
@@ -81,14 +79,14 @@ _Kuljetusliike voi:_
 |Yritys |Haluaa nähdä varaston historiaa | Voi seurata paljonko keräysvälineitä on ollut ja missä |
 |Käsittelylaitos |Haluaa nähdä yhteenvedon | Pystyy laskuttamaan yritystä|
 |Käsittelylaitos| Haluaa kirjautua järjestelmään | Näkee ja pääsee muokkaamaan varastotietoja|
-|Käsittelylaitos| Haluaa nähdä ja muokata lavasäilytyshinta | Pystyy laskuttamaan yritystä ajantasaisesti |
+|Käsittelylaitos| Haluaa nähdä lavasäilytyshinta | Pystyy laskuttamaan yritystä ajantasaisesti |
 |Käsittelylaitos | Näkee omia varastotietoja | Pystyy laskuttamaan yritystä |
 |Kuljetusliike | Haluaa kirjautua järjestelmään | Näkee varastotietoja | 
 |Kuljetusliike | Näkee omia varastotietoja | Pystyy laskuttamaan yritystä |
 |Kuljetusliike | Haluaa nähdä käsittelylaitoksen varastossa olevat vapaat lavat | Pysty varaamaan lavat | 
-|Kuljetusliike | Haluaa varata tyhjiä lavoja | Voi kuljettaa **kokonaisen** kuorman omaan varastoon | 
+|Kuljetusliike | Haluaa varata tyhjiä lavoja | Voi kuljettaa kuorman omaan varastoon | 
 |Kuljetusliike |Haluaa nähdä yhteenvedon | Pystyy laskuttamaan yritystä|
-|Kuljetusliike | Haluaa nähdä ja muokata lavasäilytyshinta | Pystyy laskuttamaan yritystä ajantasaisesti |
+|Kuljetusliike | Haluaa nähdä **ja muokata** lavasäilytyshinta | Pystyy laskuttamaan yritystä ajantasaisesti |
 | | | | 
 
 
@@ -105,7 +103,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 ## Tietohakemisto
 
 > ### _Company_
-> _Company-taulu sisältää järjestelmää käyttävän organisaation tiedot. Organisaatio voi olla: yritys, käsittelylaitos ja kuljetusliike._
+> _Company-taulu sisältää järjestelmää käyttävän organisaation tiedot (nimi). Organisaatio voi olla: yritys, käsittelylaitos ja kuljetusliike._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
@@ -113,27 +111,27 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > companyName | varchar(50) | Organisaation nimi
 
 > ### _User_
-> _User-taulu sisältää järjestelmää käyttävän käyttäjän tiedot. Käyttäjä liittyy organisaatioon. Yksi käyttäjä voi kulua vain yhteen organisaatioon, mutta organisaatiossa voi olla useampi käyttäjä. Eri organisaatioiden käyttäjillä on eri käyttöoikeudet_
+> _User-taulu sisältää järjestelmää käyttävän käyttäjän tiedot. Käyttäjä liittyy organisaatioon. Yksi käyttäjä voi kulua vain yhteen organisaatioon, mutta organisaatiossa voi olla useampi käyttäjä. Eri organisaatioiden käyttäjillä on eri käyttöoikeudet._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > userId | Long PK | Käyttäjän id-tunniste.
 > companyId | int FK | Organisaation, johon käyttäjä kuluu id-tunniste. Viittaus [_company_](#company)-tauluun.
 > userName | varchar(50) | Käyttäjänimi.
-> userPassword | varchar(50) | Käyttäjän salasana.
+> userPassword | varchar(255) | Käyttäjän salasana.
 
 > ### _Invoice_
-> _Invoice-taulu sisältää laskutustiedot._
+> _Invoice-taulu sisältää laskutustiedot (laskunumero, laskuttaja, kokonaissumma, päivämäärä)._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> invoiceId | Long PK | Laskun id-tunniste
+> invoiceId | Long PK | Laskun id-tunniste.
 > companyId | int FK | Organisaation id-tunniste, viittaus [_company_](#company)-tauluun.
-> totalSum | decimal(5,2) | Laskun loppusumma
-> invoiceDate | Date | Laskun päivämäärä
+> totalSum | decimal(5,2) | Laskun loppusumma.
+> invoiceDate | Date | Laskun päivämäärä.
 
 > ### _Stock_
-> _Stock-taulu sisältää varastotiedot. Varasto kuuluu vain yhdelle yritykselle (käsittelylaitos/kuljetusliike)._
+> _Stock-taulu sisältää varastotiedot. Yhteen varastoriviin kuuluu vain yhden organisaation (käsittelylaitos/kuljetusliike) varastotiedot tiettynä päivänä._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
@@ -141,20 +139,20 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > invoiceId | int FK | Laskun id, viittaus  [_invoice_](#invoice)-tauluun.
 > quantity | int |  Varaston kokonaislavamäärä.
 > available | int | Varaston varattavissa oleva lavamäärä.
-> price | decimal(5,2) | Varastointihinta per päivä.
+> price | decimal(7,2) | Varastointihinta per päivä.
 > date | Date | Varastoinnin päivämäärä.
 
 > ### _Reservation_
-> _Reservation-taulu sisältää tietyn kuljetusliikkeen/käyttäjän käsittelylaitokselta tekemän varauksen tietoja, kuten varattu lavamäärä, varauspäivämäärä, onko varaus noudettu. Kun varaus on noudettu käsittelylaitokselta, lavamäärä siirtyy kuljetusliikkeen varastoon._
+> _Reservation-taulu sisältää tietyn käyttäjän käsittelylaitokselta tekemän varauksen tietoja, kuten varattu lavamäärä, varauspäivämäärä, onko varaus noudettu. Kun varaus on noudettu käsittelylaitokselta, lavamäärä siirtyy kuljetusliikkeen varastoon._
 >
 > Kenttä | Tyyppi | Kuvaus |
 > ---|---|---|
-> reservationId | Long PK | Varauksen id-tunniste |
-> stockId | int FK | Laskun id-tunniste |
-> companyId | int FK | Varausta tehneen kuljetusliikkeen id-tunniste, viittaus [_company_](#company)-tauluun|
-> reservedQuantity | int | Varattu lavamäärä |
-> reservationDate | Date | Varauksen päivämäärä |
-> isPickedUp | Boolean | Tieto, onko varaus noudettu, oletuksena False |
+> reservationId | Long PK | Varauksen id-tunniste.
+> stockId | int FK | Varastorivin id-tunniste, viittaus [_stock_](#stock)-tauluun.
+> companyId | int FK | Varausta tehneen kuljetusliikkeen id-tunniste, viittaus [_company_](#company)-tauluun.
+> reservedQuantity | int | Varattu lavamäärä.
+> reservationDate | Date | Varauksen päivämäärä.
+> isPickedUp | Boolean | Tieto, onko varaus noudettu, oletuksena kentän arvo on False.
 
 
 <!--
