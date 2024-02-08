@@ -1,0 +1,2 @@
+org.springframework.test.context.ContextCustomizerFactory = com.softala.sr2.\
+    config.SqlTestContainersSpringContextCustomizerFactory
