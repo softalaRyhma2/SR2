@@ -1,0 +1,27 @@
+{
+  "sr2App": {
+    "stock": {
+      "home": {
+        "title": "Stocks",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Luo Stock",
+        "createOrEditLabel": "Luo tai muokkaa Stock",
+        "notFound": "Stock ei löytynyt"
+      },
+      "created": "Uusi Stock on luotu, id: {{ param }}",
+      "updated": "Stock on päivitetty, id: {{ param }}",
+      "deleted": "Stock on päivitetty, id: {{ param }}",
+      "delete": {
+        "question": "Haluatko varmasti poistaa Stock {{ id }}?"
+      },
+      "detail": {
+        "title": "Stock"
+      },
+      "id": "ID",
+      "quantity": "Quantity",
+      "available": "Available",
+      "price": "Price",
+      "date": "Date"
+    }
+  }
+}

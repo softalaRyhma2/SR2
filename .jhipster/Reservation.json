@@ -1,0 +1,33 @@
+{
+  "annotations": {
+    "changelogDate": "20240208082656"
+  },
+  "applications": "*",
+  "entityTableName": "reservation",
+  "fields": [
+    {
+      "fieldName": "reservedQuantity",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "reservationDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "isPickedUp",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "Reservation",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "stock",
+      "relationshipName": "stock",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -1,0 +1,27 @@
+{
+  "sr2App": {
+    "reservation": {
+      "home": {
+        "title": "Reservations",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Luo Reservation",
+        "createOrEditLabel": "Luo tai muokkaa Reservation",
+        "notFound": "Reservation ei löytynyt"
+      },
+      "created": "Uusi Reservation on luotu, id: {{ param }}",
+      "updated": "Reservation on päivitetty, id: {{ param }}",
+      "deleted": "Reservation on päivitetty, id: {{ param }}",
+      "delete": {
+        "question": "Haluatko varmasti poistaa Reservation {{ id }}?"
+      },
+      "detail": {
+        "title": "Reservation"
+      },
+      "id": "ID",
+      "reservedQuantity": "Reserved Quantity",
+      "reservationDate": "Reservation Date",
+      "isPickedUp": "Is Picked Up",
+      "stock": "Stock"
+    }
+  }
+}

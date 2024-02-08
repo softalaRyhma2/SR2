@@ -1,0 +1,35 @@
+{
+  "annotations": {
+    "changelogDate": "20240208082756"
+  },
+  "applications": "*",
+  "entityTableName": "invoice",
+  "fields": [
+    {
+      "fieldName": "totalSum",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "invoiceDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "name": "Invoice",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "company",
+      "relationshipName": "company",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "stock",
+      "relationshipName": "stock",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}
