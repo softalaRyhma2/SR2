@@ -93,7 +93,10 @@ _Kuljetusliike voi:_
 ## Tietokanta
 #### Luokkakaavio
 ![batteryV2-luokkakaavio drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/e891cb36-1515-4cb8-ac70-edafe5854788)
-<!-- #### Javakaavio -->
+#### Javakaavio
+![battery_javachart drawio](https://github.com/softalaRyhma2/SR2/assets/77851668/04f45102-c0fa-475f-92e0-ac412b4c1e6d)
+
+
 <!--
 Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
 kuvataan käsitekaaviolla. Käsitemalliin sisältyy myös taulujen välisten viiteyhteyksien ja avainten
