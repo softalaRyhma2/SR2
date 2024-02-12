@@ -35,9 +35,13 @@ Sovelluksen käyttäjät: Yritys, Käsittelylaitos, Kuljetusliikkeet 1-4
 
 Kuvauksissa kannattaa harkita, mikä on toteuttajalle ja asiakkaalle oleellista
 tietoa ja keskittyä siihen.
-
+-->
 ## Käyttöliittymä
+### Käyttöliitymän prototyyppi
 
+Käyttöliittymän prototyypin toteutus [Figmalla](https://www.figma.com/proto/ro5H0JYtuOTCF1MvtBOJzP/Battery?type=design&node-id=2-3&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=2%3A3).
+
+<!--
 Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona. 
 
 Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
@@ -76,7 +80,9 @@ _Kuljetusliike voi:_
 |Käyttäjä | Tekee | Miksi|
 |---|---|---|
 |Yritys |Haluaa kirjautua järjestelmään | Näkee käsittelylaitoksen ja kuljetusliikkeiden varastotietoja|
+|Yritys | Haluaa nähdä ja muokata lavasäilytyshinta | Tieto järjestelmässä on ajantasainen |
 |Yritys |Haluaa nähdä varaston historiaa | Voi seurata paljonko keräysvälineitä on ollut ja missä |
+|Yritys | Haluaa nähdä organisaatiotietoja | Pystyy ottamaan yhteyttä organisaatioon |
 |Käsittelylaitos |Haluaa nähdä yhteenvedon | Pystyy laskuttamaan yritystä|
 |Käsittelylaitos| Haluaa kirjautua järjestelmään | Näkee ja pääsee muokkaamaan varastotietoja|
 |Käsittelylaitos| Haluaa nähdä lavasäilytyshinta | Pystyy laskuttamaan yritystä ajantasaisesti |
