@@ -1,0 +1,24 @@
+{
+  "sr2App": {
+    "company": {
+      "home": {
+        "title": "Companies",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Luo Company",
+        "createOrEditLabel": "Luo tai muokkaa Company",
+        "notFound": "Company ei löytynyt"
+      },
+      "created": "Uusi Company on luotu, id: {{ param }}",
+      "updated": "Company on päivitetty, id: {{ param }}",
+      "deleted": "Company on päivitetty, id: {{ param }}",
+      "delete": {
+        "question": "Haluatko varmasti poistaa Company {{ id }}?"
+      },
+      "detail": {
+        "title": "Company"
+      },
+      "id": "ID",
+      "companyName": "Company Name"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "sr2App": {
+    "invoice": {
+      "home": {
+        "title": "Invoices",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Luo Invoice",
+        "createOrEditLabel": "Luo tai muokkaa Invoice",
+        "notFound": "Invoice ei löytynyt"
+      },
+      "created": "Uusi Invoice on luotu, id: {{ param }}",
+      "updated": "Invoice on päivitetty, id: {{ param }}",
+      "deleted": "Invoice on päivitetty, id: {{ param }}",
+      "delete": {
+        "question": "Haluatko varmasti poistaa Invoice {{ id }}?"
+      },
+      "detail": {
+        "title": "Invoice"
+      },
+      "id": "ID",
+      "totalSum": "Total Sum",
+      "invoiceDate": "Invoice Date",
+      "company": "Company",
+      "stock": "Stock"
+    }
+  }
+}

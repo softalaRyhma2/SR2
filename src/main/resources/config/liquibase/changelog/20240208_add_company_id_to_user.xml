@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="20240208_add_company_id_to_user" author="zoka">
+    <addColumn tableName="jhi_user">
+      <column name="company_id" type="bigint">
+        <constraints nullable="true" referencedTableName="company" referencedColumnNames="id" foreignKeyName="fk_user_company"/>
+      </column>
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>
