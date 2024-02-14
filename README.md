@@ -100,7 +100,9 @@ _Kuljetusliike voi:_
 #### Luokkakaavio
 ![batteryV2-luokkakaavio drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/e891cb36-1515-4cb8-ac70-edafe5854788)
 #### Javakaavio
-![battery_javachart drawio](https://github.com/softalaRyhma2/SR2/assets/77851668/04f45102-c0fa-475f-92e0-ac412b4c1e6d)
+![javachart_battery-v2 drawio(1)](https://github.com/softalaRyhma2/SR2/assets/77851668/d7458bec-b2ba-4343-99cc-91eca5657210)
+
+
 
 
 <!--
