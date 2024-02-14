@@ -1,237 +1,234 @@
-# sr2
+# SR2
+
+Tiimi: [Bozic Zorana](https://github.com/zokaas), [Lairi Piia](https://github.com/piialairi), [Martinonyte Dovile](https://github.com/dovile-mart), [Montonen Joonas](https://github.com/F0rsu), [Muittari Samuel](https://github.com/samuelmuittari), [Rautiainen Aleksis](https://github.com/aleraut), [Rusi Romeo](https://github.com/romeorusi).
+
+## Johdanto
+<!--
+Johdantoon kirjoitetaan lyhyt, ytimekäs kuvaus siitä, mikä on projektin aihe,
+kuka on asiakas (käyttäjä), mitä hän haluaa ja saa järjestelmältä, mitä
+tekniikoita käytetään ja mitä konkreettisesti on valmiina, kun projekti päättyy.
 
-This application was generated using JHipster 8.1.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.1.0](https://www.jhipster.tech/documentation-archive/v8.1.0).
+-   Järjestelmän tarkoitus ja tiivis kuvaus siitä, mistä on kyse ja kenelle järjestelmä on tarkoitettu.
+-   Toteutus- ja toimintaympäristö lyhyesti:  
+    -   Palvelinpuolen ratkaisut ja teknologiat (esim. palvelinteknologia, mikä tietokantajärjestelmä on käytössä)
+    -   Käyttöliittymäratkaisut ja teknologiat (esim. päätelaitteet: puhelin,
+    täppäri, desktop)
 
-## Project Structure
+    -->
+    
+Web-sovelluksen tarkoituksena on antaa yritykselle, kuljetusliikkeille ja käsittelylaitokselle yhteinen sovellus, jonka kautta voidaan hallinnoida, varata ja laskuttaa akku- ja paristokierrätykseen tarvittavia lavoja. Ennen tätä sovellusta eri toimijoilla on ollut käytössä vaihtelevia tapoja tehdä näitä toimintoja. Projektin tarkoituksena on tehdä asiakkaalle prototyyppi. 
+Sovelluksen tekemiseen käytetään JHipsteriä -kehitystyökalua, joka tarjoaa mm. valmiin käyttäjänhallinnan, tietokantarajapinnat sekä tietoturvan.
 
-Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
-
-In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
-
-`/src/*` structure follows default Java structure.
-
-- `.yo-rc.json` - Yeoman configuration file
-  JHipster configuration is stored in this file at `generator-jhipster` key. You may find `generator-jhipster-*` for specific blueprints configuration.
-- `.yo-resolve` (optional) - Yeoman conflict resolver
-  Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match `[pattern] [action]` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if ommited) or force. Lines starting with `#` are considered comments and are ignored.
-- `.jhipster/*.json` - JHipster entity configuration files
-
-- `npmw` - wrapper to use locally installed npm.
-  JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using `./npmw` instead of the traditional `npm` you can configure a Node-less environment to develop or test your application.
-- `/src/main/docker` - Docker configurations for the application and services that the application depends on
-
-## Development
-
-Before you can build this project, you must install and configure the following dependencies on your machine:
-
-1. [Node.js][]: We use Node to run a development web server and build the project.
-   Depending on your system, you can install Node either from source or as a pre-packaged bundle.
-
-After installing Node, you should be able to run the following command to install development tools.
-You will only need to run this command when dependencies change in [package.json](package.json).
-
-```
-npm install
-```
-
-We use npm scripts and [Webpack][] as our build system.
-
-Run the following commands in two separate terminals to create a blissful development experience where your browser
-auto-refreshes when files change on your hard drive.
-
-```
-./mvnw
-npm start
-```
-
-Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in [package.json](package.json). You can also run `npm update` and `npm install` to manage dependencies.
-Add the `help` flag on any command to see how you can use it. For example, `npm help update`.
-
-The `npm run` command will list all of the scripts available to run for this project.
-
-### PWA Support
-
-JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
-
-The service worker initialization code is commented out by default. To enable it, uncomment the following code in `src/main/webapp/index.html`:
-
-```html
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js').then(function () {
-      console.log('Service Worker Registered');
-    });
-  }
-</script>
-```
-
-Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
-
-### Managing dependencies
-
-For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
-
-```
-npm install --save --save-exact leaflet
-```
-
-To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
-
-```
-npm install --save-dev --save-exact @types/leaflet
-```
-
-Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
-Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
-
-For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
-
-## Building for production
-
-### Packaging as jar
-
-To build the final jar and optimize the sr2 application for production, run:
-
-```
-./mvnw -Pprod clean verify
-```
-
-This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
-To ensure everything worked, run:
-
-```
-java -jar target/*.jar
-```
-
-Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
-
-Refer to [Using JHipster in production][] for more details.
-
-### Packaging as war
-
-To package your application as a war in order to deploy it to an application server, run:
-
-```
-./mvnw -Pprod,war clean verify
-```
-
-### JHipster Control Center
-
-JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
-
-```
-docker compose -f src/main/docker/jhipster-control-center.yml up
-```
-
-## Testing
-
-### Spring Boot tests
-
-To launch your application's tests, run:
-
-```
-./mvnw verify
-```
-
-### Client tests
-
-Unit tests are run by [Jest][]. They're located in [src/test/javascript/](src/test/javascript/) and can be run with:
-
-```
-npm test
-```
-
-## Others
-
-### Code quality using Sonar
-
-Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
-
-```
-docker compose -f src/main/docker/sonar.yml up -d
-```
-
-Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
-
-You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven plugin.
-
-Then, run a Sonar analysis:
-
-```
-./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
-
-If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
-
-```
-./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
-
-Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
-
-```
-sonar.login=admin
-sonar.password=admin
-```
-
-For more information, refer to the [Code quality page][].
-
-### Using Docker to simplify development (optional)
-
-You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
-
-For example, to start a postgresql database in a docker container, run:
-
-```
-docker compose -f src/main/docker/postgresql.yml up -d
-```
-
-To stop it and remove the container, run:
-
-```
-docker compose -f src/main/docker/postgresql.yml down
-```
-
-You can also fully dockerize your application and all the services that it depends on.
-To achieve this, first build a docker image of your app by running:
-
-```
-npm run java:docker
-```
-
-Or build a arm64 docker image when using an arm64 processor os like MacOS with M1 processor family running:
-
-```
-npm run java:docker:arm64
-```
-
-Then run:
-
-```
-docker compose -f src/main/docker/app.yml up -d
-```
-
-When running Docker Desktop on MacOS Big Sur or later, consider enabling experimental `Use the new Virtualization framework` for better processing performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).
-
-For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
-
-## Continuous Integration (optional)
-
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
-
-[JHipster Homepage and latest documentation]: https://www.jhipster.tech
-[JHipster 8.1.0 archive]: https://www.jhipster.tech/documentation-archive/v8.1.0
-[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v8.1.0/development/
-[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v8.1.0/docker-compose
-[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v8.1.0/production/
-[Running tests page]: https://www.jhipster.tech/documentation-archive/v8.1.0/running-tests/
-[Code quality page]: https://www.jhipster.tech/documentation-archive/v8.1.0/code-quality/
-[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v8.1.0/setting-up-ci/
-[Node.js]: https://nodejs.org/
-[NPM]: https://www.npmjs.com/
-[Webpack]: https://webpack.github.io/
-[BrowserSync]: https://www.browsersync.io/
-[Jest]: https://facebook.github.io/jest/
-[Leaflet]: https://leafletjs.com/
-[DefinitelyTyped]: https://definitelytyped.org/
+Sovelluksessa on palvelinpuolella käytössä Spring Boot ja kehitysvaiheessa käytössä on H2-tietokanta. Käyttöliittymäratkaisuna on React TypeScriptillä ja sovellusta on tarkoitus käyttää pääasiallisesti tietokoneella, mutta sen skaalautuvuus on suunniteltu siten, että sitä voi käyttää myös mobiililaitteella. 
+<!--
+## Järjestelmän määrittely
+
+Määrittelyssä järjestelmää tarkastellaan käyttäjän näkökulmasta. Järjestelmän
+toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, ja kuvataan järjestelmän
+käyttäjäryhmät.
+
+-   Lyhyt kuvaus käyttäjäryhmistä (rooleista)
+Sovelluksen käyttäjät: Yritys, Käsittelylaitos, Kuljetusliikkeet 1-4
+-   Käyttäjäroolit ja roolien tarvitsemat toiminnot, esim. käyttötapauskaaviona
+    (use case diagram) tai käyttäjätarinoina.
+-   Lyhyt kuvaus käyttötapauksista tai käyttäjätarinat
+
+Kuvauksissa kannattaa harkita, mikä on toteuttajalle ja asiakkaalle oleellista
+tietoa ja keskittyä siihen.
+-->
+## Käyttöliittymä
+### Käyttöliitymän prototyyppi
+
+Käyttöliittymän prototyypin toteutus [Figmalla](https://www.figma.com/proto/ro5H0JYtuOTCF1MvtBOJzP/Battery?type=design&node-id=2-3&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=2%3A3).
+
+[Prototyypin esittelyvideo](https://youtu.be/tYGiNWlRKU4?si=zZkSN_4aD26bb1Pi)
+<!--
+Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona. 
+
+Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
+-->
+
+#### Käyttäjäroolit 
+
+_Yritys (Admin) voi:_
+
+- nähdä käsittelylaitoksen ja kuljetusliikkeen varastosaldot ja muokata niitä.
+- muokata käsittelylaitoksen ja kuljetusliikkeen lavapaikkahintoja.
+- nähdä käsittelylaitoksen ja kuljetusliikkeen laskuhistoriat.
+- nähdä käsittelylaitoksen ja kuljetusliikkeen organisaatiotietoja.
+
+_Käsittelylaitos voi:_
+
+- nähdä oman varaston tyhjät ja varatut lavat.
+- muokata oman varaston saldoa.
+- nähdä oma varastointihinta per lava.
+- laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista.
+- tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
+- **Ei saa nähdä mitään tietoja kuljetusliikkeistä**
+
+
+
+_Kuljetusliike voi:_
+
+- nähdä ja muokata oman varaston saldoa.
+- nähdä montako varattavissa olevaa lavaa käsittelylaitoksen varastossa on, varata niitä ja **merkata noudetuksi**.
+- nähdä oma varastointihinta per lava.
+- laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista.
+- tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
+
+#### Käyttäjätarinat
+
+|Käyttäjä | Tekee | Miksi|
+|---|---|---|
+|Yritys |Haluaa kirjautua järjestelmään | Näkee käsittelylaitoksen ja kuljetusliikkeiden varastotietoja|
+|Yritys | Haluaa nähdä ja muokata lavasäilytyshinta | Tieto järjestelmässä on ajantasainen |
+|Yritys |Haluaa nähdä varaston historiaa | Voi seurata paljonko keräysvälineitä on ollut ja missä |
+|Yritys | Haluaa nähdä organisaatiotietoja | Pystyy ottamaan yhteyttä organisaatioon |
+|Käsittelylaitos |Haluaa nähdä yhteenvedon | Pystyy laskuttamaan yritystä|
+|Käsittelylaitos| Haluaa kirjautua järjestelmään | Näkee ja pääsee muokkaamaan varastotietoja|
+|Käsittelylaitos| Haluaa nähdä lavasäilytyshinta | Pystyy laskuttamaan yritystä ajantasaisesti |
+|Käsittelylaitos | Näkee omia varastotietoja | Pystyy laskuttamaan yritystä |
+|Kuljetusliike | Haluaa kirjautua järjestelmään | Näkee varastotietoja | 
+|Kuljetusliike | Näkee omia varastotietoja | Pystyy laskuttamaan yritystä |
+|Kuljetusliike | Haluaa nähdä käsittelylaitoksen varastossa olevat vapaat lavat | Pysty varaamaan lavat | 
+|Kuljetusliike | Haluaa varata tyhjiä lavoja | Voi kuljettaa kuorman omaan varastoon | 
+|Kuljetusliike |Haluaa nähdä yhteenvedon | Pystyy laskuttamaan yritystä|
+|Kuljetusliike | Haluaa nähdä **ja muokata** lavasäilytyshinta | Pystyy laskuttamaan yritystä ajantasaisesti |
+| | | | 
+
+
+## Tietokanta
+#### Luokkakaavio
+![batteryV2-luokkakaavio drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/e891cb36-1515-4cb8-ac70-edafe5854788)
+#### Javakaavio
+![javachart_battery-v2 drawio(1)](https://github.com/softalaRyhma2/SR2/assets/77851668/d7458bec-b2ba-4343-99cc-91eca5657210)
+
+
+
+
+<!--
+Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
+kuvataan käsitekaaviolla. Käsitemalliin sisältyy myös taulujen välisten viiteyhteyksien ja avainten
+määritykset. Tietokanta kuvataan käyttäen jotain kuvausmenetelmää, joko ER-kaaviota ja UML-luokkakaaviota.
+
+Lisäksi kukin järjestelmän tietoelementti ja sen attribuutit kuvataan
+tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elementin (taulun) ja niiden
+attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
+-->
+## Tietohakemisto
+
+> ### _Company_
+> _Company-taulu sisältää järjestelmää käyttävän organisaation tiedot (nimi). Organisaatio voi olla: yritys, käsittelylaitos ja kuljetusliike._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> companyId | Long PK | Organisaation id-tunniste
+> companyName | varchar(50) | Organisaation nimi
+
+> ### _User_
+> _User-taulu sisältää järjestelmää käyttävän käyttäjän tiedot. Käyttäjä liittyy organisaatioon. Yksi käyttäjä voi kulua vain yhteen organisaatioon, mutta organisaatiossa voi olla useampi käyttäjä. Eri organisaatioiden käyttäjillä on eri käyttöoikeudet._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> userId | Long PK | Käyttäjän id-tunniste.
+> companyId | int FK | Organisaation, johon käyttäjä kuluu id-tunniste. Viittaus [_company_](#company)-tauluun.
+> userName | varchar(50) | Käyttäjänimi.
+> userPassword | varchar(255) | Käyttäjän salasana.
+
+> ### _Invoice_
+> _Invoice-taulu sisältää laskutustiedot (laskunumero, laskuttaja, kokonaissumma, päivämäärä)._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> invoiceId | Long PK | Laskun id-tunniste.
+> companyId | int FK | Organisaation id-tunniste, viittaus [_company_](#company)-tauluun.
+> totalSum | decimal(5,2) | Laskun loppusumma.
+> invoiceDate | Date | Laskun päivämäärä.
+
+> ### _Stock_
+> _Stock-taulu sisältää varastotiedot. Yhteen varastoriviin kuuluu vain yhden organisaation (käsittelylaitos/kuljetusliike) varastotiedot tiettynä päivänä._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> stockId | Long PK | Varastotietojen rivin id-tunniste.
+> invoiceId | int FK | Laskun id, viittaus  [_invoice_](#invoice)-tauluun.
+> quantity | int |  Varaston kokonaislavamäärä.
+> available | int | Varaston varattavissa oleva lavamäärä.
+> price | decimal(7,2) | Varastointihinta per päivä.
+> date | Date | Varastoinnin päivämäärä.
+
+> ### _Reservation_
+> _Reservation-taulu sisältää tietyn käyttäjän käsittelylaitokselta tekemän varauksen tietoja, kuten varattu lavamäärä, varauspäivämäärä, onko varaus noudettu. Kun varaus on noudettu käsittelylaitokselta, lavamäärä siirtyy kuljetusliikkeen varastoon._
+>
+> Kenttä | Tyyppi | Kuvaus |
+> ---|---|---|
+> reservationId | Long PK | Varauksen id-tunniste.
+> stockId | int FK | Varastorivin id-tunniste, viittaus [_stock_](#stock)-tauluun.
+> companyId | int FK | Varausta tehneen kuljetusliikkeen id-tunniste, viittaus [_company_](#company)-tauluun.
+> reservedQuantity | int | Varattu lavamäärä.
+> reservationDate | Date | Varauksen päivämäärä.
+> isPickedUp | Boolean | Tieto, onko varaus noudettu, oletuksena kentän arvo on False.
+
+
+<!--
+
+
+
+## Tekninen kuvaus
+
+Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
+ratkaisut, esim.
+
+-   Missä mikäkin järjestelmän komponentti ajetaan (tietokone, palvelinohjelma)
+    ja komponenttien väliset yhteydet (vaikkapa tähän tyyliin:
+    https://security.ufl.edu/it-workers/risk-assessment/creating-an-information-systemdata-flow-diagram/)
+-   Palvelintoteutuksen yleiskuvaus: teknologiat, deployment-ratkaisut yms.
+-   Keskeisten rajapintojen kuvaukset, esimerkit REST-rajapinta. Tarvittaessa voidaan rajapinnan käyttöä täsmentää
+    UML-sekvenssikaavioilla.
+-   Toteutuksen yleisiä ratkaisuja, esim. turvallisuus.
+
+Tämän lisäksi
+
+-   ohjelmakoodin tulee olla kommentoitua
+-   luokkien, metodien ja muuttujien tulee olla kuvaavasti nimettyjä ja noudattaa
+    johdonmukaisia nimeämiskäytäntöjä
+-   ohjelmiston pitää olla organisoitu komponentteihin niin, että turhalta toistolta
+    vältytään
+
+## Testaus
+
+Tässä kohdin selvitetään, miten ohjelmiston oikea toiminta varmistetaan
+testaamalla projektin aikana: millaisia testauksia tehdään ja missä vaiheessa.
+Testauksen tarkemmat sisällöt ja testisuoritusten tulosten raportit kirjataan
+erillisiin dokumentteihin.
+
+Tänne kirjataan myös lopuksi järjestelmän tunnetut ongelmat, joita ei ole korjattu.
+
+## Asennustiedot
+
+Järjestelmän asennus on syytä dokumentoida kahdesta näkökulmasta:
+
+-   järjestelmän kehitysympäristö: miten järjestelmän kehitysympäristön saisi
+    rakennettua johonkin toiseen koneeseen
+
+-   järjestelmän asentaminen tuotantoympäristöön: miten järjestelmän saisi
+    asennettua johonkin uuteen ympäristöön.
+
+Asennusohjeesta tulisi ainakin käydä ilmi, miten käytettävä tietokanta ja
+käyttäjät tulee ohjelmistoa asentaessa määritellä (käytettävä tietokanta,
+käyttäjätunnus, salasana, tietokannan luonti yms.).
+
+## Käynnistys- ja käyttöohje
+
+Tyypillisesti tässä riittää kertoa ohjelman käynnistykseen tarvittava URL sekä
+mahdolliset kirjautumiseen tarvittavat tunnukset. Jos järjestelmän
+käynnistämiseen tai käyttöön liittyy joitain muita toimenpiteitä tai toimintajärjestykseen liittyviä asioita, nekin kerrotaan tässä yhteydessä.
+
+Usko tai älä, tulet tarvitsemaan tätä itsekin, kun tauon jälkeen palaat
+järjestelmän pariin !
+
+
+Back end sovellus käynnistyy komentorivillä komennolla "./mvnw" osoitteessa "localhost:8080" ja front end -sovellus käynnistyy komennolla "npm start" osoitteessa "localhost:"
+
+Sovellus on käytettävissä myös osoitteessa: "tähän tulee heroku tms. osoite"
+-->
