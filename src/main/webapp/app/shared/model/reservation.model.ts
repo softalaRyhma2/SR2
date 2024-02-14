@@ -3,9 +3,9 @@ import { IStock } from 'app/shared/model/stock.model';
 
 export interface IReservation {
   id?: number;
-  reservedQuantity?: number | null;
-  reservationDate?: dayjs.Dayjs | null;
-  isPickedUp?: boolean | null;
+  reservedQuantity?: number;
+  reservationDate?: dayjs.Dayjs;
+  isPickedUp?: boolean;
   stock?: IStock | null;
 }
 

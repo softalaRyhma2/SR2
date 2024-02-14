@@ -50,10 +50,6 @@ export const InvoiceDetail = () => {
             <Translate contentKey="sr2App.invoice.company">Company</Translate>
           </dt>
           <dd>{invoiceEntity.company ? invoiceEntity.company.id : ''}</dd>
-          <dt>
-            <Translate contentKey="sr2App.invoice.stock">Stock</Translate>
-          </dt>
-          <dd>{invoiceEntity.stock ? invoiceEntity.stock.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/invoice" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

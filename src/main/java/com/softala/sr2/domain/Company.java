@@ -26,8 +26,14 @@ public class Company implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "company_name", nullable = false)
+    @Size(max = 50)
+    @Column(name = "company_name", length = 50, nullable = false)
     private String companyName;
+
+    @NotNull
+    @Pattern(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
+    @Column(name = "company_email", nullable = false)
+    private String companyEmail;
 
     @OneToMany(mappedBy = "company")
     private Set<User> users = new HashSet<>();
@@ -60,18 +66,17 @@ public class Company implements Serializable {
         this.companyName = companyName;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    public String getCompanyEmail() {
+        return this.companyEmail;
+    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Company)) {
-            return false;
-        }
-        return getId() != null && getId().equals(((Company) o).getId());
+    public Company companyEmail(String companyEmail) {
+        this.setCompanyEmail(companyEmail);
+        return this;
+    }
+
+    public void setCompanyEmail(String companyEmail) {
+        this.companyEmail = companyEmail;
     }
 
     public Set<User> getUsers() {
@@ -92,10 +97,22 @@ public class Company implements Serializable {
         user.setCompany(null);
     }
 
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Company)) {
+            return false;
+        }
+        return getId() != null && getId().equals(((Company) o).getId());
+    }
+
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -103,8 +120,9 @@ public class Company implements Serializable {
     @Override
     public String toString() {
         return "Company{" +
-                "id=" + getId() +
-                ", companyName='" + getCompanyName() + "'" +
-                "}";
+            "id=" + getId() +
+            ", companyName='" + getCompanyName() + "'" +
+            ", companyEmail='" + getCompanyEmail() + "'" +
+            "}";
     }
 }

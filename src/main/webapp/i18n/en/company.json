@@ -18,7 +18,8 @@
         "title": "Company"
       },
       "id": "ID",
-      "companyName": "Company Name"
+      "companyName": "Company Name",
+      "companyEmail": "Company Email"
     }
   }
 }

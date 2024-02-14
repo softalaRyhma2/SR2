@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing
- * {@link com.softala.testiapp.domain.Reservation}.
+ * Service Implementation for managing {@link com.softala.sr2.domain.Reservation}.
  */
 @Service
 @Transactional
 public class ReservationService {
 
     private final Logger log = LoggerFactory.getLogger(ReservationService.class);
+
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
 

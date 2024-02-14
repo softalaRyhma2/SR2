@@ -7,11 +7,13 @@
   "fields": [
     {
       "fieldName": "totalSum",
-      "fieldType": "BigDecimal"
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "invoiceDate",
-      "fieldType": "LocalDate"
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
     }
   ],
   "name": "Invoice",
@@ -20,12 +22,6 @@
     {
       "otherEntityName": "company",
       "relationshipName": "company",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityName": "stock",
-      "relationshipName": "stock",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
     }

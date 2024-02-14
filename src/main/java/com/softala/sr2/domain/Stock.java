@@ -1,6 +1,8 @@
 package com.softala.sr2.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,17 +26,25 @@ public class Stock implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "quantity")
+    @NotNull
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "available")
+    @NotNull
+    @Column(name = "available", nullable = false)
     private Integer available;
 
-    @Column(name = "price", precision = 21, scale = 2)
+    @NotNull
+    @Column(name = "price", precision = 21, scale = 2, nullable = false)
     private BigDecimal price;
 
-    @Column(name = "date")
-    private LocalDate date;
+    @NotNull
+    @Column(name = "stock_date", nullable = false)
+    private LocalDate stockDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
+    private Invoice invoice;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -90,17 +100,30 @@ public class Stock implements Serializable {
         this.price = price;
     }
 
-    public LocalDate getDate() {
-        return this.date;
+    public LocalDate getStockDate() {
+        return this.stockDate;
     }
 
-    public Stock date(LocalDate date) {
-        this.setDate(date);
+    public Stock stockDate(LocalDate stockDate) {
+        this.setStockDate(stockDate);
         return this;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setStockDate(LocalDate stockDate) {
+        this.stockDate = stockDate;
+    }
+
+    public Invoice getInvoice() {
+        return this.invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
+
+    public Stock invoice(Invoice invoice) {
+        this.setInvoice(invoice);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -130,7 +153,7 @@ public class Stock implements Serializable {
             ", quantity=" + getQuantity() +
             ", available=" + getAvailable() +
             ", price=" + getPrice() +
-            ", date='" + getDate() + "'" +
+            ", stockDate='" + getStockDate() + "'" +
             "}";
     }
 }

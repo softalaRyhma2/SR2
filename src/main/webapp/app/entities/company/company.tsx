@@ -117,6 +117,10 @@ export const Company = () => {
                   <Translate contentKey="sr2App.company.companyName">Company Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('companyName')} />
                 </th>
+                <th className="hand" onClick={sort('companyEmail')}>
+                  <Translate contentKey="sr2App.company.companyEmail">Company Email</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('companyEmail')} />
+                </th>
                 <th />
               </tr>
             </thead>
@@ -129,6 +133,7 @@ export const Company = () => {
                     </Button>
                   </td>
                   <td>{company.companyName}</td>
+                  <td>{company.companyEmail}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/company/${company.id}`} color="info" size="sm" data-cy="entityDetailsButton">

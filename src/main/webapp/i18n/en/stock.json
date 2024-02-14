@@ -21,7 +21,8 @@
       "quantity": "Quantity",
       "available": "Available",
       "price": "Price",
-      "date": "Date"
+      "stockDate": "Stock Date",
+      "invoice": "Invoice"
     }
   }
 }

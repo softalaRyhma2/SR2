@@ -108,6 +108,10 @@ export const ReservationUpdate = () => {
                 name="reservedQuantity"
                 data-cy="reservedQuantity"
                 type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                  validate: v => isNumber(v) || translate('entity.validation.number'),
+                }}
               />
               <ValidatedField
                 label={translate('sr2App.reservation.reservationDate')}
@@ -115,6 +119,9 @@ export const ReservationUpdate = () => {
                 name="reservationDate"
                 data-cy="reservationDate"
                 type="date"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
               />
               <ValidatedField
                 label={translate('sr2App.reservation.isPickedUp')}

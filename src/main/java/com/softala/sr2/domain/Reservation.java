@@ -1,6 +1,8 @@
 package com.softala.sr2.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import org.hibernate.annotations.Cache;
@@ -23,21 +25,25 @@ public class Reservation implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @Column(name = "reserved_quantity")
+    @NotNull
+    @Column(name = "reserved_quantity", nullable = false)
     private Integer reservedQuantity;
 
-    @Column(name = "reservation_date")
+    @NotNull
+    @Column(name = "reservation_date", nullable = false)
     private LocalDate reservationDate;
 
-    @Column(name = "is_picked_up")
+    @NotNull
+    @Column(name = "is_picked_up", nullable = false)
     private Boolean isPickedUp;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "invoice" }, allowSetters = true)
     private Stock stock;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -52,14 +58,6 @@ public class Reservation implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Integer getReservedQuantity() {
@@ -114,8 +112,15 @@ public class Reservation implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -130,8 +135,7 @@ public class Reservation implements Serializable {
 
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -139,10 +143,10 @@ public class Reservation implements Serializable {
     @Override
     public String toString() {
         return "Reservation{" +
-                "id=" + getId() +
-                ", reservedQuantity=" + getReservedQuantity() +
-                ", reservationDate='" + getReservationDate() + "'" +
-                ", isPickedUp='" + getIsPickedUp() + "'" +
-                "}";
+            "id=" + getId() +
+            ", reservedQuantity=" + getReservedQuantity() +
+            ", reservationDate='" + getReservationDate() + "'" +
+            ", isPickedUp='" + getIsPickedUp() + "'" +
+            "}";
     }
 }

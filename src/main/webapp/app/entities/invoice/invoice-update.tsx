@@ -10,8 +10,6 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { ICompany } from 'app/shared/model/company.model';
 import { getEntities as getCompanies } from 'app/entities/company/company.reducer';
-import { IStock } from 'app/shared/model/stock.model';
-import { getEntities as getStocks } from 'app/entities/stock/stock.reducer';
 import { IInvoice } from 'app/shared/model/invoice.model';
 import { getEntity, updateEntity, createEntity, reset } from './invoice.reducer';
 
@@ -24,7 +22,6 @@ export const InvoiceUpdate = () => {
   const isNew = id === undefined;
 
   const companies = useAppSelector(state => state.company.entities);
-  const stocks = useAppSelector(state => state.stock.entities);
   const invoiceEntity = useAppSelector(state => state.invoice.entity);
   const loading = useAppSelector(state => state.invoice.loading);
   const updating = useAppSelector(state => state.invoice.updating);
@@ -42,7 +39,6 @@ export const InvoiceUpdate = () => {
     }
 
     dispatch(getCompanies({}));
-    dispatch(getStocks({}));
   }, []);
 
   useEffect(() => {
@@ -64,7 +60,6 @@ export const InvoiceUpdate = () => {
       ...invoiceEntity,
       ...values,
       company: companies.find(it => it.id.toString() === values.company.toString()),
-      stock: stocks.find(it => it.id.toString() === values.stock.toString()),
     };
 
     if (isNew) {
@@ -80,7 +75,6 @@ export const InvoiceUpdate = () => {
       : {
           ...invoiceEntity,
           company: invoiceEntity?.company?.id,
-          stock: invoiceEntity?.stock?.id,
         };
 
   return (
@@ -114,6 +108,10 @@ export const InvoiceUpdate = () => {
                 name="totalSum"
                 data-cy="totalSum"
                 type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                  validate: v => isNumber(v) || translate('entity.validation.number'),
+                }}
               />
               <ValidatedField
                 label={translate('sr2App.invoice.invoiceDate')}
@@ -121,6 +119,9 @@ export const InvoiceUpdate = () => {
                 name="invoiceDate"
                 data-cy="invoiceDate"
                 type="date"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
               />
               <ValidatedField
                 id="invoice-company"
@@ -133,17 +134,7 @@ export const InvoiceUpdate = () => {
                 {companies
                   ? companies.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <ValidatedField id="invoice-stock" name="stock" data-cy="stock" label={translate('sr2App.invoice.stock')} type="select">
-                <option value="" key="0" />
-                {stocks
-                  ? stocks.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.companyName}
                       </option>
                     ))
                   : null}

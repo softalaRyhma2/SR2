@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing
- * {@link com.softala.testiapp.domain.Company}.
+ * Service Implementation for managing {@link com.softala.sr2.domain.Company}.
  */
 @Service
 @Transactional
 public class CompanyService {
 
     private final Logger log = LoggerFactory.getLogger(CompanyService.class);
+
     private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
 
@@ -65,6 +65,9 @@ public class CompanyService {
             .map(existingCompany -> {
                 if (company.getCompanyName() != null) {
                     existingCompany.setCompanyName(company.getCompanyName());
+                }
+                if (company.getCompanyEmail() != null) {
+                    existingCompany.setCompanyEmail(company.getCompanyEmail());
                 }
 
                 return existingCompany;

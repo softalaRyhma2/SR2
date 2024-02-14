@@ -1,4 +1,4 @@
-id;quantity;available;price;date
+id;quantity;available;price;stock_date
 1;11992;353;19497.13;2024-02-07
 2;14330;20140;14976.13;2024-02-07
 3;11189;24939;24567.65;2024-02-07

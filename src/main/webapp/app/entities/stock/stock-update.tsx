@@ -8,6 +8,8 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
+import { IInvoice } from 'app/shared/model/invoice.model';
+import { getEntities as getInvoices } from 'app/entities/invoice/invoice.reducer';
 import { IStock } from 'app/shared/model/stock.model';
 import { getEntity, updateEntity, createEntity, reset } from './stock.reducer';
 
@@ -19,6 +21,7 @@ export const StockUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
+  const invoices = useAppSelector(state => state.invoice.entities);
   const stockEntity = useAppSelector(state => state.stock.entity);
   const loading = useAppSelector(state => state.stock.loading);
   const updating = useAppSelector(state => state.stock.updating);
@@ -34,6 +37,8 @@ export const StockUpdate = () => {
     } else {
       dispatch(getEntity(id));
     }
+
+    dispatch(getInvoices({}));
   }, []);
 
   useEffect(() => {
@@ -60,6 +65,7 @@ export const StockUpdate = () => {
     const entity = {
       ...stockEntity,
       ...values,
+      invoice: invoices.find(it => it.id.toString() === values.invoice.toString()),
     };
 
     if (isNew) {
@@ -74,6 +80,7 @@ export const StockUpdate = () => {
       ? {}
       : {
           ...stockEntity,
+          invoice: stockEntity?.invoice?.id,
         };
 
   return (
@@ -107,6 +114,10 @@ export const StockUpdate = () => {
                 name="quantity"
                 data-cy="quantity"
                 type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                  validate: v => isNumber(v) || translate('entity.validation.number'),
+                }}
               />
               <ValidatedField
                 label={translate('sr2App.stock.available')}
@@ -114,9 +125,42 @@ export const StockUpdate = () => {
                 name="available"
                 data-cy="available"
                 type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                  validate: v => isNumber(v) || translate('entity.validation.number'),
+                }}
               />
-              <ValidatedField label={translate('sr2App.stock.price')} id="stock-price" name="price" data-cy="price" type="text" />
-              <ValidatedField label={translate('sr2App.stock.date')} id="stock-date" name="date" data-cy="date" type="date" />
+              <ValidatedField
+                label={translate('sr2App.stock.price')}
+                id="stock-price"
+                name="price"
+                data-cy="price"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                  validate: v => isNumber(v) || translate('entity.validation.number'),
+                }}
+              />
+              <ValidatedField
+                label={translate('sr2App.stock.stockDate')}
+                id="stock-stockDate"
+                name="stockDate"
+                data-cy="stockDate"
+                type="date"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField id="stock-invoice" name="invoice" data-cy="invoice" label={translate('sr2App.stock.invoice')} type="select">
+                <option value="" key="0" />
+                {invoices
+                  ? invoices.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.id}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/stock" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

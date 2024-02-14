@@ -51,11 +51,15 @@ export const StockDetail = () => {
           </dt>
           <dd>{stockEntity.price}</dd>
           <dt>
-            <span id="date">
-              <Translate contentKey="sr2App.stock.date">Date</Translate>
+            <span id="stockDate">
+              <Translate contentKey="sr2App.stock.stockDate">Stock Date</Translate>
             </span>
           </dt>
-          <dd>{stockEntity.date ? <TextFormat value={stockEntity.date} type="date" format={APP_LOCAL_DATE_FORMAT} /> : null}</dd>
+          <dd>{stockEntity.stockDate ? <TextFormat value={stockEntity.stockDate} type="date" format={APP_LOCAL_DATE_FORMAT} /> : null}</dd>
+          <dt>
+            <Translate contentKey="sr2App.stock.invoice">Invoice</Translate>
+          </dt>
+          <dd>{stockEntity.invoice ? stockEntity.invoice.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/stock" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
