@@ -33,26 +33,29 @@ const AppRoutes = () => {
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="logout" element={<Logout />} />
-        {/* <Route path="account">
+        <Route path="account">
           <Route
             path="*"
             element={
-              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.PCENTER, AUTHORITIES.TRANSPORT]}>
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.TRANSPORT, AUTHORITIES.TRANSPORT]}>
                 <Account />
               </PrivateRoute>
             }
           />
-          <Route path="register" element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
-              <Admin />
-            </PrivateRoute>
-          } />
+          <Route
+            path="register"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+                <Admin />
+              </PrivateRoute>
+            }
+          />
           <Route path="activate" element={<Activate />} />
           <Route path="reset">
             <Route path="request" element={<PasswordResetInit />} />
             <Route path="finish" element={<PasswordResetFinish />} />
           </Route>
-        </Route>*/}
+        </Route>
         <Route
           path="admin/*"
           element={
@@ -64,7 +67,7 @@ const AppRoutes = () => {
         <Route
           path="*"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.PCENTER, AUTHORITIES.TRANSPORT]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.TRANSPORT, AUTHORITIES.TRANSPORT]}>
               <EntitiesRoutes />
             </PrivateRoute>
           }
