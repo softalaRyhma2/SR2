@@ -33,7 +33,7 @@ const AppRoutes = () => {
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="logout" element={<Logout />} />
-        <Route path="account">
+        {/* <Route path="account">
           <Route
             path="*"
             element={
@@ -42,13 +42,17 @@ const AppRoutes = () => {
               </PrivateRoute>
             }
           />
-          <Route path="register" element={<Register />} />
+          <Route path="register" element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+              <Admin />
+            </PrivateRoute>
+          } />
           <Route path="activate" element={<Activate />} />
           <Route path="reset">
             <Route path="request" element={<PasswordResetInit />} />
             <Route path="finish" element={<PasswordResetFinish />} />
           </Route>
-        </Route>
+        </Route>*/}
         <Route
           path="admin/*"
           element={
