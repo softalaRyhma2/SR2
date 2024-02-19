@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-Sr2App<sr-2>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.softala.sr2.Sr2App",
+      "projectName": "sr-2",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
