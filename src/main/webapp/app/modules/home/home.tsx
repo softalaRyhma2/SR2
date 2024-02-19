@@ -13,11 +13,13 @@ export const Home = () => {
   return (
     <Row>
       <Col md="3" className="pad">
-        <span className="hipster rounded" />
+        {/* <span className="hipster rounded" />*/}
       </Col>
       <Col md="9">
         <h1 className="display-4">
-          <Translate contentKey="home.title">Welcome, Java Hipster!</Translate>
+          <Translate contentKey="home.title" interpolate={{ username: account.login }}>
+            Welcome, {account.login}!
+          </Translate>
         </h1>
         <p className="lead">
           <Translate contentKey="home.subtitle">This is your homepage</Translate>
@@ -45,15 +47,15 @@ export const Home = () => {
               </Translate>
             </Alert>
 
-            <Alert color="warning">
+            {/* <Alert color="warning">
               <Translate contentKey="global.messages.info.register.noaccount">You do not have an account yet?</Translate>&nbsp;
               <Link to="/account/register" className="alert-link">
                 <Translate contentKey="global.messages.info.register.link">Register a new account</Translate>
               </Link>
-            </Alert>
+            </Alert>*/}
           </div>
         )}
-        <p>
+        {/*<p>
           <Translate contentKey="home.question">If you have any question on JHipster:</Translate>
         </p>
 
@@ -91,7 +93,7 @@ export const Home = () => {
             GitHub
           </a>
           !
-        </p>
+        </p>*/}
       </Col>
     </Row>
   );
