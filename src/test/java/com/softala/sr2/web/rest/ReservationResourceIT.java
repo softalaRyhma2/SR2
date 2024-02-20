@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.softala.sr2.IntegrationTest;
 import com.softala.sr2.domain.Reservation;
+import com.softala.sr2.domain.Stock;
 import com.softala.sr2.repository.ReservationRepository;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
@@ -68,6 +69,16 @@ class ReservationResourceIT {
             .reservedQuantity(DEFAULT_RESERVED_QUANTITY)
             .reservationDate(DEFAULT_RESERVATION_DATE)
             .isPickedUp(DEFAULT_IS_PICKED_UP);
+        // Add required entity
+        Stock stock;
+        if (TestUtil.findAll(em, Stock.class).isEmpty()) {
+            stock = StockResourceIT.createEntity(em);
+            em.persist(stock);
+            em.flush();
+        } else {
+            stock = TestUtil.findAll(em, Stock.class).get(0);
+        }
+        reservation.setStock(stock);
         return reservation;
     }
 
@@ -82,6 +93,16 @@ class ReservationResourceIT {
             .reservedQuantity(UPDATED_RESERVED_QUANTITY)
             .reservationDate(UPDATED_RESERVATION_DATE)
             .isPickedUp(UPDATED_IS_PICKED_UP);
+        // Add required entity
+        Stock stock;
+        if (TestUtil.findAll(em, Stock.class).isEmpty()) {
+            stock = StockResourceIT.createUpdatedEntity(em);
+            em.persist(stock);
+            em.flush();
+        } else {
+            stock = TestUtil.findAll(em, Stock.class).get(0);
+        }
+        reservation.setStock(stock);
         return reservation;
     }
 

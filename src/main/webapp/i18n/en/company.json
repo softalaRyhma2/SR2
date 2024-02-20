@@ -19,7 +19,9 @@
       },
       "id": "ID",
       "companyName": "Company Name",
-      "companyEmail": "Company Email"
+      "companyEmail": "Company Email",
+      "companyDetails": "Company Details",
+      "invoice": "Invoice"
     }
   }
 }

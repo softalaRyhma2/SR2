@@ -1,5 +1,6 @@
 package com.softala.sr2.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -31,12 +32,19 @@ public class Company implements Serializable {
     private String companyName;
 
     @NotNull
+    @Size(max = 60)
     @Pattern(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
-    @Column(name = "company_email", nullable = false)
+    @Column(name = "company_email", length = 60, nullable = false)
     private String companyEmail;
 
-    @OneToMany(mappedBy = "company")
-    private Set<User> users = new HashSet<>();
+    @Size(max = 500)
+    @Column(name = "company_details", length = 500)
+    private String companyDetails;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
+    private Set<Invoice> invoices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -79,22 +87,48 @@ public class Company implements Serializable {
         this.companyEmail = companyEmail;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public String getCompanyDetails() {
+        return this.companyDetails;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public Company companyDetails(String companyDetails) {
+        this.setCompanyDetails(companyDetails);
+        return this;
     }
 
-    public void addUser(User user) {
-        this.users.add(user);
-        user.setCompany(this);
+    public void setCompanyDetails(String companyDetails) {
+        this.companyDetails = companyDetails;
     }
 
-    public void removeUser(User user) {
-        this.users.remove(user);
-        user.setCompany(null);
+    public Set<Invoice> getInvoices() {
+        return this.invoices;
+    }
+
+    public void setInvoices(Set<Invoice> invoices) {
+        if (this.invoices != null) {
+            this.invoices.forEach(i -> i.setCompany(null));
+        }
+        if (invoices != null) {
+            invoices.forEach(i -> i.setCompany(this));
+        }
+        this.invoices = invoices;
+    }
+
+    public Company invoices(Set<Invoice> invoices) {
+        this.setInvoices(invoices);
+        return this;
+    }
+
+    public Company addInvoice(Invoice invoice) {
+        this.invoices.add(invoice);
+        invoice.setCompany(this);
+        return this;
+    }
+
+    public Company removeInvoice(Invoice invoice) {
+        this.invoices.remove(invoice);
+        invoice.setCompany(null);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -123,6 +157,7 @@ public class Company implements Serializable {
             "id=" + getId() +
             ", companyName='" + getCompanyName() + "'" +
             ", companyEmail='" + getCompanyEmail() + "'" +
+            ", companyDetails='" + getCompanyDetails() + "'" +
             "}";
     }
 }

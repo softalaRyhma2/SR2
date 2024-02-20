@@ -1,5 +1,6 @@
 package com.softala.sr2.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -25,15 +26,15 @@ public class Invoice implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotNull
-    @Column(name = "total_sum", precision = 21, scale = 2, nullable = false)
+    @Column(name = "total_sum", precision = 21, scale = 2)
     private BigDecimal totalSum;
 
-    @NotNull
-    @Column(name = "invoice_date", nullable = false)
+    @Column(name = "invoice_date")
     private LocalDate invoiceDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "invoices" }, allowSetters = true)
     private Company company;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

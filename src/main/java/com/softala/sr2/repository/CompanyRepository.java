@@ -1,7 +1,6 @@
 package com.softala.sr2.repository;
 
 import com.softala.sr2.domain.Company;
-import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CompanyRepository extends JpaRepository<Company, Long> {
-    List<Company> findByUsers_Id(Long userId);
-}
+public interface CompanyRepository extends JpaRepository<Company, Long> {}

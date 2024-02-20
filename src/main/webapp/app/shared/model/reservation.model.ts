@@ -6,7 +6,7 @@ export interface IReservation {
   reservedQuantity?: number;
   reservationDate?: dayjs.Dayjs;
   isPickedUp?: boolean;
-  stock?: IStock | null;
+  stock?: IStock;
 }
 
 export const defaultValue: Readonly<IReservation> = {

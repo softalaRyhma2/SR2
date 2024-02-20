@@ -151,7 +151,14 @@ export const StockUpdate = () => {
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
               />
-              <ValidatedField id="stock-invoice" name="invoice" data-cy="invoice" label={translate('sr2App.stock.invoice')} type="select">
+              <ValidatedField
+                id="stock-invoice"
+                name="invoice"
+                data-cy="invoice"
+                label={translate('sr2App.stock.invoice')}
+                type="select"
+                required
+              >
                 <option value="" key="0" />
                 {invoices
                   ? invoices.map(otherEntity => (
@@ -161,6 +168,9 @@ export const StockUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
+              <FormText>
+                <Translate contentKey="entity.validation.required">This field is required.</Translate>
+              </FormText>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/stock" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

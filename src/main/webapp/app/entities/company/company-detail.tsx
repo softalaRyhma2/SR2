@@ -43,6 +43,12 @@ export const CompanyDetail = () => {
             </span>
           </dt>
           <dd>{companyEntity.companyEmail}</dd>
+          <dt>
+            <span id="companyDetails">
+              <Translate contentKey="sr2App.company.companyDetails">Company Details</Translate>
+            </span>
+          </dt>
+          <dd>{companyEntity.companyDetails}</dd>
         </dl>
         <Button tag={Link} to="/company" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

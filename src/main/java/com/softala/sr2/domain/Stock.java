@@ -42,7 +42,8 @@ public class Stock implements Serializable {
     @Column(name = "stock_date", nullable = false)
     private LocalDate stockDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
     private Invoice invoice;
 

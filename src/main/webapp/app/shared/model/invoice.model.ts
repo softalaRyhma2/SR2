@@ -3,9 +3,9 @@ import { ICompany } from 'app/shared/model/company.model';
 
 export interface IInvoice {
   id?: number;
-  totalSum?: number;
-  invoiceDate?: dayjs.Dayjs;
-  company?: ICompany | null;
+  totalSum?: number | null;
+  invoiceDate?: dayjs.Dayjs | null;
+  company?: ICompany;
 }
 
 export const defaultValue: Readonly<IInvoice> = {};

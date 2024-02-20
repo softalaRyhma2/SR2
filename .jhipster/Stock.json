@@ -33,7 +33,8 @@
       "otherEntityName": "invoice",
       "relationshipName": "invoice",
       "relationshipSide": "left",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     }
   ],
   "searchEngine": "no",

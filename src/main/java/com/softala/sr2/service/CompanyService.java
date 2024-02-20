@@ -1,9 +1,7 @@
 package com.softala.sr2.service;
 
 import com.softala.sr2.domain.Company;
-import com.softala.sr2.domain.User;
 import com.softala.sr2.repository.CompanyRepository;
-import com.softala.sr2.repository.UserRepository;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +20,9 @@ public class CompanyService {
     private final Logger log = LoggerFactory.getLogger(CompanyService.class);
 
     private final CompanyRepository companyRepository;
-    private final UserRepository userRepository;
 
-    public CompanyService(CompanyRepository companyRepository, UserRepository userRepository) {
+    public CompanyService(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
-        this.userRepository = userRepository;
     }
 
     /**
@@ -69,6 +65,9 @@ public class CompanyService {
                 if (company.getCompanyEmail() != null) {
                     existingCompany.setCompanyEmail(company.getCompanyEmail());
                 }
+                if (company.getCompanyDetails() != null) {
+                    existingCompany.setCompanyDetails(company.getCompanyDetails());
+                }
 
                 return existingCompany;
             })
@@ -107,24 +106,5 @@ public class CompanyService {
     public void delete(Long id) {
         log.debug("Request to delete Company : {}", id);
         companyRepository.deleteById(id);
-    }
-
-    /**
-     * Assign a user to a company.
-     *
-     * @param userId    the ID of the user.
-     * @param companyId the ID of the company.
-     * @return the updated company entity after assignment.
-     */
-    public Company assignUserToCompany(Long userId, Long companyId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User not found with id " + userId));
-        return companyRepository
-            .findById(companyId)
-            .map(company -> {
-                user.setCompany(company); // Assuming User class has setCompany method.
-                userRepository.save(user);
-                return company;
-            })
-            .orElseThrow(() -> new IllegalStateException("Company not found with id " + companyId));
     }
 }

@@ -37,11 +37,12 @@ public class Reservation implements Serializable {
     @Column(name = "is_picked_up", nullable = false)
     private Boolean isPickedUp;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(value = { "invoice" }, allowSetters = true)
     private Stock stock;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 

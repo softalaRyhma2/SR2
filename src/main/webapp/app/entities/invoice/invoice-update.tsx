@@ -108,10 +108,6 @@ export const InvoiceUpdate = () => {
                 name="totalSum"
                 data-cy="totalSum"
                 type="text"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                  validate: v => isNumber(v) || translate('entity.validation.number'),
-                }}
               />
               <ValidatedField
                 label={translate('sr2App.invoice.invoiceDate')}
@@ -119,9 +115,6 @@ export const InvoiceUpdate = () => {
                 name="invoiceDate"
                 data-cy="invoiceDate"
                 type="date"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                }}
               />
               <ValidatedField
                 id="invoice-company"
@@ -129,16 +122,20 @@ export const InvoiceUpdate = () => {
                 data-cy="company"
                 label={translate('sr2App.invoice.company')}
                 type="select"
+                required
               >
                 <option value="" key="0" />
                 {companies
                   ? companies.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.companyName}
+                        {otherEntity.id}
                       </option>
                     ))
                   : null}
               </ValidatedField>
+              <FormText>
+                <Translate contentKey="entity.validation.required">This field is required.</Translate>
+              </FormText>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/invoice" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

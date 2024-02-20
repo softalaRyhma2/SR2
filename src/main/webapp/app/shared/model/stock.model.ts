@@ -7,7 +7,7 @@ export interface IStock {
   available?: number;
   price?: number;
   stockDate?: dayjs.Dayjs;
-  invoice?: IInvoice | null;
+  invoice?: IInvoice;
 }
 
 export const defaultValue: Readonly<IStock> = {};
