@@ -242,7 +242,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         return id != null && id.equals(((User) o).id);
     }
 
-    //comment so I can push
     @Override
     public int hashCode() {
         // see
