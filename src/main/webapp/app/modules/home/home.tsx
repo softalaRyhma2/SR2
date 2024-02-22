@@ -43,7 +43,8 @@ export const Home = () => {
               <Translate contentKey="global.messages.info.authenticated.suffix">
                 , you can try the default accounts:
                 <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
-                <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).
+                <br />- User (login=&quot;user&quot; and password=&quot;user&quot;)
+                <br />- Transport 1 (login=&quot;transport1&quot; and password=&quot;user&quot;).
               </Translate>
             </Alert>
 

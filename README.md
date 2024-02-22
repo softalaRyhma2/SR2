@@ -17,8 +17,8 @@ tekniikoita käytetään ja mitä konkreettisesti on valmiina, kun projekti pä�
 
     -->
 
-Web-sovelluksen tarkoituksena on antaa yritykselle, kuljetusliikkeille ja käsittelylaitokselle yhteinen sovellus, jonka kautta voidaan hallinnoida, varata ja laskuttaa akku- ja paristokierrätykseen tarvittavia lavoja. Ennen tätä sovellusta eri toimijoilla on ollut käytössä vaihtelevia tapoja tehdä näitä toimintoja. Projektin tarkoituksena on tehdä asiakkaalle prototyyppi.
-Sovelluksen tekemiseen käytetään JHipsteriä -kehitystyökalua, joka tarjoaa mm. valmiin käyttäjänhallinnan, tietokantarajapinnat sekä tietoturvan.
+Web-sovelluksen tarkoituksena on tehdä yritykselle, kuljetusliikkeille ja käsittelylaitokselle yhteinen sovellus, jonka kautta voidaan hallinnoida, varata ja laskuttaa akku- ja paristokierrätykseen tarvittavia lavoja. Ennen tätä sovellusta eri toimijoilla on ollut käytössä vaihtelevia tapoja tehdä näitä toimintoja. Projektin tarkoituksena on tehdä asiakkaalle prototyyppi.
+Sovelluksen tekemiseen käytetään JHipster -kehitystyökalua, joka tarjoaa mm. valmiin käyttäjänhallinnan, tietokantarajapinnat sekä tietoturvan.
 
 Sovelluksessa on palvelinpuolella käytössä Spring Boot ja kehitysvaiheessa käytössä on H2-tietokanta. Käyttöliittymäratkaisuna on React TypeScriptillä ja sovellusta on tarkoitus käyttää pääasiallisesti tietokoneella, mutta sen skaalautuvuus on suunniteltu siten, että sitä voi käyttää myös mobiililaitteella.
 
@@ -136,25 +136,25 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 >
 > _Invoice-taulu sisältää laskutustiedot (laskunumero, laskuttaja, kokonaissumma, päivämäärä)._
 >
-> | Kenttä      | Tyyppi       | Kuvaus                                                             |
-> | ----------- | ------------ | ------------------------------------------------------------------ |
-> | invoiceId   | Long PK      | Laskun id-tunniste.                                                |
-> | companyId   | int FK       | Organisaation id-tunniste, viittaus [_company_](#company)-tauluun. |
-> | totalSum    | decimal(5,2) | Laskun loppusumma.                                                 |
-> | invoiceDate | Date         | Laskun päivämäärä.                                                 |
+> | Kenttä      | Tyyppi        | Kuvaus                                                             |
+> | ----------- | ------------- | ------------------------------------------------------------------ |
+> | invoiceId   | Long PK       | Laskun id-tunniste.                                                |
+> | companyId   | int FK        | Organisaation id-tunniste, viittaus [_company_](#company)-tauluun. |
+> | totalSum    | decimal(21,2) | Laskun loppusumma.                                                 |
+> | invoiceDate | Date          | Laskun päivämäärä.                                                 |
 
 > ### _Stock_
 >
 > _Stock-taulu sisältää varastotiedot. Yhteen varastoriviin kuuluu vain yhden organisaation (käsittelylaitos/kuljetusliike) varastotiedot tiettynä päivänä._
 >
-> | Kenttä    | Tyyppi       | Kuvaus                                             |
-> | --------- | ------------ | -------------------------------------------------- |
-> | stockId   | Long PK      | Varastotietojen rivin id-tunniste.                 |
-> | invoiceId | int FK       | Laskun id, viittaus [_invoice_](#invoice)-tauluun. |
-> | quantity  | int          | Varaston kokonaislavamäärä.                        |
-> | available | int          | Varaston varattavissa oleva lavamäärä.             |
-> | price     | decimal(7,2) | Varastointihinta per päivä.                        |
-> | date      | Date         | Varastoinnin päivämäärä.                           |
+> | Kenttä    | Tyyppi        | Kuvaus                                             |
+> | --------- | ------------- | -------------------------------------------------- |
+> | stockId   | Long PK       | Varastotietojen rivin id-tunniste.                 |
+> | invoiceId | int FK        | Laskun id, viittaus [_invoice_](#invoice)-tauluun. |
+> | quantity  | int           | Varaston kokonaislavamäärä.                        |
+> | available | int           | Varaston varattavissa oleva lavamäärä.             |
+> | price     | decimal(21,2) | Varastointihinta per päivä.                        |
+> | date      | Date          | Varastoinnin päivämäärä.                           |
 
 > ### _Reservation_
 >
@@ -169,7 +169,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > | reservationDate  | Date    | Varauksen päivämäärä.                                                                  |
 > | isPickedUp       | Boolean | Tieto, onko varaus noudettu, oletuksena kentän arvo on False.                          |
 
-JHipster oletuksena generoidut taulut:
+JHipster automaattisesti generoidut taulut:
 
 > ### _JhiUser_
 >
@@ -184,9 +184,9 @@ JHipster oletuksena generoidut taulut:
 > | firstName        | varchar(50)   | Käyttäjän etunimi.                                                                                                                                                                                                                |
 > | lastName         | varchar(50)   | Käyttäjän sukunimi.                                                                                                                                                                                                               |
 > | email            | varchar(191)  | Sähköpostiosoite.                                                                                                                                                                                                                 |
-> | activated        | boolean       | Tieto, onko tili aktiivinen. Oletusarvo on False. Tili aktivoidaan luonnin yhteydessä tai järjestelmävalvoja määrittelee sen erikseen.                                                                                            |
+> | activated        | boolean       | Tieto, onko tili aktiivinen. Oletusarvo on False. Tili aktivoidaan luonnin jälkeen tai järjestelmävalvoja määrittelee tilin tilan erikseen.                                                                                       |
 > | langKey          | varchar(10)   | Käyttäjän käyttämä kieli järjestelmässä, englanti tai suomi.                                                                                                                                                                      |
-> | activationKey    | varchar(20)   |
+> | activationKey    | varchar(20)   |                                                                                                                                                                                                                                   |
 > | resetKey         | varchar(20)   | Tilin aktivointiavain, joka lähetetään rekisteröinnin tai salasanan palautuspyynnön yhteydessä käyttäjälle sähköpostitse. Sen avulla pystyy luomaan uuden salasanan tilille. Aktivoinnin jälkeen kentän arvo muuttuu _null_:iksi. |
 > | createdBy        | varchar(50)   | Tieto, kuka on luonut käyttäjän tunnukset.                                                                                                                                                                                        |
 > | createdDate      | Timestamp     | Tilin luontipäivämäärä.                                                                                                                                                                                                           |

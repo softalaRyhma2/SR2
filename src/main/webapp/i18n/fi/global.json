@@ -53,7 +53,7 @@
         "authenticated": {
           "prefix": "Jos haluat ",
           "link": "kirjaudu sisään",
-          "suffix": ", voit koittaa käyttää oletustilejä:<br/>- Administrator (login=\"admin\" ja salasana=\"admin\") <br/>- User (login=\"user\" ja salasana=\"user\")."
+          "suffix": ", voit koittaa käyttää oletustilejä:<br/>- Administrator (login=\"admin\" ja salasana=\"admin\") <br/>- User (login=\"user\" ja salasana=\"user\") <br/>- transport1 (login=\"transport1\" ja salasana=\"user\")."
         },
         "register": {
           "noaccount": "Eikö sinulla ole vielä tiliä?",
