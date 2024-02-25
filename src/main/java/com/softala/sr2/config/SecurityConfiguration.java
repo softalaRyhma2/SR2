@@ -79,6 +79,8 @@ public class SecurityConfiguration {
                         .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
                         .requestMatchers(mvc.pattern("/api/register")).hasAuthority(AuthoritiesConstants.ADMIN)
                         .requestMatchers(mvc.pattern("/api/activate")).permitAll()
+                        //todo change api/companies to other than permitAll, it's like this for testing nothing else works.
+                        .requestMatchers(mvc.pattern("/api/companies")).permitAll()
                         .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
                         .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
                         .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)

@@ -15,8 +15,10 @@ export const UserManagementUpdate = () => {
 
   const { login } = useParams<'login'>();
   const isNew = login === undefined;
+  const [companies, setCompanies] = useState([]);
 
   useEffect(() => {
+    fetchCompanies();
     if (isNew) {
       dispatch(reset());
     } else {
@@ -27,6 +29,16 @@ export const UserManagementUpdate = () => {
       dispatch(reset());
     };
   }, [login]);
+
+  const fetchCompanies = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/companies');
+      const data = await response.json();
+      setCompanies(data);
+    } catch (error) {
+      console.error('Error fetching companies:', error);
+    }
+  };
 
   const handleClose = () => {
     navigate('/admin/user-management');
@@ -151,6 +163,13 @@ export const UserManagementUpdate = () => {
                 {locales.map(locale => (
                   <option value={locale} key={locale}>
                     {languages[locale].name}
+                  </option>
+                ))}
+              </ValidatedField>
+              <ValidatedField type="select" name="companyId" label="Company">
+                {companies.map(company => (
+                  <option key={company.id} value={company.id}>
+                    {company.companyName}
                   </option>
                 ))}
               </ValidatedField>
