@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { locales, languages } from 'app/config/translation';
 import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { getEntities as getCompanies } from 'app/entities/company/company.reducer';
+import { size } from 'lodash';
 
 export const UserManagementUpdate = () => {
   const dispatch = useAppDispatch();
@@ -15,30 +17,19 @@ export const UserManagementUpdate = () => {
 
   const { login } = useParams<'login'>();
   const isNew = login === undefined;
-  const [companies, setCompanies] = useState([]);
 
   useEffect(() => {
-    fetchCompanies();
     if (isNew) {
       dispatch(reset());
     } else {
       dispatch(getUser(login));
     }
     dispatch(getRoles());
+    dispatch(getCompanies({ page: 0, size: 20, sort: 'id,asc' }));
     return () => {
       dispatch(reset());
     };
   }, [login]);
-
-  const fetchCompanies = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/api/companies');
-      const data = await response.json();
-      setCompanies(data);
-    } catch (error) {
-      console.error('Error fetching companies:', error);
-    }
-  };
 
   const handleClose = () => {
     navigate('/admin/user-management');
@@ -58,6 +49,7 @@ export const UserManagementUpdate = () => {
   const loading = useAppSelector(state => state.userManagement.loading);
   const updating = useAppSelector(state => state.userManagement.updating);
   const authorities = useAppSelector(state => state.userManagement.authorities);
+  const companies = useAppSelector(state => state.getCompanies.companyId);
 
   return (
     <div>
