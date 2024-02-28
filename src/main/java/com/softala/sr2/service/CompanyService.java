@@ -1,7 +1,12 @@
 package com.softala.sr2.service;
 
 import com.softala.sr2.domain.Company;
+import com.softala.sr2.domain.User;
 import com.softala.sr2.repository.CompanyRepository;
+import com.softala.sr2.repository.UserRepository;
+import com.softala.sr2.security.SecurityUtils;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +26,40 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
-    public CompanyService(CompanyRepository companyRepository) {
+    private final UserRepository userRepository;
+
+    public CompanyService(CompanyRepository companyRepository, UserRepository userRepository) {
         this.companyRepository = companyRepository;
+        this.userRepository = userRepository;
+    }
+
+    public List<Company> findAllCompaniesByLoggedInUser() {
+        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+        if (currentUserLogin.isPresent()) {
+            String login = currentUserLogin.get();
+            Optional<User> user = userRepository.findOneByLogin(login);
+            if (user.isPresent()) {
+                // Tarkistetaan, onko käyttäjä admin
+                if (isAdmin(user.get())) {
+                    // Palautetaan kaikki yritykset
+                    return companyRepository.findAll();
+                } else {
+                    // Haetaan käyttäjän yritys
+                    Company userCompany = user.get().getCompany();
+                    if (userCompany != null) {
+                        // Palautetaan lista, jossa on vain käyttäjän yritys
+                        return Collections.singletonList(userCompany);
+                    }
+                }
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    private boolean isAdmin(User user) {
+        // Voit toteuttaa adminin tarkistuksen tarpeidesi mukaan.
+        // Tässä esimerkissä tarkistetaan, onko käyttäjällä ADMIN-rooli.
+        return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_ADMIN"));
     }
 
     /**

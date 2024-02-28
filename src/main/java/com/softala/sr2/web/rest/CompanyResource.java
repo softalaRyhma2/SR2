@@ -47,11 +47,19 @@ public class CompanyResource {
         this.companyRepository = companyRepository;
     }
 
+    @GetMapping("/companies/current")
+    public ResponseEntity<List<Company>> findAllCompaniesByLoggedInUser() {
+        List<Company> companies = companyService.findAllCompaniesByLoggedInUser();
+        return ResponseEntity.ok().body(companies);
+    }
+
     /**
      * {@code POST  /companies} : Create a new company.
      *
      * @param company the company to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new company, or with status {@code 400 (Bad Request)} if the company has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new company, or with status {@code 400 (Bad Request)} if the
+     *         company has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -70,11 +78,13 @@ public class CompanyResource {
     /**
      * {@code PUT  /companies/:id} : Updates an existing company.
      *
-     * @param id the id of the company to save.
+     * @param id      the id of the company to save.
      * @param company the company to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated company,
-     * or with status {@code 400 (Bad Request)} if the company is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the company couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated company,
+     *         or with status {@code 400 (Bad Request)} if the company is not valid,
+     *         or with status {@code 500 (Internal Server Error)} if the company
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
@@ -102,14 +112,17 @@ public class CompanyResource {
     }
 
     /**
-     * {@code PATCH  /companies/:id} : Partial updates given fields of an existing company, field will ignore if it is null
+     * {@code PATCH  /companies/:id} : Partial updates given fields of an existing
+     * company, field will ignore if it is null
      *
-     * @param id the id of the company to save.
+     * @param id      the id of the company to save.
      * @param company the company to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated company,
-     * or with status {@code 400 (Bad Request)} if the company is not valid,
-     * or with status {@code 404 (Not Found)} if the company is not found,
-     * or with status {@code 500 (Internal Server Error)} if the company couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated company,
+     *         or with status {@code 400 (Bad Request)} if the company is not valid,
+     *         or with status {@code 404 (Not Found)} if the company is not found,
+     *         or with status {@code 500 (Internal Server Error)} if the company
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -138,24 +151,24 @@ public class CompanyResource {
     }
 
     /**
-     * {@code GET  /companies} : get all the companies.
+     * {@code GET  /companies} : get all the companies by logged in user
      *
      * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of companies in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of companies in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<Company>> getAllCompanies(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Companies");
-        Page<Company> page = companyService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    public ResponseEntity<List<Company>> getAllCompaniesForLoggedInUser() {
+        List<Company> companies = companyService.findAllCompaniesByLoggedInUser();
+        return ResponseEntity.ok().body(companies);
     }
 
     /**
      * {@code GET  /companies/:id} : get the "id" company.
      *
      * @param id the id of the company to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the company, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the company, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<Company> getCompany(@PathVariable("id") Long id) {
