@@ -2,8 +2,10 @@ package com.softala.sr2.service;
 
 import com.softala.sr2.config.Constants;
 import com.softala.sr2.domain.Authority;
+import com.softala.sr2.domain.Company;
 import com.softala.sr2.domain.User;
 import com.softala.sr2.repository.AuthorityRepository;
+import com.softala.sr2.repository.CompanyRepository;
 import com.softala.sr2.repository.UserRepository;
 import com.softala.sr2.security.AuthoritiesConstants;
 import com.softala.sr2.security.SecurityUtils;
@@ -15,6 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +43,9 @@ public class UserService {
     private final AuthorityRepository authorityRepository;
 
     private final CacheManager cacheManager;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     public UserService(
         UserRepository userRepository,
@@ -177,6 +183,15 @@ public class UserService {
                 .collect(Collectors.toSet());
             user.setAuthorities(authorities);
         }
+
+        // Set the company based on the companyId from the DTO
+        if (userDTO.getCompanyId() != null) {
+            Company company = companyRepository
+                .findById(userDTO.getCompanyId())
+                .orElseThrow(() -> new RuntimeException("Company not found with id " + userDTO.getCompanyId()));
+            user.setCompany(company); // Assuming you have a setCompany method in your User entity
+        }
+
         userRepository.save(user);
         this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);
