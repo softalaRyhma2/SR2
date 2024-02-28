@@ -229,6 +229,12 @@ public class UserService {
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .forEach(managedAuthorities::add);
+                if (userDTO.getCompanyId() != null) {
+                    Company company = companyRepository
+                        .findById(userDTO.getCompanyId())
+                        .orElseThrow(() -> new RuntimeException("Company not found with id " + userDTO.getCompanyId()));
+                    user.setCompany(company);
+                }
                 userRepository.save(user);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
