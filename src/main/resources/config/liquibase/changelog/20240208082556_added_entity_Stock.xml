@@ -15,16 +15,19 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="quantity" type="integer">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="available" type="integer">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="price" type="decimal(21,2)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
-            <column name="date" type="date">
-                <constraints nullable="true" />
+            <column name="stock_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="invoice_id" type="bigint">
+                <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -50,7 +53,8 @@
             <column name="quantity" type="numeric"/>
             <column name="available" type="numeric"/>
             <column name="price" type="numeric"/>
-            <column name="date" type="date"/>
+            <column name="stock_date" type="date"/>
+            <column name="invoice_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

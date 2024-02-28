@@ -130,7 +130,7 @@ class UserResourceIT {
         user.setActivated(true);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.TRANSPORT));
 
         restUserMockMvc
             .perform(post("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(user)))
@@ -163,7 +163,7 @@ class UserResourceIT {
         user.setActivated(true);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.TRANSPORT));
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restUserMockMvc
@@ -189,7 +189,7 @@ class UserResourceIT {
         user.setActivated(true);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.TRANSPORT));
 
         // Create the User
         restUserMockMvc
@@ -215,7 +215,7 @@ class UserResourceIT {
         user.setActivated(true);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.TRANSPORT));
 
         // Create the User
         restUserMockMvc
@@ -297,7 +297,7 @@ class UserResourceIT {
         user.setCreatedDate(updatedUser.getCreatedDate());
         user.setLastModifiedBy(updatedUser.getLastModifiedBy());
         user.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.TRANSPORT));
 
         restUserMockMvc
             .perform(put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(user)))
@@ -338,7 +338,7 @@ class UserResourceIT {
         user.setCreatedDate(updatedUser.getCreatedDate());
         user.setLastModifiedBy(updatedUser.getLastModifiedBy());
         user.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.TRANSPORT));
 
         restUserMockMvc
             .perform(put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(user)))
@@ -390,7 +390,7 @@ class UserResourceIT {
         user.setCreatedDate(updatedUser.getCreatedDate());
         user.setLastModifiedBy(updatedUser.getLastModifiedBy());
         user.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.TRANSPORT));
 
         restUserMockMvc
             .perform(put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(user)))
@@ -430,7 +430,7 @@ class UserResourceIT {
         user.setCreatedDate(updatedUser.getCreatedDate());
         user.setLastModifiedBy(updatedUser.getLastModifiedBy());
         user.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        user.setAuthorities(Collections.singleton(AuthoritiesConstants.TRANSPORT));
 
         restUserMockMvc
             .perform(put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(user)))
@@ -482,7 +482,7 @@ class UserResourceIT {
         userDTO.setLangKey(DEFAULT_LANGKEY);
         userDTO.setCreatedBy(DEFAULT_LOGIN);
         userDTO.setLastModifiedBy(DEFAULT_LOGIN);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.TRANSPORT));
 
         User user = userMapper.userDTOToUser(userDTO);
         assertThat(user.getId()).isEqualTo(DEFAULT_ID);
@@ -497,7 +497,7 @@ class UserResourceIT {
         assertThat(user.getCreatedDate()).isNotNull();
         assertThat(user.getLastModifiedBy()).isNull();
         assertThat(user.getLastModifiedDate()).isNotNull();
-        assertThat(user.getAuthorities()).extracting("name").containsExactly(AuthoritiesConstants.USER);
+        assertThat(user.getAuthorities()).extracting("name").containsExactly(AuthoritiesConstants.TRANSPORT);
     }
 
     @Test
@@ -509,7 +509,7 @@ class UserResourceIT {
         user.setLastModifiedDate(Instant.now());
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
-        authority.setName(AuthoritiesConstants.USER);
+        authority.setName(AuthoritiesConstants.TRANSPORT);
         authorities.add(authority);
         user.setAuthorities(authorities);
 
@@ -527,7 +527,7 @@ class UserResourceIT {
         assertThat(userDTO.getCreatedDate()).isEqualTo(user.getCreatedDate());
         assertThat(userDTO.getLastModifiedBy()).isEqualTo(DEFAULT_LOGIN);
         assertThat(userDTO.getLastModifiedDate()).isEqualTo(user.getLastModifiedDate());
-        assertThat(userDTO.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
+        assertThat(userDTO.getAuthorities()).containsExactly(AuthoritiesConstants.TRANSPORT);
         assertThat(userDTO.toString()).isNotNull();
     }
 
@@ -544,10 +544,10 @@ class UserResourceIT {
         authorityB.setName(AuthoritiesConstants.ADMIN);
         assertThat(authorityA).isNotEqualTo(authorityB);
 
-        authorityA.setName(AuthoritiesConstants.USER);
+        authorityA.setName(AuthoritiesConstants.TRANSPORT);
         assertThat(authorityA).isNotEqualTo(authorityB);
 
-        authorityB.setName(AuthoritiesConstants.USER);
+        authorityB.setName(AuthoritiesConstants.TRANSPORT);
         assertThat(authorityA).isEqualTo(authorityB).hasSameHashCodeAs(authorityB);
     }
 

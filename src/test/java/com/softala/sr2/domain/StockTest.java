@@ -1,5 +1,6 @@
 package com.softala.sr2.domain;
 
+import static com.softala.sr2.domain.InvoiceTestSamples.*;
 import static com.softala.sr2.domain.StockTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,5 +21,17 @@ class StockTest {
 
         stock2 = getStockSample2();
         assertThat(stock1).isNotEqualTo(stock2);
+    }
+
+    @Test
+    void invoiceTest() throws Exception {
+        Stock stock = getStockRandomSampleGenerator();
+        Invoice invoiceBack = getInvoiceRandomSampleGenerator();
+
+        stock.setInvoice(invoiceBack);
+        assertThat(stock.getInvoice()).isEqualTo(invoiceBack);
+
+        stock.invoice(null);
+        assertThat(stock.getInvoice()).isNull();
     }
 }

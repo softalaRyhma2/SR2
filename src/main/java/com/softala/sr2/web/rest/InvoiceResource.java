@@ -4,6 +4,8 @@ import com.softala.sr2.domain.Invoice;
 import com.softala.sr2.repository.InvoiceRepository;
 import com.softala.sr2.service.InvoiceService;
 import com.softala.sr2.web.rest.errors.BadRequestAlertException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -53,7 +55,7 @@ public class InvoiceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<Invoice> createInvoice(@RequestBody Invoice invoice) throws URISyntaxException {
+    public ResponseEntity<Invoice> createInvoice(@Valid @RequestBody Invoice invoice) throws URISyntaxException {
         log.debug("REST request to save Invoice : {}", invoice);
         if (invoice.getId() != null) {
             throw new BadRequestAlertException("A new invoice cannot already have an ID", ENTITY_NAME, "idexists");
@@ -76,8 +78,10 @@ public class InvoiceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Invoice> updateInvoice(@PathVariable(value = "id", required = false) final Long id, @RequestBody Invoice invoice)
-        throws URISyntaxException {
+    public ResponseEntity<Invoice> updateInvoice(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody Invoice invoice
+    ) throws URISyntaxException {
         log.debug("REST request to update Invoice : {}, {}", id, invoice);
         if (invoice.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -111,7 +115,7 @@ public class InvoiceResource {
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Invoice> partialUpdateInvoice(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody Invoice invoice
+        @NotNull @RequestBody Invoice invoice
     ) throws URISyntaxException {
         log.debug("REST request to partial update Invoice partially : {}, {}", id, invoice);
         if (invoice.getId() == null) {

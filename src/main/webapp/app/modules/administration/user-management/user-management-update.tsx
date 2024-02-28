@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { locales, languages } from 'app/config/translation';
 import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { getEntities as getCompanies } from 'app/entities/company/company.reducer';
+import { size } from 'lodash';
 
 export const UserManagementUpdate = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +25,7 @@ export const UserManagementUpdate = () => {
       dispatch(getUser(login));
     }
     dispatch(getRoles());
+    dispatch(getCompanies({ page: 0, size: 20, sort: 'id,asc' }));
     return () => {
       dispatch(reset());
     };
@@ -46,6 +49,7 @@ export const UserManagementUpdate = () => {
   const loading = useAppSelector(state => state.userManagement.loading);
   const updating = useAppSelector(state => state.userManagement.updating);
   const authorities = useAppSelector(state => state.userManagement.authorities);
+  const companies = useAppSelector(state => state.getCompanies.companyId);
 
   return (
     <div>
@@ -151,6 +155,13 @@ export const UserManagementUpdate = () => {
                 {locales.map(locale => (
                   <option value={locale} key={locale}>
                     {languages[locale].name}
+                  </option>
+                ))}
+              </ValidatedField>
+              <ValidatedField type="select" name="companyId" label="Company">
+                {companies.map(company => (
+                  <option key={company.id} value={company.id}>
+                    {company.companyName}
                   </option>
                 ))}
               </ValidatedField>

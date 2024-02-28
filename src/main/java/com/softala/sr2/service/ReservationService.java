@@ -1,10 +1,7 @@
 package com.softala.sr2.service;
 
 import com.softala.sr2.domain.Reservation;
-import com.softala.sr2.domain.User;
 import com.softala.sr2.repository.ReservationRepository;
-import com.softala.sr2.repository.UserRepository;
-import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,20 +11,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing
- * {@link com.softala.testiapp.domain.Reservation}.
+ * Service Implementation for managing {@link com.softala.sr2.domain.Reservation}.
  */
 @Service
 @Transactional
 public class ReservationService {
 
     private final Logger log = LoggerFactory.getLogger(ReservationService.class);
-    private final ReservationRepository reservationRepository;
-    private final UserRepository userRepository;
 
-    public ReservationService(ReservationRepository reservationRepository, UserRepository userRepository) {
+    private final ReservationRepository reservationRepository;
+
+    public ReservationService(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
-        this.userRepository = userRepository;
     }
 
     /**
@@ -111,33 +106,5 @@ public class ReservationService {
     public void delete(Long id) {
         log.debug("Request to delete Reservation : {}", id);
         reservationRepository.deleteById(id);
-    }
-
-    /**
-     * Assign a reservation to a user.
-     *
-     * @param reservationId the ID of the reservation.
-     * @param userId        the ID of the user.
-     * @return the updated reservation entity.
-     */
-    public Reservation assignReservationToUser(Long reservationId, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User not found with id " + userId));
-        return reservationRepository
-            .findById(reservationId)
-            .map(reservation -> {
-                reservation.setUser(user); // Assuming Reservation class has setUser method.
-                return reservationRepository.save(reservation);
-            })
-            .orElseThrow(() -> new IllegalStateException("Reservation not found with id " + reservationId));
-    }
-
-    /**
-     * Get all reservations for a specific user.
-     *
-     * @param userId the ID of the user.
-     * @return a list of reservations.
-     */
-    public List<Reservation> findAllReservationsForUser(Long userId) {
-        return reservationRepository.findByUser_Id(userId);
     }
 }

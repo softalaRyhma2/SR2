@@ -36,6 +36,7 @@ public class DomainUserDetailsService implements UserDetailsService {
         if (new EmailValidator().isValid(login, null)) {
             return userRepository
                 .findOneWithAuthoritiesByEmailIgnoreCase(login)
+                .filter(user -> user.getCompany() != null)
                 .map(user -> createSpringSecurityUser(login, user))
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
         }
@@ -43,6 +44,7 @@ public class DomainUserDetailsService implements UserDetailsService {
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
         return userRepository
             .findOneWithAuthoritiesByLogin(lowercaseLogin)
+            .filter(user -> user.getCompany() != null)
             .map(user -> createSpringSecurityUser(lowercaseLogin, user))
             .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
     }

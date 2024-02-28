@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.softala.sr2.IntegrationTest;
+import com.softala.sr2.domain.Company;
 import com.softala.sr2.domain.Invoice;
 import com.softala.sr2.repository.InvoiceRepository;
 import jakarta.persistence.EntityManager;
@@ -64,6 +65,16 @@ class InvoiceResourceIT {
      */
     public static Invoice createEntity(EntityManager em) {
         Invoice invoice = new Invoice().totalSum(DEFAULT_TOTAL_SUM).invoiceDate(DEFAULT_INVOICE_DATE);
+        // Add required entity
+        Company company;
+        if (TestUtil.findAll(em, Company.class).isEmpty()) {
+            company = CompanyResourceIT.createEntity(em);
+            em.persist(company);
+            em.flush();
+        } else {
+            company = TestUtil.findAll(em, Company.class).get(0);
+        }
+        invoice.setCompany(company);
         return invoice;
     }
 
@@ -75,6 +86,16 @@ class InvoiceResourceIT {
      */
     public static Invoice createUpdatedEntity(EntityManager em) {
         Invoice invoice = new Invoice().totalSum(UPDATED_TOTAL_SUM).invoiceDate(UPDATED_INVOICE_DATE);
+        // Add required entity
+        Company company;
+        if (TestUtil.findAll(em, Company.class).isEmpty()) {
+            company = CompanyResourceIT.createUpdatedEntity(em);
+            em.persist(company);
+            em.flush();
+        } else {
+            company = TestUtil.findAll(em, Company.class).get(0);
+        }
+        invoice.setCompany(company);
         return invoice;
     }
 

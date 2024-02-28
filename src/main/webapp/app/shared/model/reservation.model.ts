@@ -3,10 +3,10 @@ import { IStock } from 'app/shared/model/stock.model';
 
 export interface IReservation {
   id?: number;
-  reservedQuantity?: number | null;
-  reservationDate?: dayjs.Dayjs | null;
-  isPickedUp?: boolean | null;
-  stock?: IStock | null;
+  reservedQuantity?: number;
+  reservationDate?: dayjs.Dayjs;
+  isPickedUp?: boolean;
+  stock?: IStock;
 }
 
 export const defaultValue: Readonly<IReservation> = {

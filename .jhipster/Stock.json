@@ -7,24 +7,36 @@
   "fields": [
     {
       "fieldName": "quantity",
-      "fieldType": "Integer"
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "available",
-      "fieldType": "Integer"
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "price",
-      "fieldType": "BigDecimal"
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "date",
-      "fieldType": "LocalDate"
+      "fieldName": "stockDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
     }
   ],
   "name": "Stock",
   "pagination": "pagination",
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityName": "invoice",
+      "relationshipName": "invoice",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
   "searchEngine": "no",
   "service": "serviceClass"
 }

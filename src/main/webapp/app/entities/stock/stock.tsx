@@ -125,8 +125,12 @@ export const Stock = () => {
                 <th className="hand" onClick={sort('price')}>
                   <Translate contentKey="sr2App.stock.price">Price</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('price')} />
                 </th>
-                <th className="hand" onClick={sort('date')}>
-                  <Translate contentKey="sr2App.stock.date">Date</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('date')} />
+                <th className="hand" onClick={sort('stockDate')}>
+                  <Translate contentKey="sr2App.stock.stockDate">Stock Date</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('stockDate')} />
+                </th>
+                <th>
+                  <Translate contentKey="sr2App.stock.invoice">Invoice</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -142,7 +146,8 @@ export const Stock = () => {
                   <td>{stock.quantity}</td>
                   <td>{stock.available}</td>
                   <td>{stock.price}</td>
-                  <td>{stock.date ? <TextFormat type="date" value={stock.date} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
+                  <td>{stock.stockDate ? <TextFormat type="date" value={stock.stockDate} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
+                  <td>{stock.invoice ? <Link to={`/invoice/${stock.invoice.id}`}>{stock.invoice.id}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/stock/${stock.id}`} color="info" size="sm" data-cy="entityDetailsButton">

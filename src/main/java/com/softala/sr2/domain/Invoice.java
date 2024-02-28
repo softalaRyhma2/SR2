@@ -1,6 +1,8 @@
 package com.softala.sr2.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,11 +32,10 @@ public class Invoice implements Serializable {
     @Column(name = "invoice_date")
     private LocalDate invoiceDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "invoices" }, allowSetters = true)
     private Company company;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Stock stock;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -87,19 +88,6 @@ public class Invoice implements Serializable {
 
     public Invoice company(Company company) {
         this.setCompany(company);
-        return this;
-    }
-
-    public Stock getStock() {
-        return this.stock;
-    }
-
-    public void setStock(Stock stock) {
-        this.stock = stock;
-    }
-
-    public Invoice stock(Stock stock) {
-        this.setStock(stock);
         return this;
     }
 

@@ -4,6 +4,8 @@ import com.softala.sr2.domain.Reservation;
 import com.softala.sr2.repository.ReservationRepository;
 import com.softala.sr2.service.ReservationService;
 import com.softala.sr2.web.rest.errors.BadRequestAlertException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -53,7 +55,7 @@ public class ReservationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) throws URISyntaxException {
+    public ResponseEntity<Reservation> createReservation(@Valid @RequestBody Reservation reservation) throws URISyntaxException {
         log.debug("REST request to save Reservation : {}", reservation);
         if (reservation.getId() != null) {
             throw new BadRequestAlertException("A new reservation cannot already have an ID", ENTITY_NAME, "idexists");
@@ -78,7 +80,7 @@ public class ReservationResource {
     @PutMapping("/{id}")
     public ResponseEntity<Reservation> updateReservation(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody Reservation reservation
+        @Valid @RequestBody Reservation reservation
     ) throws URISyntaxException {
         log.debug("REST request to update Reservation : {}, {}", id, reservation);
         if (reservation.getId() == null) {
@@ -113,7 +115,7 @@ public class ReservationResource {
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Reservation> partialUpdateReservation(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody Reservation reservation
+        @NotNull @RequestBody Reservation reservation
     ) throws URISyntaxException {
         log.debug("REST request to partial update Reservation partially : {}, {}", id, reservation);
         if (reservation.getId() == null) {

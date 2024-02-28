@@ -3,6 +3,7 @@ package com.softala.sr2.repository;
 import com.softala.sr2.domain.Company;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,5 +12,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Long> {
-    List<Company> findByUsers_Id(Long userId);
+    @Query("SELECT c FROM Company c WHERE c.id = (SELECT u.company.id FROM User u WHERE u.login = :login)")
+    List<Company> findAllByLoggedInUser(@Param("login") String login);
 }

@@ -1,11 +1,7 @@
-id;company_name
-1;uplift irritably french
-2;merry can
-3;prevail sneaky once
-4;meh
-5;subcontract um hungrily
-6;thankful gifted
-7;considering
-8;where
-9;during eek
-10;round
+id;company_name;company_email;company_details
+1;Transport 1;transport1@example.com;
+2;Transport 2;transport2@example.com;
+3;Transport 3;transport3@example.com;
+4;Transport 4;transport4@example.com;
+5;Käsittelylaitos;kasittelylaitos@example.com;
+6;Recser;recser@example.com;

@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.softala.sr2.IntegrationTest;
+import com.softala.sr2.domain.Invoice;
 import com.softala.sr2.domain.Stock;
 import com.softala.sr2.repository.StockRepository;
 import jakarta.persistence.EntityManager;
@@ -42,8 +43,8 @@ class StockResourceIT {
     private static final BigDecimal DEFAULT_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_PRICE = new BigDecimal(2);
 
-    private static final LocalDate DEFAULT_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate DEFAULT_STOCK_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_STOCK_DATE = LocalDate.now(ZoneId.systemDefault());
 
     private static final String ENTITY_API_URL = "/api/stocks";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -69,7 +70,21 @@ class StockResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Stock createEntity(EntityManager em) {
-        Stock stock = new Stock().quantity(DEFAULT_QUANTITY).available(DEFAULT_AVAILABLE).price(DEFAULT_PRICE).date(DEFAULT_DATE);
+        Stock stock = new Stock()
+            .quantity(DEFAULT_QUANTITY)
+            .available(DEFAULT_AVAILABLE)
+            .price(DEFAULT_PRICE)
+            .stockDate(DEFAULT_STOCK_DATE);
+        // Add required entity
+        Invoice invoice;
+        if (TestUtil.findAll(em, Invoice.class).isEmpty()) {
+            invoice = InvoiceResourceIT.createEntity(em);
+            em.persist(invoice);
+            em.flush();
+        } else {
+            invoice = TestUtil.findAll(em, Invoice.class).get(0);
+        }
+        stock.setInvoice(invoice);
         return stock;
     }
 
@@ -80,7 +95,21 @@ class StockResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Stock createUpdatedEntity(EntityManager em) {
-        Stock stock = new Stock().quantity(UPDATED_QUANTITY).available(UPDATED_AVAILABLE).price(UPDATED_PRICE).date(UPDATED_DATE);
+        Stock stock = new Stock()
+            .quantity(UPDATED_QUANTITY)
+            .available(UPDATED_AVAILABLE)
+            .price(UPDATED_PRICE)
+            .stockDate(UPDATED_STOCK_DATE);
+        // Add required entity
+        Invoice invoice;
+        if (TestUtil.findAll(em, Invoice.class).isEmpty()) {
+            invoice = InvoiceResourceIT.createUpdatedEntity(em);
+            em.persist(invoice);
+            em.flush();
+        } else {
+            invoice = TestUtil.findAll(em, Invoice.class).get(0);
+        }
+        stock.setInvoice(invoice);
         return stock;
     }
 
@@ -105,7 +134,7 @@ class StockResourceIT {
         assertThat(testStock.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testStock.getAvailable()).isEqualTo(DEFAULT_AVAILABLE);
         assertThat(testStock.getPrice()).isEqualByComparingTo(DEFAULT_PRICE);
-        assertThat(testStock.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testStock.getStockDate()).isEqualTo(DEFAULT_STOCK_DATE);
     }
 
     @Test
@@ -128,6 +157,74 @@ class StockResourceIT {
 
     @Test
     @Transactional
+    void checkQuantityIsRequired() throws Exception {
+        int databaseSizeBeforeTest = stockRepository.findAll().size();
+        // set the field null
+        stock.setQuantity(null);
+
+        // Create the Stock, which fails.
+
+        restStockMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(stock)))
+            .andExpect(status().isBadRequest());
+
+        List<Stock> stockList = stockRepository.findAll();
+        assertThat(stockList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkAvailableIsRequired() throws Exception {
+        int databaseSizeBeforeTest = stockRepository.findAll().size();
+        // set the field null
+        stock.setAvailable(null);
+
+        // Create the Stock, which fails.
+
+        restStockMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(stock)))
+            .andExpect(status().isBadRequest());
+
+        List<Stock> stockList = stockRepository.findAll();
+        assertThat(stockList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkPriceIsRequired() throws Exception {
+        int databaseSizeBeforeTest = stockRepository.findAll().size();
+        // set the field null
+        stock.setPrice(null);
+
+        // Create the Stock, which fails.
+
+        restStockMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(stock)))
+            .andExpect(status().isBadRequest());
+
+        List<Stock> stockList = stockRepository.findAll();
+        assertThat(stockList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkStockDateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = stockRepository.findAll().size();
+        // set the field null
+        stock.setStockDate(null);
+
+        // Create the Stock, which fails.
+
+        restStockMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(stock)))
+            .andExpect(status().isBadRequest());
+
+        List<Stock> stockList = stockRepository.findAll();
+        assertThat(stockList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllStocks() throws Exception {
         // Initialize the database
         stockRepository.saveAndFlush(stock);
@@ -141,7 +238,7 @@ class StockResourceIT {
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
             .andExpect(jsonPath("$.[*].available").value(hasItem(DEFAULT_AVAILABLE)))
             .andExpect(jsonPath("$.[*].price").value(hasItem(sameNumber(DEFAULT_PRICE))))
-            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())));
+            .andExpect(jsonPath("$.[*].stockDate").value(hasItem(DEFAULT_STOCK_DATE.toString())));
     }
 
     @Test
@@ -159,7 +256,7 @@ class StockResourceIT {
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
             .andExpect(jsonPath("$.available").value(DEFAULT_AVAILABLE))
             .andExpect(jsonPath("$.price").value(sameNumber(DEFAULT_PRICE)))
-            .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()));
+            .andExpect(jsonPath("$.stockDate").value(DEFAULT_STOCK_DATE.toString()));
     }
 
     @Test
@@ -181,7 +278,7 @@ class StockResourceIT {
         Stock updatedStock = stockRepository.findById(stock.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedStock are not directly saved in db
         em.detach(updatedStock);
-        updatedStock.quantity(UPDATED_QUANTITY).available(UPDATED_AVAILABLE).price(UPDATED_PRICE).date(UPDATED_DATE);
+        updatedStock.quantity(UPDATED_QUANTITY).available(UPDATED_AVAILABLE).price(UPDATED_PRICE).stockDate(UPDATED_STOCK_DATE);
 
         restStockMockMvc
             .perform(
@@ -198,7 +295,7 @@ class StockResourceIT {
         assertThat(testStock.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testStock.getAvailable()).isEqualTo(UPDATED_AVAILABLE);
         assertThat(testStock.getPrice()).isEqualByComparingTo(UPDATED_PRICE);
-        assertThat(testStock.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testStock.getStockDate()).isEqualTo(UPDATED_STOCK_DATE);
     }
 
     @Test
@@ -286,7 +383,7 @@ class StockResourceIT {
         assertThat(testStock.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testStock.getAvailable()).isEqualTo(DEFAULT_AVAILABLE);
         assertThat(testStock.getPrice()).isEqualByComparingTo(UPDATED_PRICE);
-        assertThat(testStock.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testStock.getStockDate()).isEqualTo(DEFAULT_STOCK_DATE);
     }
 
     @Test
@@ -301,7 +398,7 @@ class StockResourceIT {
         Stock partialUpdatedStock = new Stock();
         partialUpdatedStock.setId(stock.getId());
 
-        partialUpdatedStock.quantity(UPDATED_QUANTITY).available(UPDATED_AVAILABLE).price(UPDATED_PRICE).date(UPDATED_DATE);
+        partialUpdatedStock.quantity(UPDATED_QUANTITY).available(UPDATED_AVAILABLE).price(UPDATED_PRICE).stockDate(UPDATED_STOCK_DATE);
 
         restStockMockMvc
             .perform(
@@ -318,7 +415,7 @@ class StockResourceIT {
         assertThat(testStock.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testStock.getAvailable()).isEqualTo(UPDATED_AVAILABLE);
         assertThat(testStock.getPrice()).isEqualByComparingTo(UPDATED_PRICE);
-        assertThat(testStock.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testStock.getStockDate()).isEqualTo(UPDATED_STOCK_DATE);
     }
 
     @Test

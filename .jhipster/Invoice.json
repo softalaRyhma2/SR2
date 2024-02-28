@@ -20,14 +20,9 @@
     {
       "otherEntityName": "company",
       "relationshipName": "company",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityName": "stock",
-      "relationshipName": "stock",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-one"
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     }
   ],
   "searchEngine": "no",

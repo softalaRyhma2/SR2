@@ -1,3 +1,7 @@
 id;login;password_hash;first_name;last_name;email;image_url;activated;lang_key;created_by;last_modified_by
 1;admin;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;admin@localhost;;true;en;system;system
 2;user;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;User;User;user@localhost;;true;en;system;system
+3;transport1;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;Manager;Manager;transport1@example.com;;true;en;system;system
+4;transport2;$2a$10$1iz9A8OIfh0w7vUu8.TqXeAZycZZo4TkIg6g2bcwWt2BeNNpTW0zS;Staff;Staff;staff@localhost;;true;en;system;system
+5;transport3;$2a$10$9yIy9IZwUdEirmp3CNf5ROpdd3KX9lb7aL/.OsnryyxSRDVTkW/KW;Client;Client;client@localhost;;true;en;system;system
+6;transport4;$2a$10$rjJVZ2oRhImnI9Xy9m7oOu66yGgZRw7fsNInQh6UevnRl3a0IOa/e;Driver;Driver;driver@localhost;;true;en;system;system

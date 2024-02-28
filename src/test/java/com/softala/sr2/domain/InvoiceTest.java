@@ -2,7 +2,6 @@ package com.softala.sr2.domain;
 
 import static com.softala.sr2.domain.CompanyTestSamples.*;
 import static com.softala.sr2.domain.InvoiceTestSamples.*;
-import static com.softala.sr2.domain.StockTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.softala.sr2.web.rest.TestUtil;
@@ -34,17 +33,5 @@ class InvoiceTest {
 
         invoice.company(null);
         assertThat(invoice.getCompany()).isNull();
-    }
-
-    @Test
-    void stockTest() throws Exception {
-        Invoice invoice = getInvoiceRandomSampleGenerator();
-        Stock stockBack = getStockRandomSampleGenerator();
-
-        invoice.setStock(stockBack);
-        assertThat(invoice.getStock()).isEqualTo(stockBack);
-
-        invoice.stock(null);
-        assertThat(invoice.getStock()).isNull();
     }
 }

@@ -7,15 +7,18 @@
   "fields": [
     {
       "fieldName": "reservedQuantity",
-      "fieldType": "Integer"
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "reservationDate",
-      "fieldType": "LocalDate"
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "isPickedUp",
-      "fieldType": "Boolean"
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
     }
   ],
   "name": "Reservation",
@@ -25,7 +28,8 @@
       "otherEntityName": "stock",
       "relationshipName": "stock",
       "relationshipSide": "left",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     }
   ],
   "searchEngine": "no",

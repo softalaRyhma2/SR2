@@ -52,6 +52,7 @@ public class CacheConfiguration {
             createCache(cm, com.softala.sr2.domain.Stock.class.getName());
             createCache(cm, com.softala.sr2.domain.Reservation.class.getName());
             createCache(cm, com.softala.sr2.domain.Invoice.class.getName());
+            createCache(cm, com.softala.sr2.domain.Company.class.getName() + ".invoices");
             // jhipster-needle-ehcache-add-entry
         };
     }

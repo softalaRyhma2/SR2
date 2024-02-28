@@ -14,8 +14,14 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="company_name" type="varchar(255)">
+            <column name="company_name" type="varchar(50)">
                 <constraints nullable="false" />
+            </column>
+            <column name="company_email" type="varchar(60)">
+                <constraints nullable="false" />
+            </column>
+            <column name="company_details" type="varchar(500)">
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -39,6 +45,8 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="company_name" type="string"/>
+            <column name="company_email" type="string"/>
+            <column name="company_details" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
