@@ -25,7 +25,9 @@ export const Company = () => {
   const companyList = useAppSelector(state => state.company.entities);
   const loading = useAppSelector(state => state.company.loading);
   const totalItems = useAppSelector(state => state.company.totalItems);
-  const isAdmin = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN]));
+  const isAdmin = useAppSelector(state =>
+    hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]),
+  );
 
   const getAllEntities = () => {
     dispatch(

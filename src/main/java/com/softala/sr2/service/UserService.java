@@ -135,6 +135,7 @@ public class UserService {
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.PCENTER).ifPresent(authorities::add);
         // Add ROLE_TRANSPORT to the authorities
+        authorityRepository.findById(AuthoritiesConstants.RECSER).ifPresent(authorities::add);
         authorityRepository.findById(AuthoritiesConstants.TRANSPORT).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
 

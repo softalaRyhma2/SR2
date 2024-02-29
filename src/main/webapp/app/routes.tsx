@@ -37,7 +37,7 @@ const AppRoutes = () => {
           <Route
             path="*"
             element={
-              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.PCENTER, AUTHORITIES.TRANSPORT]}>
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.RECSER, AUTHORITIES.PCENTER, AUTHORITIES.TRANSPORT]}>
                 <Account />
               </PrivateRoute>
             }
@@ -45,7 +45,7 @@ const AppRoutes = () => {
           <Route
             path="register"
             element={
-              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.RECSER]}>
                 <Admin />
               </PrivateRoute>
             }
@@ -59,7 +59,7 @@ const AppRoutes = () => {
         <Route
           path="admin/*"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.RECSER]}>
               <Admin />
             </PrivateRoute>
           }
@@ -67,7 +67,7 @@ const AppRoutes = () => {
         <Route
           path="*"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.PCENTER, AUTHORITIES.TRANSPORT]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.RECSER, AUTHORITIES.PCENTER, AUTHORITIES.TRANSPORT]}>
               <EntitiesRoutes />
             </PrivateRoute>
           }

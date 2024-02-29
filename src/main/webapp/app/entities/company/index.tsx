@@ -16,7 +16,7 @@ const CompanyRoutes = () => (
     <Route
       path="new"
       element={
-        <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+        <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.RECSER]}>
           <CompanyUpdate />
         </PrivateRoute>
       }
