@@ -1,5 +1,5 @@
-$header-color: #fff;
-$header-color-secondary: #bbb;
+$header-color: white;
+$header-color-secondary: white;
 $header-color-hover: darken($header-color, 20%);
 
 /* ==========================================================================
@@ -38,8 +38,14 @@ Development Ribbon
 Navbar styles
 ========================================================================== */
 .jh-navbar {
-  background-color: #353d47;
+  background-color: #e62d2d;
   padding: 0.2em 1em;
+  position: fixed; // Keep it fixed at the top
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+
   .profile-image {
     margin: -10px 0px;
     height: 40px;
@@ -75,6 +81,7 @@ Navbar styles
     }
   }
 }
+
 .navbar-brand {
   overflow: hidden;
 }
@@ -90,19 +97,20 @@ Navbar styles
   padding: 0 0 0 10px;
 }
 
-.brand-logo {
-  &:hover {
-    text-decoration: none;
-  }
-  .brand-icon {
-    height: 35px;
-    width: auto;
-    display: inline-block;
-    img {
-      width: 45px;
-    }
-  }
-}
+// Size and settings for the brand logo
+// .brand-logo {
+//   &:hover {
+//     text-decoration: none;
+//   }
+//   .brand-icon {
+//     height: 35px;
+//     width: auto;
+//     display: inline-block;
+//     img {
+//       width: 45px;
+//     }
+//   }
+// }
 
 .brand-title {
   font-size: 1.25rem;

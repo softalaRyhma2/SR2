@@ -1,6 +1,6 @@
 {
   "global": {
-    "title": "Sr2",
+    "title": "Recser paristokierrätys",
     "browsehappy": "Käytät <strong>vanhentunutta</strong> selainta. Ole hyvä ja <a href=\"http://browsehappy.com/?locale=en\">päivitä selaimesi</a> parempaa käyttökokemusta varten.",
     "menu": {
       "home": "Etusivu",
@@ -51,9 +51,9 @@
     "messages": {
       "info": {
         "authenticated": {
-          "prefix": "Jos haluat ",
-          "link": "kirjaudu sisään",
-          "suffix": ", voit koittaa käyttää oletustilejä:<br/>- Administrator (login=\"admin\" ja salasana=\"admin\") <br/>- User (login=\"user\" ja salasana=\"user\") <br/>- transport1 (login=\"transport1\" ja salasana=\"user\")."
+          "prefix": "Väliaikaiset kirjautumistunnukset.<br/>",
+          "suffix": "- Administrator (login=\"admin\" ja salasana=\"admin\") <br/>- User (login=\"user\" ja salasana=\"user\") <br/>- transport1 (login=\"transport1\" ja salasana=\"user\").",
+          "button": "Kirjaudu sisään"
         },
         "register": {
           "noaccount": "Eikö sinulla ole vielä tiliä?",
@@ -147,5 +147,5 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "Tämä on footer teksti"
+  "footer": "<a href=\"https://www.paristokierratys.fi/en\" target=\"_blank\"> Vieraile Paristokierrätyksen sivuilla</a>"
 }
