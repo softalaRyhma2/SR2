@@ -55,7 +55,19 @@ Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
 
 #### Käyttäjäroolit
 
-_Yritys (Admin) voi:_
+<!--
+_Ylläpitäjä (Admin) voi:_
+
+- luoda uusia organisaatioita sekä käyttäjiä ja päivittää niiden tietoja.
+- nähdä käsittelylaitoksen ja kuljetusliikkeen varastosaldot ja muokata niitä.
+- muokata käsittelylaitoksen ja kuljetusliikkeen lavapaikkahintoja.
+- nähdä käsittelylaitoksen ja kuljetusliikkeen laskuhistoriat.
+- nähdä käsittelylaitoksen ja kuljetusliikkeen organisaatiotietoja.
+-->
+
+_Yritys (Recser) voi:_
+
+<!-- - luoda uusia organisaatioita sekä käyttäjiä ja päivittää niiden tietoja.-->
 
 - nähdä käsittelylaitoksen ja kuljetusliikkeen varastosaldot ja muokata niitä.
 - muokata käsittelylaitoksen ja kuljetusliikkeen lavapaikkahintoja.
@@ -169,45 +181,50 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > | reservationDate  | Date    | Varauksen päivämäärä.                                                                  |
 > | isPickedUp       | Boolean | Tieto, onko varaus noudettu, oletuksena kentän arvo on False.                          |
 
-JHipster automaattisesti generoidut taulut:
+#### JHipster automaattisesti generoidut taulut:
 
-> ### _JhiUser_
+> ### _User_
 >
-> _JHI_User-taulu sisältää järjestelmää käyttävän käyttäjän tiedot. Käyttäjä liittyy organisaatioon. Yksi käyttäjä voi kulua vain yhteen organisaatioon ja organisaatiossa voi olla yksi käyttäjä. Eri organisaatioiden käyttäjillä on eri käyttöoikeudet._
+> _User-taulu sisältää järjestelmää käyttävän käyttäjän tiedot. Käyttäjä liittyy organisaatioon. Yksi käyttäjä voi kulua vain yhteen organisaatioon ja organisaatiossa voi olla yksi käyttäjä. Eri organisaatioiden käyttäjillä on eri käyttöoikeudet._
 >
-> | Kenttä           | Tyyppi        | Kuvaus                                                                                                                                                                                                                            |
-> | ---------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-> | id               | BigInteger PK | Käyttäjän id-tunniste.                                                                                                                                                                                                            |
-> | companyId        | int FK        | Organisaation, johon käyttäjä kuluu id-tunniste. Viittaus [_company_](#company)-tauluun.                                                                                                                                          |
-> | login            | varchar(50)   | Käyttäjänimi.                                                                                                                                                                                                                     |
-> | passwordHash     | varchar(60)   | Käyttäjän salasana.                                                                                                                                                                                                               |
-> | firstName        | varchar(50)   | Käyttäjän etunimi.                                                                                                                                                                                                                |
-> | lastName         | varchar(50)   | Käyttäjän sukunimi.                                                                                                                                                                                                               |
-> | email            | varchar(191)  | Sähköpostiosoite.                                                                                                                                                                                                                 |
-> | activated        | boolean       | Tieto, onko tili aktiivinen. Oletusarvo on False. Tili aktivoidaan luonnin jälkeen tai järjestelmävalvoja määrittelee tilin tilan erikseen.                                                                                       |
-> | langKey          | varchar(10)   | Käyttäjän käyttämä kieli järjestelmässä, englanti tai suomi.                                                                                                                                                                      |
-> | activationKey    | varchar(20)   |                                                                                                                                                                                                                                   |
-> | resetKey         | varchar(20)   | Tilin aktivointiavain, joka lähetetään rekisteröinnin tai salasanan palautuspyynnön yhteydessä käyttäjälle sähköpostitse. Sen avulla pystyy luomaan uuden salasanan tilille. Aktivoinnin jälkeen kentän arvo muuttuu _null_:iksi. |
-> | createdBy        | varchar(50)   | Tieto, kuka on luonut käyttäjän tunnukset.                                                                                                                                                                                        |
-> | createdDate      | Timestamp     | Tilin luontipäivämäärä.                                                                                                                                                                                                           |
-> | resetDate        | Timestamp     |
-> | lastModifiedDate | Timestamp     | Tilin tietojen viimeisen muokkauksen päivämäärä ja kellonaika.                                                                                                                                                                    |
-> | lastModifiedBy   | varchar(50)   | Tilin tietojen muokkaajan käyttäjänimi. Tilin aktivoinnin yhteydessä luodun salasanan tallentamisen tekijänä näkyy _anonymousUser_.                                                                                               |
+> | Kenttä       | Tyyppi       | Kuvaus                                                                                                                                                                                                                            |
+> | ------------ | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | id           | Long PK      | Käyttäjän id-tunniste.                                                                                                                                                                                                            |
+> | companyId    | int FK       | Organisaation, johon käyttäjä kuluu id-tunniste. Viittaus [_company_](#company)-tauluun.                                                                                                                                          |
+> | login        | varchar(50)  | Käyttäjänimi.                                                                                                                                                                                                                     |
+> | passwordHash | varchar(60)  | Käyttäjän salasana.                                                                                                                                                                                                               |
+> | firstName    | varchar(50)  | Käyttäjän etunimi.                                                                                                                                                                                                                |
+> | lastName     | varchar(50)  | Käyttäjän sukunimi.                                                                                                                                                                                                               |
+> | email        | varchar(254) | Sähköpostiosoite.                                                                                                                                                                                                                 |
+> | activated    | boolean      | Tieto, onko tili aktiivinen. Oletusarvo on False. Tili aktivoidaan luonnin jälkeen tai järjestelmävalvoja määrittelee tilin tilan erikseen.                                                                                       |
+> | langKey      | varchar(10)  | Käyttäjän käyttämä kieli järjestelmässä, englanti tai suomi.                                                                                                                                                                      |
+> | resetKey     | varchar(20)  | Tilin aktivointiavain, joka lähetetään rekisteröinnin tai salasanan palautuspyynnön yhteydessä käyttäjälle sähköpostitse. Sen avulla pystyy luomaan uuden salasanan tilille. Aktivoinnin jälkeen kentän arvo muuttuu _null_:iksi. |
+> | resetDate    | Timestamp    |                                                                                                                                                                                                                                   |
 
-> ### _JhiAuthority_
+> ### _AbstractAuditingEntity_
 >
-> \_JHI_Authority-taulu sisältää rooleja. Admin, Pcenter, Transport.
-> Kenttä | Tyyppi | Kuvaus
-> ------ | ------ | ------
+> _AbstractAuditingEntity-taulu sisältää lisätietoja käyttäjän tilin luonnista ja tietojen muokkauksesta (kuka ja milloin on tehnyt muutoksia)._
+> Kenttä | Tyyppi | Kuvaus |
+> ------ | ------ | ------ |
+> | createdBy | varchar(50) | Tieto, kuka on luonut käyttäjän tunnukset. |
+> | createdDate | Timestamp | Tilin luontipäivämäärä. |
+> | lastModifiedBy | varchar(50) | Tilin tietojen muokkaajan käyttäjänimi. Tilin aktivoinnin yhteydessä luodun salasanan tallentamisen tekijänä näkyy _anonymousUser_. |
+> | lastModifiedDate | Timestamp | Tilin tietojen viimeisen muokkauksen päivämäärä ja kellonaika. |
+
+> ### _Authority_
+>
+> _Authority-taulu sisältää rooleja. Admin, Recser, Pcenter, Transport._
+> Kenttä | Tyyppi | Kuvaus |
+> ------ | ------ | ------ |
 > name | varchar(50) | Roolin nimi.
 
 > ### _JhiUserAuthority_
 >
-> _JHI_User_Authority-taulu sisältää tietoa käyttäjien rooleista. Käyttäjällä voi olla yksi tai useampi rooli.
-> Kenttä | Tyyppi | Kuvaus
-> ------ | ------ | ------
-> userId | BigInteger FK | Käyttäjän id-tunniste. Viittaus [\_JhiUser_](#jhiuser)-tauluun.
-> authorityName | varchar(50) FK | Roolin nimi. Viittaus [_JhiAuthority_](#jhiauthority)-tauluun.
+> _JHIUserAuthority-taulu sisältää tietoa käyttäjien rooleista. Käyttäjällä voi olla yksi tai useampi rooli._
+> Kenttä | Tyyppi | Kuvaus |
+> ------ | ------ | ------ |
+> userId | int FK | Käyttäjän id-tunniste. Viittaus [_User_](#user)-tauluun.
+> authorityName | varchar(50) FK | Roolin nimi. Viittaus [_Authority_](#authority)-tauluun.
 
 <!--
 
