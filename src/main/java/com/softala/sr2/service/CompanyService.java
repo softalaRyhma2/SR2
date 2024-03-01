@@ -39,15 +39,11 @@ public class CompanyService {
             String login = currentUserLogin.get();
             Optional<User> user = userRepository.findOneByLogin(login);
             if (user.isPresent()) {
-                // Tarkistetaan, onko käyttäjä admin
                 if (isAdmin(user.get()) || isRecser(user.get())) {
-                    // Palautetaan kaikki yritykset
                     return companyRepository.findAll();
                 } else {
-                    // Haetaan käyttäjän yritys
                     Company userCompany = user.get().getCompany();
                     if (userCompany != null) {
-                        // Palautetaan lista, jossa on vain käyttäjän yritys
                         return Collections.singletonList(userCompany);
                     }
                 }
@@ -61,8 +57,6 @@ public class CompanyService {
     }
 
     private boolean isAdmin(User user) {
-        // Voit toteuttaa adminin tarkistuksen tarpeidesi mukaan.
-        // Tässä esimerkissä tarkistetaan, onko käyttäjällä ADMIN-rooli.
         return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_ADMIN"));
     }
 

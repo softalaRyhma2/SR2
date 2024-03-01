@@ -84,7 +84,7 @@ public class SecurityConfiguration {
                         // nothing else works.
                         .requestMatchers(mvc.pattern("/api/companies")).permitAll()
                         .requestMatchers(mvc.pattern("/api/company/new")).hasAnyAuthority(AuthoritiesConstants.ADMIN,
-                                AuthoritiesConstants.RECSER)
+                                 AuthoritiesConstants.RECSER)
                         .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
                         .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
                         .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
