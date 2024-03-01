@@ -40,7 +40,7 @@ public class CompanyService {
             Optional<User> user = userRepository.findOneByLogin(login);
             if (user.isPresent()) {
                 // Tarkistetaan, onko käyttäjä admin
-                if (isAdmin(user.get())) {
+                if (isAdmin(user.get()) || isRecser(user.get())) {
                     // Palautetaan kaikki yritykset
                     return companyRepository.findAll();
                 } else {
@@ -54,6 +54,10 @@ public class CompanyService {
             }
         }
         return Collections.emptyList();
+    }
+
+    private boolean isRecser(User user) {
+        return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_RECSER"));
     }
 
     private boolean isAdmin(User user) {

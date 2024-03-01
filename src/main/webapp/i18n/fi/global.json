@@ -52,7 +52,7 @@
       "info": {
         "authenticated": {
           "prefix": "Väliaikaiset kirjautumistunnukset.<br/>",
-          "suffix": "- Administrator (login=\"admin\" ja salasana=\"admin\") <br/>- User (login=\"user\" ja salasana=\"user\") <br/>- transport1 (login=\"transport1\" ja salasana=\"user\").",
+          "suffix": "- Administrator (login=\"admin\" ja salasana=\"admin\") <br />- Recser User (login=\"recser\" and password=\"recser\") <br/>- User (login=\"user\" ja salasana=\"user\") <br/>- transport1 (login=\"transport1\" ja salasana=\"user\").",
           "button": "Kirjaudu sisään"
         },
         "register": {
