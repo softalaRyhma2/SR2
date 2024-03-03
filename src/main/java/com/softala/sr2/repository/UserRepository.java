@@ -1,5 +1,6 @@
 package com.softala.sr2.repository;
 
+import com.softala.sr2.domain.Company;
 import com.softala.sr2.domain.User;
 import java.time.Instant;
 import java.util.List;
@@ -38,4 +39,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
     Page<User> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+
+    List<User> findByCompany(Company company);
 }

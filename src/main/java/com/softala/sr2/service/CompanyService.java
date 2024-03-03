@@ -140,6 +140,13 @@ public class CompanyService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Company : {}", id);
+
+        Optional<Company> companyOptional = companyRepository.findById(id);
+        companyOptional.ifPresent(company -> {
+            List<User> users = userRepository.findByCompany(company);
+            users.forEach(user -> user.setCompany(null));
+        });
+
         companyRepository.deleteById(id);
     }
 }

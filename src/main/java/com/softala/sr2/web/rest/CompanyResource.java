@@ -2,6 +2,7 @@ package com.softala.sr2.web.rest;
 
 import com.softala.sr2.domain.Company;
 import com.softala.sr2.repository.CompanyRepository;
+import com.softala.sr2.security.SecurityUtils;
 import com.softala.sr2.service.CompanyService;
 import com.softala.sr2.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -186,7 +187,18 @@ public class CompanyResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCompany(@PathVariable("id") Long id) {
         log.debug("REST request to delete Company : {}", id);
+
+        // Check if the current user is an admin
+        boolean isAdmin = SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN");
+
+        // If not admin give error
+        if (!isAdmin) {
+            throw new BadRequestAlertException("User is not authorized to delete companies", ENTITY_NAME, "notauthorized");
+        }
+
+        // IF all fine delete
         companyService.delete(id);
+
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
