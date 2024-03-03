@@ -1,13 +1,21 @@
 package com.softala.sr2.web.rest;
 
+import com.softala.sr2.domain.Company;
+import com.softala.sr2.domain.Invoice;
 import com.softala.sr2.domain.Stock;
+import com.softala.sr2.domain.User;
+import com.softala.sr2.repository.InvoiceRepository;
 import com.softala.sr2.repository.StockRepository;
+import com.softala.sr2.repository.UserRepository;
+import com.softala.sr2.security.SecurityUtils;
 import com.softala.sr2.service.StockService;
 import com.softala.sr2.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,12 +47,60 @@ public class StockResource {
     private String applicationName;
 
     private final StockService stockService;
-
+    private final UserRepository userRepository;
     private final StockRepository stockRepository;
+    private final InvoiceRepository invoiceRepository;
 
-    public StockResource(StockService stockService, StockRepository stockRepository) {
+    public StockResource(
+        StockService stockService,
+        StockRepository stockRepository,
+        UserRepository userRepository,
+        InvoiceRepository invoiceRepository
+    ) {
         this.stockService = stockService;
         this.stockRepository = stockRepository;
+        this.userRepository = userRepository;
+        this.invoiceRepository = invoiceRepository;
+    }
+
+    public List<Stock> findStocksByInvoices(List<Invoice> invoices) {
+        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+        if (currentUserLogin.isPresent()) {
+            String login = currentUserLogin.get();
+            Optional<User> user = userRepository.findOneByLogin(login);
+            if (user.isPresent()) {
+                // Tarkistetaan, onko käyttäjä admin
+                if (isAdmin(user.get()) || isRecser(user.get())) {
+                    // Palautetaan kaikki varastot
+                    return stockRepository.findAll();
+                } else {
+                    // Haetaan käyttäjän yritys
+                    Company userCompany = user.get().getCompany();
+                    if (userCompany != null) {
+                        // Haetaan yrityksen varasto
+                        List<Invoice> companyInvoices = invoiceRepository.findByCompany(userCompany);
+                        if (companyInvoices != null && !companyInvoices.isEmpty()) {
+                            List<Stock> companyStocks = new ArrayList<>();
+                            for (Invoice invoice : companyInvoices) {
+                                companyStocks.addAll(stockRepository.findByInvoice(invoice));
+                            }
+                            return companyStocks;
+                        }
+                    }
+                }
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    private boolean isRecser(User user) {
+        return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_RECSER"));
+    }
+
+    private boolean isAdmin(User user) {
+        // Voit toteuttaa adminin tarkistuksen tarpeidesi mukaan.
+        // Tässä esimerkissä tarkistetaan, onko käyttäjällä ADMIN-rooli.
+        return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_ADMIN"));
     }
 
     /**
