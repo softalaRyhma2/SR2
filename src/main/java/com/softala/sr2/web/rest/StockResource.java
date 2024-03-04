@@ -63,33 +63,30 @@ public class StockResource {
         this.invoiceRepository = invoiceRepository;
     }
 
-    public List<Stock> findStocksByInvoices(List<Invoice> invoices) {
+    public List<Stock> findStocksByInvoices() {
         Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
         if (currentUserLogin.isPresent()) {
             String login = currentUserLogin.get();
             Optional<User> user = userRepository.findOneByLogin(login);
             if (user.isPresent()) {
-                // Tarkistetaan, onko käyttäjä admin
+                // Check if the user is admin or recser
                 if (isAdmin(user.get()) || isRecser(user.get())) {
-                    // Palautetaan kaikki varastot
+                    // Return all stocks
                     return stockRepository.findAll();
                 } else {
-                    // Haetaan käyttäjän yritys
+                    // Get user's company
                     Company userCompany = user.get().getCompany();
                     if (userCompany != null) {
-                        // Haetaan yrityksen varasto
-                        List<Invoice> companyInvoices = invoiceRepository.findByCompany(userCompany);
-                        if (companyInvoices != null && !companyInvoices.isEmpty()) {
-                            List<Stock> companyStocks = new ArrayList<>();
-                            for (Invoice invoice : companyInvoices) {
-                                companyStocks.addAll(stockRepository.findByInvoice(invoice));
-                            }
-                            return companyStocks;
-                        }
+                        // Get invoices for the user's company
+                        List<Invoice> invoices = invoiceRepository.findByCompany(userCompany);
+
+                        // Get stocks linked to the retrieved invoices
+                        return stockRepository.findByInvoices(invoices);
                     }
                 }
             }
         }
+        // Default return statement if none of the conditions are met
         return Collections.emptyList();
     }
 

@@ -17,7 +17,15 @@ import org.springframework.stereotype.Repository;
  * Spring Data JPA repository for the Stock entity.
  */
 @SuppressWarnings("unused")
-@Repository
 public interface StockRepository extends JpaRepository<Stock, Long> {
-    List<Stock> findByInvoice(Invoice invoice);
+    //  @Query("SELECT i FROM Invoice i WHERE i.company.id = (SELECT u.company.id FROM User u WHERE u.login = :login)")
+
+    @Query("SELECT s FROM Stock s WHERE s.invoice.company.id = (SELECT u.company.id FROM User u WHERE u.login = :login)")
+    List<Stock> findByCurrentUserCompany(@Param("login") String login);
+
+    @Query("SELECT s FROM Stock s WHERE s.invoice IN :invoices")
+    List<Stock> findByInvoice(@Param("invoices") List<Invoice> invoices);
+
+    @Query("SELECT s FROM Stock s WHERE s.invoice IN :invoices")
+    List<Stock> findByInvoices(@Param("invoices") List<Invoice> invoices);
 }

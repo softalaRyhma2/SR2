@@ -8,6 +8,7 @@ import com.softala.sr2.repository.InvoiceRepository;
 import com.softala.sr2.repository.StockRepository;
 import com.softala.sr2.repository.UserRepository;
 import com.softala.sr2.security.SecurityUtils;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -35,34 +36,37 @@ public class StockService {
     private final StockRepository stockRepository;
     private final UserRepository userRepository;
     private final InvoiceRepository invoiceRepository;
+    private final InvoiceService invoiceService;
 
-    public StockService(StockRepository stockRepository, InvoiceRepository invoiceRepository, UserRepository userRepository) {
+    public StockService(
+        StockRepository stockRepository,
+        InvoiceRepository invoiceRepository,
+        UserRepository userRepository,
+        InvoiceService invoiceService
+    ) {
         this.stockRepository = stockRepository;
         this.invoiceRepository = invoiceRepository;
         this.userRepository = userRepository;
+        this.invoiceService = invoiceService;
     }
 
-    public List<Stock> findStocksByInvoices(List<Invoice> invoices) {
+    public List<Stock> findStocksByInvoices() {
         Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
         if (currentUserLogin.isPresent()) {
             String login = currentUserLogin.get();
             Optional<User> user = userRepository.findOneByLogin(login);
             if (user.isPresent()) {
-                // Check if the user is admin or recser
+                // Tarkistetaan, onko käyttäjä admin
                 if (isAdmin(user.get()) || isRecser(user.get())) {
-                    // Return all stocks
+                    // Palautetaan kaikki varastot
                     return stockRepository.findAll();
                 } else {
-                    // Find the user's company
+                    // Haetaan käyttäjän yritys
                     Company userCompany = user.get().getCompany();
                     if (userCompany != null) {
-                        // Find invoices for the user's company
+                        // Haetaan yrityksen varasto
                         List<Invoice> companyInvoices = invoiceRepository.findByCompany(userCompany);
-
-                        if (!companyInvoices.isEmpty()) {
-                            // Find stocks related to company invoices
-                            return stockRepository.findByInvoice(companyInvoices);
-                        }
+                        return stockRepository.findByInvoices(companyInvoices);
                     }
                 }
             }
@@ -75,8 +79,6 @@ public class StockService {
     }
 
     private boolean isAdmin(User user) {
-        // Voit toteuttaa adminin tarkistuksen tarpeidesi mukaan.
-        // Tässä esimerkissä tarkistetaan, onko käyttäjällä ADMIN-rooli.
         return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_ADMIN"));
     }
 
