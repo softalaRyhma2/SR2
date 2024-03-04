@@ -140,7 +140,7 @@ export const Invoice = () => {
                   <td>
                     {invoice.invoiceDate ? <TextFormat type="date" value={invoice.invoiceDate} format={APP_LOCAL_DATE_FORMAT} /> : null}
                   </td>
-                  <td>{invoice.company ? <Link to={`/company/${invoice.company.id}`}>{invoice.company.id}</Link> : ''}</td>
+                  <td>{invoice.company ? <Link to={`/company/${invoice.company.id}`}>{invoice.company.companyName}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/invoice/${invoice.id}`} color="info" size="sm" data-cy="entityDetailsButton">
