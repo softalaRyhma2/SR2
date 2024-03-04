@@ -1,5 +1,5 @@
 id;reserved_quantity;reservation_date;is_picked_up;stock_id
-1;32308;2024-02-07;true;1
-2;9060;2024-02-07;false;2
-3;25208;2024-02-08;true;3
+1;5;2024-01-22;true;101
+2;10;2024-02-01;true;106
+3;20;2024-02-08;false;108
 
