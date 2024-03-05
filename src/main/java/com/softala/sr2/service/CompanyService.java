@@ -34,19 +34,18 @@ public class CompanyService {
     }
 
     public List<Company> findAllCompaniesByLoggedInUser() {
-        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
-        if (currentUserLogin.isPresent()) {
-            String login = currentUserLogin.get();
-            Optional<User> user = userRepository.findOneByLogin(login);
-            if (user.isPresent()) {
-                if (isAdmin(user.get()) || isRecser(user.get())) {
-                    return companyRepository.findAll();
-                } else {
-                    Company userCompany = user.get().getCompany();
-                    if (userCompany != null) {
-                        return Collections.singletonList(userCompany);
-                    }
-                }
+        String currentUserLogin = SecurityUtils
+            .getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException("Current user login not found"));
+
+        User user = userRepository.findOneByLogin(currentUserLogin).orElseThrow(() -> new IllegalStateException("User not found"));
+
+        if (isAdmin(user) || isRecser(user)) {
+            return companyRepository.findAll();
+        } else {
+            Company userCompany = user.getCompany();
+            if (userCompany != null) {
+                return Collections.singletonList(userCompany);
             }
         }
         return Collections.emptyList();
