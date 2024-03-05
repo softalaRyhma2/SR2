@@ -35,23 +35,18 @@ public class InvoiceService {
     }
 
     public List<Invoice> findAllInvoicesByLoggedInUser() {
-        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
-        if (currentUserLogin.isPresent()) {
-            String login = currentUserLogin.get();
-            Optional<User> user = userRepository.findOneByLogin(login);
-            if (user.isPresent()) {
-                // Tarkistetaan, onko käyttäjä admin
-                if (isAdmin(user.get()) || isRecser(user.get())) {
-                    // Palautetaan kaikki yritykset
-                    return invoiceRepository.findAll();
-                } else {
-                    // Haetaan käyttäjän yritys
-                    Company userCompany = user.get().getCompany();
-                    if (userCompany != null) {
-                        // Palautetaan lista, jossa on vain käyttäjän yritys
-                        return invoiceRepository.findByCompany(userCompany);
-                    }
-                }
+        String currentUserLogin = SecurityUtils
+            .getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException("Current user login not found"));
+
+        User user = userRepository.findOneByLogin(currentUserLogin).orElseThrow(() -> new IllegalStateException("User not found"));
+
+        if (isAdmin(user) || isRecser(user)) {
+            return invoiceRepository.findAll();
+        } else {
+            Company userCompany = user.getCompany();
+            if (userCompany != null) {
+                return invoiceRepository.findByCompany(userCompany);
             }
         }
         return Collections.emptyList();
