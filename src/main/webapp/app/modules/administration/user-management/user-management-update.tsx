@@ -49,7 +49,7 @@ export const UserManagementUpdate = () => {
   const loading = useAppSelector(state => state.userManagement.loading);
   const updating = useAppSelector(state => state.userManagement.updating);
   const authorities = useAppSelector(state => state.userManagement.authorities);
-  const companies = useAppSelector(state => state.getCompanies.companyId);
+  const companies = useAppSelector(state => state.company.entities);
 
   return (
     <div>

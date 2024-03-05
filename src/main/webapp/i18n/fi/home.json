@@ -3,7 +3,7 @@
     "title": "Tervetuloa {{username}}!",
     "subtitle": "Tämä on kotisivusi",
     "logged": {
-      "message": "Olet kirjautusnut käyttäjänä \"{{username}}\"."
+      "message": "Olet kirjautunut käyttäjänä \"{{username}}\"."
     },
     "question": "Jos sinulla on kysymyksiä JHipsteristä:",
     "link": {

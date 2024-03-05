@@ -4,6 +4,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 import com.softala.sr2.security.*;
+import com.softala.sr2.security.AuthoritiesConstants;
 import com.softala.sr2.web.filter.SpaWebFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -79,8 +80,11 @@ public class SecurityConfiguration {
                         .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
                         .requestMatchers(mvc.pattern("/api/register")).hasAuthority(AuthoritiesConstants.ADMIN)
                         .requestMatchers(mvc.pattern("/api/activate")).permitAll()
-                        //todo change api/companies to other than permitAll, it's like this for testing nothing else works.
+                        // todo change api/companies to other than permitAll, it's like this for testing
+                        // nothing else works.
                         .requestMatchers(mvc.pattern("/api/companies")).permitAll()
+                        .requestMatchers(mvc.pattern("/api/company/new")).hasAnyAuthority(AuthoritiesConstants.ADMIN,
+                                 AuthoritiesConstants.RECSER)
                         .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
                         .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
                         .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)

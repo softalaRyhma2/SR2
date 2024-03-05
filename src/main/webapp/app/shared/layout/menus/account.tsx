@@ -2,6 +2,7 @@ import React from 'react';
 import MenuItem from 'app/shared/layout/menus/menu-item';
 import { Translate, translate } from 'react-jhipster';
 import { NavDropdown } from './menu-components';
+import { useAppSelector } from 'app/config/store';
 
 const accountMenuItemsAuthenticated = () => (
   <>
@@ -28,11 +29,19 @@ const accountMenuItems = () => (
   </>
 );
 
-export const AccountMenu = ({ isAuthenticated = false }) => (
-  <NavDropdown icon="user" name={translate('global.menu.account.main')} id="account-menu" data-cy="accountMenu">
-    {isAuthenticated && accountMenuItemsAuthenticated()}
-    {!isAuthenticated && accountMenuItems()}
-  </NavDropdown>
-);
+export const AccountMenu = ({ isAuthenticated = false }) => {
+  const account = useAppSelector(state => state.authentication.account); // Correctly placed hook call
+
+  return (
+    <NavDropdown
+      icon="user"
+      name={isAuthenticated ? account.login : translate('global.menu.account.main')} // Display login name if authenticated
+      id="account-menu"
+      data-cy="accountMenu"
+    >
+      {isAuthenticated ? accountMenuItemsAuthenticated() : accountMenuItems()}
+    </NavDropdown>
+  );
+};
 
 export default AccountMenu;

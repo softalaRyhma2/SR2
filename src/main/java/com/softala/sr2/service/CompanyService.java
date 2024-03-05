@@ -39,15 +39,11 @@ public class CompanyService {
             String login = currentUserLogin.get();
             Optional<User> user = userRepository.findOneByLogin(login);
             if (user.isPresent()) {
-                // Tarkistetaan, onko käyttäjä admin
-                if (isAdmin(user.get())) {
-                    // Palautetaan kaikki yritykset
+                if (isAdmin(user.get()) || isRecser(user.get())) {
                     return companyRepository.findAll();
                 } else {
-                    // Haetaan käyttäjän yritys
                     Company userCompany = user.get().getCompany();
                     if (userCompany != null) {
-                        // Palautetaan lista, jossa on vain käyttäjän yritys
                         return Collections.singletonList(userCompany);
                     }
                 }
@@ -56,9 +52,11 @@ public class CompanyService {
         return Collections.emptyList();
     }
 
+    private boolean isRecser(User user) {
+        return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_RECSER"));
+    }
+
     private boolean isAdmin(User user) {
-        // Voit toteuttaa adminin tarkistuksen tarpeidesi mukaan.
-        // Tässä esimerkissä tarkistetaan, onko käyttäjällä ADMIN-rooli.
         return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_ADMIN"));
     }
 
@@ -142,6 +140,13 @@ public class CompanyService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Company : {}", id);
+
+        Optional<Company> companyOptional = companyRepository.findById(id);
+        companyOptional.ifPresent(company -> {
+            List<User> users = userRepository.findByCompany(company);
+            users.forEach(user -> user.setCompany(null));
+        });
+
         companyRepository.deleteById(id);
     }
 }

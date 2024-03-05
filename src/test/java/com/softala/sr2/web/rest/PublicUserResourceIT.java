@@ -80,7 +80,18 @@ class PublicUserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.PCENTER, AuthoritiesConstants.ADMIN)));
+            .andExpect(
+                jsonPath("$")
+                    .value(
+                        hasItems(
+                            AuthoritiesConstants.ADMIN,
+                            AuthoritiesConstants.RECSER,
+                            AuthoritiesConstants.TRANSPORT,
+                            AuthoritiesConstants.PCENTER,
+                            AuthoritiesConstants.TRANSPORT
+                        )
+                    )
+            );
     }
 
     @Test
