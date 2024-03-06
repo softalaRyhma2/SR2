@@ -45,7 +45,10 @@ tietoa ja keskittyä siihen.
 
 Käyttöliittymän prototyypin toteutus [Figmalla](https://www.figma.com/proto/ro5H0JYtuOTCF1MvtBOJzP/Battery?type=design&node-id=2-3&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=2%3A3).
 
-[Prototyypin esittelyvideo](https://youtu.be/tYGiNWlRKU4?si=zZkSN_4aD26bb1Pi)
+[Linkki herokussa julkaistuun sovellukseen](https://recser-app-6b6a8f3d45a1.herokuapp.com)
+
+[Prototyypin esittelyvideo sprint 1](https://youtu.be/tYGiNWlRKU4?si=zZkSN_4aD26bb1Pi)
+
 
 <!--
 Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona.
