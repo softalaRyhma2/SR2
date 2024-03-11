@@ -55,7 +55,7 @@ export const InvoiceDetail = () => {
           <dt>
             <Translate contentKey="sr2App.invoice.company">Company</Translate>
           </dt>
-          <dd>{invoiceEntity.company ? invoiceEntity.company.id : ''}</dd>
+          <dd>{invoiceEntity.company ? invoiceEntity.company.companyName : ''}</dd>
         </dl>
         <Button tag={Link} to="/invoice" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
