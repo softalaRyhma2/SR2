@@ -25,7 +25,7 @@ export const ReservedItemDeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.reservedItem.updateSuccess);
 
   const handleClose = () => {
-    navigate('/reserved-item');
+    navigate('/reserved-item' + pageLocation.search);
   };
 
   useEffect(() => {

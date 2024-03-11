@@ -36,16 +36,14 @@
       "otherEntityRelationshipName": "stockItem",
       "relationshipName": "stock",
       "relationshipSide": "right",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "stockItemType",
       "otherEntityRelationshipName": "stockItem",
       "relationshipName": "stockItemType",
       "relationshipSide": "right",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
+      "relationshipType": "many-to-one"
     }
   ],
   "searchEngine": "no",

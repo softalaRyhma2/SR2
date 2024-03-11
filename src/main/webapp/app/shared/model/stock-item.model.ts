@@ -8,8 +8,8 @@ export interface IStockItem {
   available?: number;
   price?: number;
   reservedItems?: IReservedItem[] | null;
-  stock?: IStock;
-  stockItemType?: IStockItemType;
+  stock?: IStock | null;
+  stockItemType?: IStockItemType | null;
 }
 
 export const defaultValue: Readonly<IStockItem> = {};

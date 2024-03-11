@@ -7,9 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.softala.sr2.IntegrationTest;
-import com.softala.sr2.domain.Stock;
 import com.softala.sr2.domain.StockItem;
-import com.softala.sr2.domain.StockItemType;
 import com.softala.sr2.repository.StockItemRepository;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
@@ -67,26 +65,6 @@ class StockItemResourceIT {
      */
     public static StockItem createEntity(EntityManager em) {
         StockItem stockItem = new StockItem().quantity(DEFAULT_QUANTITY).available(DEFAULT_AVAILABLE).price(DEFAULT_PRICE);
-        // Add required entity
-        Stock stock;
-        if (TestUtil.findAll(em, Stock.class).isEmpty()) {
-            stock = StockResourceIT.createEntity(em);
-            em.persist(stock);
-            em.flush();
-        } else {
-            stock = TestUtil.findAll(em, Stock.class).get(0);
-        }
-        stockItem.setStock(stock);
-        // Add required entity
-        StockItemType stockItemType;
-        if (TestUtil.findAll(em, StockItemType.class).isEmpty()) {
-            stockItemType = StockItemTypeResourceIT.createEntity(em);
-            em.persist(stockItemType);
-            em.flush();
-        } else {
-            stockItemType = TestUtil.findAll(em, StockItemType.class).get(0);
-        }
-        stockItem.setStockItemType(stockItemType);
         return stockItem;
     }
 
@@ -98,26 +76,6 @@ class StockItemResourceIT {
      */
     public static StockItem createUpdatedEntity(EntityManager em) {
         StockItem stockItem = new StockItem().quantity(UPDATED_QUANTITY).available(UPDATED_AVAILABLE).price(UPDATED_PRICE);
-        // Add required entity
-        Stock stock;
-        if (TestUtil.findAll(em, Stock.class).isEmpty()) {
-            stock = StockResourceIT.createUpdatedEntity(em);
-            em.persist(stock);
-            em.flush();
-        } else {
-            stock = TestUtil.findAll(em, Stock.class).get(0);
-        }
-        stockItem.setStock(stock);
-        // Add required entity
-        StockItemType stockItemType;
-        if (TestUtil.findAll(em, StockItemType.class).isEmpty()) {
-            stockItemType = StockItemTypeResourceIT.createUpdatedEntity(em);
-            em.persist(stockItemType);
-            em.flush();
-        } else {
-            stockItemType = TestUtil.findAll(em, StockItemType.class).get(0);
-        }
-        stockItem.setStockItemType(stockItemType);
         return stockItem;
     }
 

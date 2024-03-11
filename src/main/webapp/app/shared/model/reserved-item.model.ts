@@ -4,8 +4,8 @@ import { IStockItem } from 'app/shared/model/stock-item.model';
 export interface IReservedItem {
   id?: number;
   quantity?: number;
-  reservation?: IReservation;
-  stockItem?: IStockItem;
+  reservation?: IReservation | null;
+  stockItem?: IStockItem | null;
 }
 
 export const defaultValue: Readonly<IReservedItem> = {};

@@ -31,7 +31,7 @@ export const ReservedItemUpdate = () => {
   const updateSuccess = useAppSelector(state => state.reservedItem.updateSuccess);
 
   const handleClose = () => {
-    navigate('/reserved-item');
+    navigate('/reserved-item' + location.search);
   };
 
   useEffect(() => {
@@ -125,7 +125,6 @@ export const ReservedItemUpdate = () => {
                 data-cy="reservation"
                 label={translate('sr2App.reservedItem.reservation')}
                 type="select"
-                required
               >
                 <option value="" key="0" />
                 {reservations
@@ -136,16 +135,12 @@ export const ReservedItemUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <FormText>
-                <Translate contentKey="entity.validation.required">This field is required.</Translate>
-              </FormText>
               <ValidatedField
                 id="reserved-item-stockItem"
                 name="stockItem"
                 data-cy="stockItem"
                 label={translate('sr2App.reservedItem.stockItem')}
                 type="select"
-                required
               >
                 <option value="" key="0" />
                 {stockItems
@@ -156,9 +151,6 @@ export const ReservedItemUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <FormText>
-                <Translate contentKey="entity.validation.required">This field is required.</Translate>
-              </FormText>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/reserved-item" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

@@ -44,13 +44,11 @@ public class StockItem implements Serializable {
     @JsonIgnoreProperties(value = { "reservation", "stockItem" }, allowSetters = true)
     private Set<ReservedItem> reservedItems = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "stockItems", "invoice" }, allowSetters = true)
     private Stock stock;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "stockItems" }, allowSetters = true)
     private StockItemType stockItemType;
 

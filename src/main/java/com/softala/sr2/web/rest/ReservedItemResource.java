@@ -2,6 +2,7 @@ package com.softala.sr2.web.rest;
 
 import com.softala.sr2.domain.ReservedItem;
 import com.softala.sr2.repository.ReservedItemRepository;
+import com.softala.sr2.service.ReservedItemService;
 import com.softala.sr2.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -13,10 +14,14 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -24,7 +29,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/reserved-items")
-@Transactional
 public class ReservedItemResource {
 
     private final Logger log = LoggerFactory.getLogger(ReservedItemResource.class);
@@ -34,9 +38,12 @@ public class ReservedItemResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final ReservedItemService reservedItemService;
+
     private final ReservedItemRepository reservedItemRepository;
 
-    public ReservedItemResource(ReservedItemRepository reservedItemRepository) {
+    public ReservedItemResource(ReservedItemService reservedItemService, ReservedItemRepository reservedItemRepository) {
+        this.reservedItemService = reservedItemService;
         this.reservedItemRepository = reservedItemRepository;
     }
 
@@ -53,7 +60,7 @@ public class ReservedItemResource {
         if (reservedItem.getId() != null) {
             throw new BadRequestAlertException("A new reservedItem cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ReservedItem result = reservedItemRepository.save(reservedItem);
+        ReservedItem result = reservedItemService.save(reservedItem);
         return ResponseEntity
             .created(new URI("/api/reserved-items/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -87,7 +94,7 @@ public class ReservedItemResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        ReservedItem result = reservedItemRepository.save(reservedItem);
+        ReservedItem result = reservedItemService.update(reservedItem);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, reservedItem.getId().toString()))
@@ -122,16 +129,7 @@ public class ReservedItemResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<ReservedItem> result = reservedItemRepository
-            .findById(reservedItem.getId())
-            .map(existingReservedItem -> {
-                if (reservedItem.getQuantity() != null) {
-                    existingReservedItem.setQuantity(reservedItem.getQuantity());
-                }
-
-                return existingReservedItem;
-            })
-            .map(reservedItemRepository::save);
+        Optional<ReservedItem> result = reservedItemService.partialUpdate(reservedItem);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -142,12 +140,15 @@ public class ReservedItemResource {
     /**
      * {@code GET  /reserved-items} : get all the reservedItems.
      *
+     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of reservedItems in body.
      */
     @GetMapping("")
-    public List<ReservedItem> getAllReservedItems() {
-        log.debug("REST request to get all ReservedItems");
-        return reservedItemRepository.findAll();
+    public ResponseEntity<List<ReservedItem>> getAllReservedItems(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of ReservedItems");
+        Page<ReservedItem> page = reservedItemService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -159,7 +160,7 @@ public class ReservedItemResource {
     @GetMapping("/{id}")
     public ResponseEntity<ReservedItem> getReservedItem(@PathVariable("id") Long id) {
         log.debug("REST request to get ReservedItem : {}", id);
-        Optional<ReservedItem> reservedItem = reservedItemRepository.findById(id);
+        Optional<ReservedItem> reservedItem = reservedItemService.findOne(id);
         return ResponseUtil.wrapOrNotFound(reservedItem);
     }
 
@@ -172,7 +173,7 @@ public class ReservedItemResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservedItem(@PathVariable("id") Long id) {
         log.debug("REST request to delete ReservedItem : {}", id);
-        reservedItemRepository.deleteById(id);
+        reservedItemService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

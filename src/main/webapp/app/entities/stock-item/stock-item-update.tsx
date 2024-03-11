@@ -147,14 +147,7 @@ export const StockItemUpdate = () => {
                   validate: v => isNumber(v) || translate('entity.validation.number'),
                 }}
               />
-              <ValidatedField
-                id="stock-item-stock"
-                name="stock"
-                data-cy="stock"
-                label={translate('sr2App.stockItem.stock')}
-                type="select"
-                required
-              >
+              <ValidatedField id="stock-item-stock" name="stock" data-cy="stock" label={translate('sr2App.stockItem.stock')} type="select">
                 <option value="" key="0" />
                 {stocks
                   ? stocks.map(otherEntity => (
@@ -164,16 +157,12 @@ export const StockItemUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <FormText>
-                <Translate contentKey="entity.validation.required">This field is required.</Translate>
-              </FormText>
               <ValidatedField
                 id="stock-item-stockItemType"
                 name="stockItemType"
                 data-cy="stockItemType"
                 label={translate('sr2App.stockItem.stockItemType')}
                 type="select"
-                required
               >
                 <option value="" key="0" />
                 {stockItemTypes
@@ -184,9 +173,6 @@ export const StockItemUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <FormText>
-                <Translate contentKey="entity.validation.required">This field is required.</Translate>
-              </FormText>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/stock-item" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

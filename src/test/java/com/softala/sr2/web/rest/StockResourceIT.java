@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.softala.sr2.IntegrationTest;
-import com.softala.sr2.domain.Invoice;
 import com.softala.sr2.domain.Stock;
 import com.softala.sr2.repository.StockRepository;
 import jakarta.persistence.EntityManager;
@@ -60,16 +59,6 @@ class StockResourceIT {
      */
     public static Stock createEntity(EntityManager em) {
         Stock stock = new Stock().stockDate(DEFAULT_STOCK_DATE);
-        // Add required entity
-        Invoice invoice;
-        if (TestUtil.findAll(em, Invoice.class).isEmpty()) {
-            invoice = InvoiceResourceIT.createEntity(em);
-            em.persist(invoice);
-            em.flush();
-        } else {
-            invoice = TestUtil.findAll(em, Invoice.class).get(0);
-        }
-        stock.setInvoice(invoice);
         return stock;
     }
 
@@ -81,16 +70,6 @@ class StockResourceIT {
      */
     public static Stock createUpdatedEntity(EntityManager em) {
         Stock stock = new Stock().stockDate(UPDATED_STOCK_DATE);
-        // Add required entity
-        Invoice invoice;
-        if (TestUtil.findAll(em, Invoice.class).isEmpty()) {
-            invoice = InvoiceResourceIT.createUpdatedEntity(em);
-            em.persist(invoice);
-            em.flush();
-        } else {
-            invoice = TestUtil.findAll(em, Invoice.class).get(0);
-        }
-        stock.setInvoice(invoice);
         return stock;
     }
 

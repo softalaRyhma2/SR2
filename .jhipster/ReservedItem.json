@@ -12,23 +12,23 @@
     }
   ],
   "name": "ReservedItem",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "reservation",
       "otherEntityRelationshipName": "reservedItem",
       "relationshipName": "reservation",
       "relationshipSide": "right",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "stockItem",
       "otherEntityRelationshipName": "reservedItem",
       "relationshipName": "stockItem",
       "relationshipSide": "right",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
+      "relationshipType": "many-to-one"
     }
   ],
-  "searchEngine": "no"
+  "searchEngine": "no",
+  "service": "serviceClass"
 }

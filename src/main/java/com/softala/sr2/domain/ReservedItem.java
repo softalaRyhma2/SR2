@@ -28,13 +28,11 @@ public class ReservedItem implements Serializable {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "reservedItems" }, allowSetters = true)
     private Reservation reservation;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "reservedItems", "stock", "stockItemType" }, allowSetters = true)
     private StockItem stockItem;
 

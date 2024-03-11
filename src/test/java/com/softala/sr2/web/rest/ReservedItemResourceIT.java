@@ -6,9 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.softala.sr2.IntegrationTest;
-import com.softala.sr2.domain.Reservation;
 import com.softala.sr2.domain.ReservedItem;
-import com.softala.sr2.domain.StockItem;
 import com.softala.sr2.repository.ReservedItemRepository;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -59,26 +57,6 @@ class ReservedItemResourceIT {
      */
     public static ReservedItem createEntity(EntityManager em) {
         ReservedItem reservedItem = new ReservedItem().quantity(DEFAULT_QUANTITY);
-        // Add required entity
-        Reservation reservation;
-        if (TestUtil.findAll(em, Reservation.class).isEmpty()) {
-            reservation = ReservationResourceIT.createEntity(em);
-            em.persist(reservation);
-            em.flush();
-        } else {
-            reservation = TestUtil.findAll(em, Reservation.class).get(0);
-        }
-        reservedItem.setReservation(reservation);
-        // Add required entity
-        StockItem stockItem;
-        if (TestUtil.findAll(em, StockItem.class).isEmpty()) {
-            stockItem = StockItemResourceIT.createEntity(em);
-            em.persist(stockItem);
-            em.flush();
-        } else {
-            stockItem = TestUtil.findAll(em, StockItem.class).get(0);
-        }
-        reservedItem.setStockItem(stockItem);
         return reservedItem;
     }
 
@@ -90,26 +68,6 @@ class ReservedItemResourceIT {
      */
     public static ReservedItem createUpdatedEntity(EntityManager em) {
         ReservedItem reservedItem = new ReservedItem().quantity(UPDATED_QUANTITY);
-        // Add required entity
-        Reservation reservation;
-        if (TestUtil.findAll(em, Reservation.class).isEmpty()) {
-            reservation = ReservationResourceIT.createUpdatedEntity(em);
-            em.persist(reservation);
-            em.flush();
-        } else {
-            reservation = TestUtil.findAll(em, Reservation.class).get(0);
-        }
-        reservedItem.setReservation(reservation);
-        // Add required entity
-        StockItem stockItem;
-        if (TestUtil.findAll(em, StockItem.class).isEmpty()) {
-            stockItem = StockItemResourceIT.createUpdatedEntity(em);
-            em.persist(stockItem);
-            em.flush();
-        } else {
-            stockItem = TestUtil.findAll(em, StockItem.class).get(0);
-        }
-        reservedItem.setStockItem(stockItem);
         return reservedItem;
     }
 
