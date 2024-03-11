@@ -19,17 +19,21 @@
       "fieldName": "isPickedUp",
       "fieldType": "Boolean",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "reservationId",
+      "fieldType": "Long"
     }
   ],
   "name": "Reservation",
   "pagination": "pagination",
   "relationships": [
     {
-      "otherEntityName": "stock",
-      "relationshipName": "stock",
+      "otherEntityName": "reservedItem",
+      "otherEntityRelationshipName": "reservation",
+      "relationshipName": "reservedItem",
       "relationshipSide": "left",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
+      "relationshipType": "one-to-many"
     }
   ],
   "searchEngine": "no",

@@ -1,0 +1,55 @@
+entity Company {
+      companyName String required maxlength(50),
+      companyEmail String required maxlength(60) pattern(/^[^@\s]+@[^@\s]+.[^@\s]+$/),
+      companyDetails String maxlength(500),
+      companyId Long
+}
+
+entity Invoice {
+      totalSum BigDecimal,
+      invoiceDate LocalDate,
+      invoiceId Long
+}
+entity Stock {
+    stockDate LocalDate required,
+    stockId Long
+}
+entity StockItem {
+    quantity Integer required,
+    availability Integer required,
+    price BigDecimal required,
+    stockItemId Long
+}
+entity StockItemType {
+    name String required
+    stockItemTypeId Long
+}
+
+entity Reservation {
+    reservedQuantity Integer required,
+    reservationDate LocalDate required,
+    isPickedUp Boolean required,
+    reservationId Long
+}
+entity ReservedItem{
+	quantity Integer required
+}
+
+relationship OneToMany {
+    Company{invoice} to @OnUpdate("CASCADE") Invoice{company required}, 
+    /* Company(1)<----->(*)Invoice : one company has many invoices, many invoices have one company*/
+    Invoice{stock} to Stock{invoice required}, 
+    /* Invoice(1)<----->(*)Stock : one invoice has many stocks, many stocks have one invoice*/
+    Stock{stockItem} to StockItem{stock required}, 
+    /*??? vai manytomany??? Stock(1)<----->(*)StockItem : one stock has many stockItems, many stockItems have one stock*/
+    StockItemType{stockItem} to StockItem{stockItemType required},
+    /* stockItemType(1)<----->(*)StockItem : one stockItemType has many stockItems, many stockItems have one stockItemType*/
+	Reservation{reservedItem} to ReservedItem{reservation required},
+	/* Reservation(1)<----->(*)ReservedItem : one Reservation has many reservedItems, many reservedItems have one Reservation*/
+	StockItem{reservedItem} to ReservedItem{stockItem required}
+    /* stockItem(1)<----->(*)ReservedItem : one stockItem has many reservedItems, many reservedItems have one stockItem*/
+}
+
+
+paginate Company, StockItemType, Stock, StockItem, Reservation, Invoice with pagination
+service Company, StockItemType, Stock, StockItem, Reservation, Invoice with serviceClass

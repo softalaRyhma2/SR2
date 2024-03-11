@@ -33,7 +33,7 @@ public class Company implements Serializable {
 
     @NotNull
     @Size(max = 60)
-    @Pattern(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
+    @Pattern(regexp = "^[^@\\s]+@[^@\\s]+.[^@\\s]+$")
     @Column(name = "company_email", length = 60, nullable = false)
     private String companyEmail;
 
@@ -41,9 +41,12 @@ public class Company implements Serializable {
     @Column(name = "company_details", length = 500)
     private String companyDetails;
 
+    @Column(name = "company_id")
+    private Long companyId;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "stocks", "company" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -98,6 +101,19 @@ public class Company implements Serializable {
 
     public void setCompanyDetails(String companyDetails) {
         this.companyDetails = companyDetails;
+    }
+
+    public Long getCompanyId() {
+        return this.companyId;
+    }
+
+    public Company companyId(Long companyId) {
+        this.setCompanyId(companyId);
+        return this;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public Set<Invoice> getInvoices() {
@@ -158,6 +174,7 @@ public class Company implements Serializable {
             ", companyName='" + getCompanyName() + "'" +
             ", companyEmail='" + getCompanyEmail() + "'" +
             ", companyDetails='" + getCompanyDetails() + "'" +
+            ", companyId=" + getCompanyId() +
             "}";
     }
 }

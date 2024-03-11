@@ -40,6 +40,9 @@ class InvoiceResourceIT {
     private static final LocalDate DEFAULT_INVOICE_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_INVOICE_DATE = LocalDate.now(ZoneId.systemDefault());
 
+    private static final Long DEFAULT_INVOICE_ID = 1L;
+    private static final Long UPDATED_INVOICE_ID = 2L;
+
     private static final String ENTITY_API_URL = "/api/invoices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -64,7 +67,7 @@ class InvoiceResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Invoice createEntity(EntityManager em) {
-        Invoice invoice = new Invoice().totalSum(DEFAULT_TOTAL_SUM).invoiceDate(DEFAULT_INVOICE_DATE);
+        Invoice invoice = new Invoice().totalSum(DEFAULT_TOTAL_SUM).invoiceDate(DEFAULT_INVOICE_DATE).invoiceId(DEFAULT_INVOICE_ID);
         // Add required entity
         Company company;
         if (TestUtil.findAll(em, Company.class).isEmpty()) {
@@ -85,7 +88,7 @@ class InvoiceResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Invoice createUpdatedEntity(EntityManager em) {
-        Invoice invoice = new Invoice().totalSum(UPDATED_TOTAL_SUM).invoiceDate(UPDATED_INVOICE_DATE);
+        Invoice invoice = new Invoice().totalSum(UPDATED_TOTAL_SUM).invoiceDate(UPDATED_INVOICE_DATE).invoiceId(UPDATED_INVOICE_ID);
         // Add required entity
         Company company;
         if (TestUtil.findAll(em, Company.class).isEmpty()) {
@@ -119,6 +122,7 @@ class InvoiceResourceIT {
         Invoice testInvoice = invoiceList.get(invoiceList.size() - 1);
         assertThat(testInvoice.getTotalSum()).isEqualByComparingTo(DEFAULT_TOTAL_SUM);
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(DEFAULT_INVOICE_DATE);
+        assertThat(testInvoice.getInvoiceId()).isEqualTo(DEFAULT_INVOICE_ID);
     }
 
     @Test
@@ -152,7 +156,8 @@ class InvoiceResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(invoice.getId().intValue())))
             .andExpect(jsonPath("$.[*].totalSum").value(hasItem(sameNumber(DEFAULT_TOTAL_SUM))))
-            .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())));
+            .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
+            .andExpect(jsonPath("$.[*].invoiceId").value(hasItem(DEFAULT_INVOICE_ID.intValue())));
     }
 
     @Test
@@ -168,7 +173,8 @@ class InvoiceResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(invoice.getId().intValue()))
             .andExpect(jsonPath("$.totalSum").value(sameNumber(DEFAULT_TOTAL_SUM)))
-            .andExpect(jsonPath("$.invoiceDate").value(DEFAULT_INVOICE_DATE.toString()));
+            .andExpect(jsonPath("$.invoiceDate").value(DEFAULT_INVOICE_DATE.toString()))
+            .andExpect(jsonPath("$.invoiceId").value(DEFAULT_INVOICE_ID.intValue()));
     }
 
     @Test
@@ -190,7 +196,7 @@ class InvoiceResourceIT {
         Invoice updatedInvoice = invoiceRepository.findById(invoice.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedInvoice are not directly saved in db
         em.detach(updatedInvoice);
-        updatedInvoice.totalSum(UPDATED_TOTAL_SUM).invoiceDate(UPDATED_INVOICE_DATE);
+        updatedInvoice.totalSum(UPDATED_TOTAL_SUM).invoiceDate(UPDATED_INVOICE_DATE).invoiceId(UPDATED_INVOICE_ID);
 
         restInvoiceMockMvc
             .perform(
@@ -206,6 +212,7 @@ class InvoiceResourceIT {
         Invoice testInvoice = invoiceList.get(invoiceList.size() - 1);
         assertThat(testInvoice.getTotalSum()).isEqualByComparingTo(UPDATED_TOTAL_SUM);
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(UPDATED_INVOICE_DATE);
+        assertThat(testInvoice.getInvoiceId()).isEqualTo(UPDATED_INVOICE_ID);
     }
 
     @Test
@@ -292,6 +299,7 @@ class InvoiceResourceIT {
         Invoice testInvoice = invoiceList.get(invoiceList.size() - 1);
         assertThat(testInvoice.getTotalSum()).isEqualByComparingTo(DEFAULT_TOTAL_SUM);
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(UPDATED_INVOICE_DATE);
+        assertThat(testInvoice.getInvoiceId()).isEqualTo(DEFAULT_INVOICE_ID);
     }
 
     @Test
@@ -306,7 +314,7 @@ class InvoiceResourceIT {
         Invoice partialUpdatedInvoice = new Invoice();
         partialUpdatedInvoice.setId(invoice.getId());
 
-        partialUpdatedInvoice.totalSum(UPDATED_TOTAL_SUM).invoiceDate(UPDATED_INVOICE_DATE);
+        partialUpdatedInvoice.totalSum(UPDATED_TOTAL_SUM).invoiceDate(UPDATED_INVOICE_DATE).invoiceId(UPDATED_INVOICE_ID);
 
         restInvoiceMockMvc
             .perform(
@@ -322,6 +330,7 @@ class InvoiceResourceIT {
         Invoice testInvoice = invoiceList.get(invoiceList.size() - 1);
         assertThat(testInvoice.getTotalSum()).isEqualByComparingTo(UPDATED_TOTAL_SUM);
         assertThat(testInvoice.getInvoiceDate()).isEqualTo(UPDATED_INVOICE_DATE);
+        assertThat(testInvoice.getInvoiceId()).isEqualTo(UPDATED_INVOICE_ID);
     }
 
     @Test

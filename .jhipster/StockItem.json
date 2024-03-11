@@ -1,0 +1,57 @@
+{
+  "annotations": {
+    "changelogDate": "20240208082456"
+  },
+  "applications": "*",
+  "entityTableName": "stock_item",
+  "fields": [
+    {
+      "fieldName": "quantity",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "availability",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "price",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "stockItemId",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "StockItem",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "reservedItem",
+      "otherEntityRelationshipName": "stockItem",
+      "relationshipName": "reservedItem",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "stock",
+      "otherEntityRelationshipName": "stockItem",
+      "relationshipName": "stock",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "stockItemType",
+      "otherEntityRelationshipName": "stockItem",
+      "relationshipName": "stockItemType",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -59,17 +59,11 @@ public class StockService {
         return stockRepository
             .findById(stock.getId())
             .map(existingStock -> {
-                if (stock.getQuantity() != null) {
-                    existingStock.setQuantity(stock.getQuantity());
-                }
-                if (stock.getAvailable() != null) {
-                    existingStock.setAvailable(stock.getAvailable());
-                }
-                if (stock.getPrice() != null) {
-                    existingStock.setPrice(stock.getPrice());
-                }
                 if (stock.getStockDate() != null) {
                     existingStock.setStockDate(stock.getStockDate());
+                }
+                if (stock.getStockId() != null) {
+                    existingStock.setStockId(stock.getStockId());
                 }
 
                 return existingStock;

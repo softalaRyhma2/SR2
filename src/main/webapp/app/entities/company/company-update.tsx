@@ -47,6 +47,9 @@ export const CompanyUpdate = () => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
+    if (values.companyId !== undefined && typeof values.companyId !== 'number') {
+      values.companyId = Number(values.companyId);
+    }
 
     const entity = {
       ...companyEntity,
@@ -113,8 +116,8 @@ export const CompanyUpdate = () => {
                   required: { value: true, message: translate('entity.validation.required') },
                   maxLength: { value: 60, message: translate('entity.validation.maxlength', { max: 60 }) },
                   pattern: {
-                    value: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
-                    message: translate('entity.validation.pattern', { pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$' }),
+                    value: /^[^@\s]+@[^@\s]+.[^@\s]+$/,
+                    message: translate('entity.validation.pattern', { pattern: '^[^@\\s]+@[^@\\s]+.[^@\\s]+$' }),
                   },
                 }}
               />
@@ -127,6 +130,13 @@ export const CompanyUpdate = () => {
                 validate={{
                   maxLength: { value: 500, message: translate('entity.validation.maxlength', { max: 500 }) },
                 }}
+              />
+              <ValidatedField
+                label={translate('sr2App.company.companyId')}
+                id="company-companyId"
+                name="companyId"
+                data-cy="companyId"
+                type="text"
               />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/company" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />

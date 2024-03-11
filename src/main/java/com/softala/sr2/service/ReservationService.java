@@ -68,6 +68,9 @@ public class ReservationService {
                 if (reservation.getIsPickedUp() != null) {
                     existingReservation.setIsPickedUp(reservation.getIsPickedUp());
                 }
+                if (reservation.getReservationId() != null) {
+                    existingReservation.setReservationId(reservation.getReservationId());
+                }
 
                 return existingReservation;
             })

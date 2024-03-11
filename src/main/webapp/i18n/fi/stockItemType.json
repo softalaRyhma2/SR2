@@ -1,0 +1,26 @@
+{
+  "sr2App": {
+    "stockItemType": {
+      "home": {
+        "title": "Stock Item Types",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Luo Stock Item Type",
+        "createOrEditLabel": "Luo tai muokkaa Stock Item Type",
+        "notFound": "Stock Item Type ei löytynyt"
+      },
+      "created": "Uusi Stock Item Type on luotu, id: {{ param }}",
+      "updated": "Stock Item Type on päivitetty, id: {{ param }}",
+      "deleted": "Stock Item Type on päivitetty, id: {{ param }}",
+      "delete": {
+        "question": "Haluatko varmasti poistaa Stock Item Type {{ id }}?"
+      },
+      "detail": {
+        "title": "Stock Item Type"
+      },
+      "id": "ID",
+      "name": "Name",
+      "stockItemTypeId": "Stock Item Type Id",
+      "stockItem": "Stock Item"
+    }
+  }
+}

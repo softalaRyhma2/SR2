@@ -1,0 +1,26 @@
+{
+  "sr2App": {
+    "reservedItem": {
+      "home": {
+        "title": "Reserved Items",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Luo Reserved Item",
+        "createOrEditLabel": "Luo tai muokkaa Reserved Item",
+        "notFound": "Reserved Item ei löytynyt"
+      },
+      "created": "Uusi Reserved Item on luotu, id: {{ param }}",
+      "updated": "Reserved Item on päivitetty, id: {{ param }}",
+      "deleted": "Reserved Item on päivitetty, id: {{ param }}",
+      "delete": {
+        "question": "Haluatko varmasti poistaa Reserved Item {{ id }}?"
+      },
+      "detail": {
+        "title": "Reserved Item"
+      },
+      "id": "ID",
+      "quantity": "Quantity",
+      "reservation": "Reservation",
+      "stockItem": "Stock Item"
+    }
+  }
+}

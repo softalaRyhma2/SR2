@@ -2,9 +2,12 @@ package com.softala.sr2.domain;
 
 import static com.softala.sr2.domain.CompanyTestSamples.*;
 import static com.softala.sr2.domain.InvoiceTestSamples.*;
+import static com.softala.sr2.domain.StockTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.softala.sr2.web.rest.TestUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class InvoiceTest {
@@ -21,6 +24,28 @@ class InvoiceTest {
 
         invoice2 = getInvoiceSample2();
         assertThat(invoice1).isNotEqualTo(invoice2);
+    }
+
+    @Test
+    void stockTest() throws Exception {
+        Invoice invoice = getInvoiceRandomSampleGenerator();
+        Stock stockBack = getStockRandomSampleGenerator();
+
+        invoice.addStock(stockBack);
+        assertThat(invoice.getStocks()).containsOnly(stockBack);
+        assertThat(stockBack.getInvoice()).isEqualTo(invoice);
+
+        invoice.removeStock(stockBack);
+        assertThat(invoice.getStocks()).doesNotContain(stockBack);
+        assertThat(stockBack.getInvoice()).isNull();
+
+        invoice.stocks(new HashSet<>(Set.of(stockBack)));
+        assertThat(invoice.getStocks()).containsOnly(stockBack);
+        assertThat(stockBack.getInvoice()).isEqualTo(invoice);
+
+        invoice.setStocks(new HashSet<>());
+        assertThat(invoice.getStocks()).doesNotContain(stockBack);
+        assertThat(stockBack.getInvoice()).isNull();
     }
 
     @Test

@@ -1,5 +1,11 @@
-id;reserved_quantity;reservation_date;is_picked_up;stock_id
-1;5;2024-01-22;true;101
-2;10;2024-02-01;true;106
-3;20;2024-02-08;false;108
-
+id;reserved_quantity;reservation_date;is_picked_up;reservation_id
+1;32308;2024-02-07;true;9060
+2;31498;2024-02-07;false;6477
+3;7646;2024-02-07;false;29599
+4;26151;2024-02-08;false;12619
+5;17617;2024-02-07;false;27851
+6;9054;2024-02-07;false;21808
+7;11480;2024-02-07;false;4850
+8;5876;2024-02-07;false;14709
+9;16930;2024-02-08;true;18201
+10;9664;2024-02-07;false;2792

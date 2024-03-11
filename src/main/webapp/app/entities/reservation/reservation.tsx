@@ -126,8 +126,9 @@ export const Reservation = () => {
                   <Translate contentKey="sr2App.reservation.isPickedUp">Is Picked Up</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('isPickedUp')} />
                 </th>
-                <th>
-                  <Translate contentKey="sr2App.reservation.stock">Stock</Translate> <FontAwesomeIcon icon="sort" />
+                <th className="hand" onClick={sort('reservationId')}>
+                  <Translate contentKey="sr2App.reservation.reservationId">Reservation Id</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('reservationId')} />
                 </th>
                 <th />
               </tr>
@@ -147,7 +148,7 @@ export const Reservation = () => {
                     ) : null}
                   </td>
                   <td>{reservation.isPickedUp ? 'true' : 'false'}</td>
-                  <td>{reservation.stock ? <Link to={`/stock/${reservation.stock.id}`}>{reservation.stock.id}</Link> : ''}</td>
+                  <td>{reservation.reservationId}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/reservation/${reservation.id}`} color="info" size="sm" data-cy="entityDetailsButton">

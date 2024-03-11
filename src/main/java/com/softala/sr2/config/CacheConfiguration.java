@@ -53,6 +53,14 @@ public class CacheConfiguration {
             createCache(cm, com.softala.sr2.domain.Reservation.class.getName());
             createCache(cm, com.softala.sr2.domain.Invoice.class.getName());
             createCache(cm, com.softala.sr2.domain.Company.class.getName() + ".invoices");
+            createCache(cm, com.softala.sr2.domain.StockItem.class.getName());
+            createCache(cm, com.softala.sr2.domain.StockItem.class.getName() + ".reservedItems");
+            createCache(cm, com.softala.sr2.domain.StockItemType.class.getName());
+            createCache(cm, com.softala.sr2.domain.StockItemType.class.getName() + ".stockItems");
+            createCache(cm, com.softala.sr2.domain.Stock.class.getName() + ".stockItems");
+            createCache(cm, com.softala.sr2.domain.ReservedItem.class.getName());
+            createCache(cm, com.softala.sr2.domain.Reservation.class.getName() + ".reservedItems");
+            createCache(cm, com.softala.sr2.domain.Invoice.class.getName() + ".stocks");
             // jhipster-needle-ehcache-add-entry
         };
     }

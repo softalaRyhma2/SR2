@@ -52,14 +52,8 @@ export const StockUpdate = () => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
-    if (values.quantity !== undefined && typeof values.quantity !== 'number') {
-      values.quantity = Number(values.quantity);
-    }
-    if (values.available !== undefined && typeof values.available !== 'number') {
-      values.available = Number(values.available);
-    }
-    if (values.price !== undefined && typeof values.price !== 'number') {
-      values.price = Number(values.price);
+    if (values.stockId !== undefined && typeof values.stockId !== 'number') {
+      values.stockId = Number(values.stockId);
     }
 
     const entity = {
@@ -109,39 +103,6 @@ export const StockUpdate = () => {
                 />
               ) : null}
               <ValidatedField
-                label={translate('sr2App.stock.quantity')}
-                id="stock-quantity"
-                name="quantity"
-                data-cy="quantity"
-                type="text"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                  validate: v => isNumber(v) || translate('entity.validation.number'),
-                }}
-              />
-              <ValidatedField
-                label={translate('sr2App.stock.available')}
-                id="stock-available"
-                name="available"
-                data-cy="available"
-                type="text"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                  validate: v => isNumber(v) || translate('entity.validation.number'),
-                }}
-              />
-              <ValidatedField
-                label={translate('sr2App.stock.price')}
-                id="stock-price"
-                name="price"
-                data-cy="price"
-                type="text"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                  validate: v => isNumber(v) || translate('entity.validation.number'),
-                }}
-              />
-              <ValidatedField
                 label={translate('sr2App.stock.stockDate')}
                 id="stock-stockDate"
                 name="stockDate"
@@ -151,6 +112,7 @@ export const StockUpdate = () => {
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
               />
+              <ValidatedField label={translate('sr2App.stock.stockId')} id="stock-stockId" name="stockId" data-cy="stockId" type="text" />
               <ValidatedField
                 id="stock-invoice"
                 name="invoice"

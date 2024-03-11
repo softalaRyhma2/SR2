@@ -55,9 +55,11 @@ export const ReservationDetail = () => {
           </dt>
           <dd>{reservationEntity.isPickedUp ? 'true' : 'false'}</dd>
           <dt>
-            <Translate contentKey="sr2App.reservation.stock">Stock</Translate>
+            <span id="reservationId">
+              <Translate contentKey="sr2App.reservation.reservationId">Reservation Id</Translate>
+            </span>
           </dt>
-          <dd>{reservationEntity.stock ? reservationEntity.stock.id : ''}</dd>
+          <dd>{reservationEntity.reservationId}</dd>
         </dl>
         <Button tag={Link} to="/reservation" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

@@ -1,0 +1,26 @@
+{
+  "sr2App": {
+    "reservedItem": {
+      "home": {
+        "title": "Reserved Items",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Reserved Item",
+        "createOrEditLabel": "Create or edit a Reserved Item",
+        "notFound": "No Reserved Items found"
+      },
+      "created": "A new Reserved Item is created with identifier {{ param }}",
+      "updated": "A Reserved Item is updated with identifier {{ param }}",
+      "deleted": "A Reserved Item is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Reserved Item {{ id }}?"
+      },
+      "detail": {
+        "title": "Reserved Item"
+      },
+      "id": "ID",
+      "quantity": "Quantity",
+      "reservation": "Reservation",
+      "stockItem": "Stock Item"
+    }
+  }
+}

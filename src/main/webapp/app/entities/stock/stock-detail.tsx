@@ -33,29 +33,17 @@ export const StockDetail = () => {
           </dt>
           <dd>{stockEntity.id}</dd>
           <dt>
-            <span id="quantity">
-              <Translate contentKey="sr2App.stock.quantity">Quantity</Translate>
-            </span>
-          </dt>
-          <dd>{stockEntity.quantity}</dd>
-          <dt>
-            <span id="available">
-              <Translate contentKey="sr2App.stock.available">Available</Translate>
-            </span>
-          </dt>
-          <dd>{stockEntity.available}</dd>
-          <dt>
-            <span id="price">
-              <Translate contentKey="sr2App.stock.price">Price</Translate>
-            </span>
-          </dt>
-          <dd>{stockEntity.price}</dd>
-          <dt>
             <span id="stockDate">
               <Translate contentKey="sr2App.stock.stockDate">Stock Date</Translate>
             </span>
           </dt>
           <dd>{stockEntity.stockDate ? <TextFormat value={stockEntity.stockDate} type="date" format={APP_LOCAL_DATE_FORMAT} /> : null}</dd>
+          <dt>
+            <span id="stockId">
+              <Translate contentKey="sr2App.stock.stockId">Stock Id</Translate>
+            </span>
+          </dt>
+          <dd>{stockEntity.stockId}</dd>
           <dt>
             <Translate contentKey="sr2App.stock.invoice">Invoice</Translate>
           </dt>

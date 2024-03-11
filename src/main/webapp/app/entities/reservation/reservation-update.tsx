@@ -8,8 +8,6 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { IStock } from 'app/shared/model/stock.model';
-import { getEntities as getStocks } from 'app/entities/stock/stock.reducer';
 import { IReservation } from 'app/shared/model/reservation.model';
 import { getEntity, updateEntity, createEntity, reset } from './reservation.reducer';
 
@@ -21,7 +19,6 @@ export const ReservationUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
-  const stocks = useAppSelector(state => state.stock.entities);
   const reservationEntity = useAppSelector(state => state.reservation.entity);
   const loading = useAppSelector(state => state.reservation.loading);
   const updating = useAppSelector(state => state.reservation.updating);
@@ -37,8 +34,6 @@ export const ReservationUpdate = () => {
     } else {
       dispatch(getEntity(id));
     }
-
-    dispatch(getStocks({}));
   }, []);
 
   useEffect(() => {
@@ -55,11 +50,13 @@ export const ReservationUpdate = () => {
     if (values.reservedQuantity !== undefined && typeof values.reservedQuantity !== 'number') {
       values.reservedQuantity = Number(values.reservedQuantity);
     }
+    if (values.reservationId !== undefined && typeof values.reservationId !== 'number') {
+      values.reservationId = Number(values.reservationId);
+    }
 
     const entity = {
       ...reservationEntity,
       ...values,
-      stock: stocks.find(it => it.id.toString() === values.stock.toString()),
     };
 
     if (isNew) {
@@ -74,7 +71,6 @@ export const ReservationUpdate = () => {
       ? {}
       : {
           ...reservationEntity,
-          stock: reservationEntity?.stock?.id,
         };
 
   return (
@@ -132,25 +128,12 @@ export const ReservationUpdate = () => {
                 type="checkbox"
               />
               <ValidatedField
-                id="reservation-stock"
-                name="stock"
-                data-cy="stock"
-                label={translate('sr2App.reservation.stock')}
-                type="select"
-                required
-              >
-                <option value="" key="0" />
-                {stocks
-                  ? stocks.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <FormText>
-                <Translate contentKey="entity.validation.required">This field is required.</Translate>
-              </FormText>
+                label={translate('sr2App.reservation.reservationId')}
+                id="reservation-reservationId"
+                name="reservationId"
+                data-cy="reservationId"
+                type="text"
+              />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/reservation" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

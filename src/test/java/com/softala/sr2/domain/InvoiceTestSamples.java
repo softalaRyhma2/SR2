@@ -9,14 +9,14 @@ public class InvoiceTestSamples {
     private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     public static Invoice getInvoiceSample1() {
-        return new Invoice().id(1L);
+        return new Invoice().id(1L).invoiceId(1L);
     }
 
     public static Invoice getInvoiceSample2() {
-        return new Invoice().id(2L);
+        return new Invoice().id(2L).invoiceId(2L);
     }
 
     public static Invoice getInvoiceRandomSampleGenerator() {
-        return new Invoice().id(longCount.incrementAndGet());
+        return new Invoice().id(longCount.incrementAndGet()).invoiceId(longCount.incrementAndGet());
     }
 }

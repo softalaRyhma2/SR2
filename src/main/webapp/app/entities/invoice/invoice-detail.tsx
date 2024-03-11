@@ -47,6 +47,12 @@ export const InvoiceDetail = () => {
             {invoiceEntity.invoiceDate ? <TextFormat value={invoiceEntity.invoiceDate} type="date" format={APP_LOCAL_DATE_FORMAT} /> : null}
           </dd>
           <dt>
+            <span id="invoiceId">
+              <Translate contentKey="sr2App.invoice.invoiceId">Invoice Id</Translate>
+            </span>
+          </dt>
+          <dd>{invoiceEntity.invoiceId}</dd>
+          <dt>
             <Translate contentKey="sr2App.invoice.company">Company</Translate>
           </dt>
           <dd>{invoiceEntity.company ? invoiceEntity.company.id : ''}</dd>

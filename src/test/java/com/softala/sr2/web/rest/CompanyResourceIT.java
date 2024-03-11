@@ -32,11 +32,14 @@ class CompanyResourceIT {
     private static final String DEFAULT_COMPANY_NAME = "AAAAAAAAAA";
     private static final String UPDATED_COMPANY_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_COMPANY_EMAIL = ">&H_Vf@E%lMz.&";
-    private static final String UPDATED_COMPANY_EMAIL = "+p~Vq@^`B.}(A";
+    private static final String DEFAULT_COMPANY_EMAIL = ">&H_Vf@E%lMz$o";
+    private static final String UPDATED_COMPANY_EMAIL = "p@VqC^`B@(AE2sL";
 
     private static final String DEFAULT_COMPANY_DETAILS = "AAAAAAAAAA";
     private static final String UPDATED_COMPANY_DETAILS = "BBBBBBBBBB";
+
+    private static final Long DEFAULT_COMPANY_ID = 1L;
+    private static final Long UPDATED_COMPANY_ID = 2L;
 
     private static final String ENTITY_API_URL = "/api/companies";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -65,7 +68,8 @@ class CompanyResourceIT {
         Company company = new Company()
             .companyName(DEFAULT_COMPANY_NAME)
             .companyEmail(DEFAULT_COMPANY_EMAIL)
-            .companyDetails(DEFAULT_COMPANY_DETAILS);
+            .companyDetails(DEFAULT_COMPANY_DETAILS)
+            .companyId(DEFAULT_COMPANY_ID);
         return company;
     }
 
@@ -79,7 +83,8 @@ class CompanyResourceIT {
         Company company = new Company()
             .companyName(UPDATED_COMPANY_NAME)
             .companyEmail(UPDATED_COMPANY_EMAIL)
-            .companyDetails(UPDATED_COMPANY_DETAILS);
+            .companyDetails(UPDATED_COMPANY_DETAILS)
+            .companyId(UPDATED_COMPANY_ID);
         return company;
     }
 
@@ -104,6 +109,7 @@ class CompanyResourceIT {
         assertThat(testCompany.getCompanyName()).isEqualTo(DEFAULT_COMPANY_NAME);
         assertThat(testCompany.getCompanyEmail()).isEqualTo(DEFAULT_COMPANY_EMAIL);
         assertThat(testCompany.getCompanyDetails()).isEqualTo(DEFAULT_COMPANY_DETAILS);
+        assertThat(testCompany.getCompanyId()).isEqualTo(DEFAULT_COMPANY_ID);
     }
 
     @Test
@@ -172,7 +178,8 @@ class CompanyResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(company.getId().intValue())))
             .andExpect(jsonPath("$.[*].companyName").value(hasItem(DEFAULT_COMPANY_NAME)))
             .andExpect(jsonPath("$.[*].companyEmail").value(hasItem(DEFAULT_COMPANY_EMAIL)))
-            .andExpect(jsonPath("$.[*].companyDetails").value(hasItem(DEFAULT_COMPANY_DETAILS)));
+            .andExpect(jsonPath("$.[*].companyDetails").value(hasItem(DEFAULT_COMPANY_DETAILS)))
+            .andExpect(jsonPath("$.[*].companyId").value(hasItem(DEFAULT_COMPANY_ID.intValue())));
     }
 
     @Test
@@ -189,7 +196,8 @@ class CompanyResourceIT {
             .andExpect(jsonPath("$.id").value(company.getId().intValue()))
             .andExpect(jsonPath("$.companyName").value(DEFAULT_COMPANY_NAME))
             .andExpect(jsonPath("$.companyEmail").value(DEFAULT_COMPANY_EMAIL))
-            .andExpect(jsonPath("$.companyDetails").value(DEFAULT_COMPANY_DETAILS));
+            .andExpect(jsonPath("$.companyDetails").value(DEFAULT_COMPANY_DETAILS))
+            .andExpect(jsonPath("$.companyId").value(DEFAULT_COMPANY_ID.intValue()));
     }
 
     @Test
@@ -211,7 +219,11 @@ class CompanyResourceIT {
         Company updatedCompany = companyRepository.findById(company.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedCompany are not directly saved in db
         em.detach(updatedCompany);
-        updatedCompany.companyName(UPDATED_COMPANY_NAME).companyEmail(UPDATED_COMPANY_EMAIL).companyDetails(UPDATED_COMPANY_DETAILS);
+        updatedCompany
+            .companyName(UPDATED_COMPANY_NAME)
+            .companyEmail(UPDATED_COMPANY_EMAIL)
+            .companyDetails(UPDATED_COMPANY_DETAILS)
+            .companyId(UPDATED_COMPANY_ID);
 
         restCompanyMockMvc
             .perform(
@@ -228,6 +240,7 @@ class CompanyResourceIT {
         assertThat(testCompany.getCompanyName()).isEqualTo(UPDATED_COMPANY_NAME);
         assertThat(testCompany.getCompanyEmail()).isEqualTo(UPDATED_COMPANY_EMAIL);
         assertThat(testCompany.getCompanyDetails()).isEqualTo(UPDATED_COMPANY_DETAILS);
+        assertThat(testCompany.getCompanyId()).isEqualTo(UPDATED_COMPANY_ID);
     }
 
     @Test
@@ -298,7 +311,7 @@ class CompanyResourceIT {
         Company partialUpdatedCompany = new Company();
         partialUpdatedCompany.setId(company.getId());
 
-        partialUpdatedCompany.companyName(UPDATED_COMPANY_NAME).companyEmail(UPDATED_COMPANY_EMAIL);
+        partialUpdatedCompany.companyDetails(UPDATED_COMPANY_DETAILS).companyId(UPDATED_COMPANY_ID);
 
         restCompanyMockMvc
             .perform(
@@ -312,9 +325,10 @@ class CompanyResourceIT {
         List<Company> companyList = companyRepository.findAll();
         assertThat(companyList).hasSize(databaseSizeBeforeUpdate);
         Company testCompany = companyList.get(companyList.size() - 1);
-        assertThat(testCompany.getCompanyName()).isEqualTo(UPDATED_COMPANY_NAME);
-        assertThat(testCompany.getCompanyEmail()).isEqualTo(UPDATED_COMPANY_EMAIL);
-        assertThat(testCompany.getCompanyDetails()).isEqualTo(DEFAULT_COMPANY_DETAILS);
+        assertThat(testCompany.getCompanyName()).isEqualTo(DEFAULT_COMPANY_NAME);
+        assertThat(testCompany.getCompanyEmail()).isEqualTo(DEFAULT_COMPANY_EMAIL);
+        assertThat(testCompany.getCompanyDetails()).isEqualTo(UPDATED_COMPANY_DETAILS);
+        assertThat(testCompany.getCompanyId()).isEqualTo(UPDATED_COMPANY_ID);
     }
 
     @Test
@@ -329,7 +343,11 @@ class CompanyResourceIT {
         Company partialUpdatedCompany = new Company();
         partialUpdatedCompany.setId(company.getId());
 
-        partialUpdatedCompany.companyName(UPDATED_COMPANY_NAME).companyEmail(UPDATED_COMPANY_EMAIL).companyDetails(UPDATED_COMPANY_DETAILS);
+        partialUpdatedCompany
+            .companyName(UPDATED_COMPANY_NAME)
+            .companyEmail(UPDATED_COMPANY_EMAIL)
+            .companyDetails(UPDATED_COMPANY_DETAILS)
+            .companyId(UPDATED_COMPANY_ID);
 
         restCompanyMockMvc
             .perform(
@@ -346,6 +364,7 @@ class CompanyResourceIT {
         assertThat(testCompany.getCompanyName()).isEqualTo(UPDATED_COMPANY_NAME);
         assertThat(testCompany.getCompanyEmail()).isEqualTo(UPDATED_COMPANY_EMAIL);
         assertThat(testCompany.getCompanyDetails()).isEqualTo(UPDATED_COMPANY_DETAILS);
+        assertThat(testCompany.getCompanyId()).isEqualTo(UPDATED_COMPANY_ID);
     }
 
     @Test

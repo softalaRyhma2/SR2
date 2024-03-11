@@ -1,0 +1,26 @@
+{
+  "sr2App": {
+    "stockItemType": {
+      "home": {
+        "title": "Stock Item Types",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Stock Item Type",
+        "createOrEditLabel": "Create or edit a Stock Item Type",
+        "notFound": "No Stock Item Types found"
+      },
+      "created": "A new Stock Item Type is created with identifier {{ param }}",
+      "updated": "A Stock Item Type is updated with identifier {{ param }}",
+      "deleted": "A Stock Item Type is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Stock Item Type {{ id }}?"
+      },
+      "detail": {
+        "title": "Stock Item Type"
+      },
+      "id": "ID",
+      "name": "Name",
+      "stockItemTypeId": "Stock Item Type Id",
+      "stockItem": "Stock Item"
+    }
+  }
+}

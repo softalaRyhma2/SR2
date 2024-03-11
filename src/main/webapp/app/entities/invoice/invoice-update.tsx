@@ -55,6 +55,9 @@ export const InvoiceUpdate = () => {
     if (values.totalSum !== undefined && typeof values.totalSum !== 'number') {
       values.totalSum = Number(values.totalSum);
     }
+    if (values.invoiceId !== undefined && typeof values.invoiceId !== 'number') {
+      values.invoiceId = Number(values.invoiceId);
+    }
 
     const entity = {
       ...invoiceEntity,
@@ -115,6 +118,13 @@ export const InvoiceUpdate = () => {
                 name="invoiceDate"
                 data-cy="invoiceDate"
                 type="date"
+              />
+              <ValidatedField
+                label={translate('sr2App.invoice.invoiceId')}
+                id="invoice-invoiceId"
+                name="invoiceId"
+                data-cy="invoiceId"
+                type="text"
               />
               <ValidatedField
                 id="invoice-company"

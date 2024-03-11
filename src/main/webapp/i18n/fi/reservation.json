@@ -21,7 +21,8 @@
       "reservedQuantity": "Reserved Quantity",
       "reservationDate": "Reservation Date",
       "isPickedUp": "Is Picked Up",
-      "stock": "Stock"
+      "reservationId": "Reservation Id",
+      "reservedItem": "Reserved Item"
     }
   }
 }

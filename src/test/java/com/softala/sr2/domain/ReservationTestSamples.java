@@ -11,14 +11,17 @@ public class ReservationTestSamples {
     private static final AtomicInteger intCount = new AtomicInteger(random.nextInt() + (2 * Short.MAX_VALUE));
 
     public static Reservation getReservationSample1() {
-        return new Reservation().id(1L).reservedQuantity(1);
+        return new Reservation().id(1L).reservedQuantity(1).reservationId(1L);
     }
 
     public static Reservation getReservationSample2() {
-        return new Reservation().id(2L).reservedQuantity(2);
+        return new Reservation().id(2L).reservedQuantity(2).reservationId(2L);
     }
 
     public static Reservation getReservationRandomSampleGenerator() {
-        return new Reservation().id(longCount.incrementAndGet()).reservedQuantity(intCount.incrementAndGet());
+        return new Reservation()
+            .id(longCount.incrementAndGet())
+            .reservedQuantity(intCount.incrementAndGet())
+            .reservationId(longCount.incrementAndGet());
     }
 }
