@@ -45,7 +45,7 @@ tietoa ja keskittyä siihen.
 
 Käyttöliittymän prototyypin toteutus [Figmalla](https://www.figma.com/proto/ro5H0JYtuOTCF1MvtBOJzP/Battery?type=design&node-id=2-3&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=2%3A3).
 
-[Prototyypin esittelyvideo](https://youtu.be/tYGiNWlRKU4?si=zZkSN_4aD26bb1Pi)
+[Prototyypin esittelyvideo V1](https://youtu.be/tYGiNWlRKU4?si=zZkSN_4aD26bb1Pi)
 
 <!--
 Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona.
@@ -55,24 +55,30 @@ Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
 
 #### Käyttäjäroolit
 
-<!--
+Projektissamme on neljä käyttäjäroolia: Admin (Ylläpitäjä), Recser (Yritys), Pcenter (Käsittelylaitos) ja Transport (Kuljetusliike). Kukin rooli on suunniteltu tukemaan erilaisia toimintoja ja käyttöoikeuksia järjestelmässä. Admin-rooli on suunniteltu järjestelmän ylläpitäjälle, jolla on laajimmat pääsy- ja hallintaoikeudet.
+Recser-rooli on suunnattu yrityksen työntekijöille, jotka käyttävät järjestelmää palvelujensa hallintaan.
+Pcenter-rooli keskittyy käsittelylaitoksen varaston hallintaan.
+Transport-rooli on suunniteltu kuljetuspalveluiden tarjoajille.
+
 _Ylläpitäjä (Admin) voi:_
+
+<!-- - tarkastella ja muokata järjestelmän Administration-valikkoa -->
 
 - luoda uusia organisaatioita sekä käyttäjiä ja päivittää niiden tietoja.
 - nähdä käsittelylaitoksen ja kuljetusliikkeen varastosaldot ja muokata niitä.
 - muokata käsittelylaitoksen ja kuljetusliikkeen lavapaikkahintoja.
 - nähdä käsittelylaitoksen ja kuljetusliikkeen laskuhistoriat.
 - nähdä käsittelylaitoksen ja kuljetusliikkeen organisaatiotietoja.
--->
+- tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
 
 _Yritys (Recser) voi:_
 
-<!-- - luoda uusia organisaatioita sekä käyttäjiä ja päivittää niiden tietoja.-->
-
+- luoda uusia organisaatioita sekä käyttäjiä ja päivittää niiden tietoja.
 - nähdä käsittelylaitoksen ja kuljetusliikkeen varastosaldot ja muokata niitä.
 - muokata käsittelylaitoksen ja kuljetusliikkeen lavapaikkahintoja.
 - nähdä käsittelylaitoksen ja kuljetusliikkeen laskuhistoriat.
 - nähdä käsittelylaitoksen ja kuljetusliikkeen organisaatiotietoja.
+- tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
 
 _Käsittelylaitos voi:_
 
