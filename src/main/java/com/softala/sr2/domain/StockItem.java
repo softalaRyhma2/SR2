@@ -32,15 +32,12 @@ public class StockItem implements Serializable {
     private Integer quantity;
 
     @NotNull
-    @Column(name = "availability", nullable = false)
-    private Integer availability;
+    @Column(name = "available", nullable = false)
+    private Integer available;
 
     @NotNull
     @Column(name = "price", precision = 21, scale = 2, nullable = false)
     private BigDecimal price;
-
-    @Column(name = "stock_item_id")
-    private Long stockItemId;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "stockItem")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -85,17 +82,17 @@ public class StockItem implements Serializable {
         this.quantity = quantity;
     }
 
-    public Integer getAvailability() {
-        return this.availability;
+    public Integer getAvailable() {
+        return this.available;
     }
 
-    public StockItem availability(Integer availability) {
-        this.setAvailability(availability);
+    public StockItem available(Integer available) {
+        this.setAvailable(available);
         return this;
     }
 
-    public void setAvailability(Integer availability) {
-        this.availability = availability;
+    public void setAvailable(Integer available) {
+        this.available = available;
     }
 
     public BigDecimal getPrice() {
@@ -109,19 +106,6 @@ public class StockItem implements Serializable {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public Long getStockItemId() {
-        return this.stockItemId;
-    }
-
-    public StockItem stockItemId(Long stockItemId) {
-        this.setStockItemId(stockItemId);
-        return this;
-    }
-
-    public void setStockItemId(Long stockItemId) {
-        this.stockItemId = stockItemId;
     }
 
     public Set<ReservedItem> getReservedItems() {
@@ -206,9 +190,8 @@ public class StockItem implements Serializable {
         return "StockItem{" +
             "id=" + getId() +
             ", quantity=" + getQuantity() +
-            ", availability=" + getAvailability() +
+            ", available=" + getAvailable() +
             ", price=" + getPrice() +
-            ", stockItemId=" + getStockItemId() +
             "}";
     }
 }

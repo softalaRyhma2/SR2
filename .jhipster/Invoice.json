@@ -14,8 +14,9 @@
       "fieldType": "LocalDate"
     },
     {
-      "fieldName": "invoiceId",
-      "fieldType": "Long"
+      "fieldName": "isClosed",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
     }
   ],
   "name": "Invoice",

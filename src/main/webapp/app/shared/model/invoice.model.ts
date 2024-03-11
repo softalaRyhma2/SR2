@@ -6,9 +6,11 @@ export interface IInvoice {
   id?: number;
   totalSum?: number | null;
   invoiceDate?: dayjs.Dayjs | null;
-  invoiceId?: number | null;
+  isClosed?: boolean;
   stocks?: IStock[] | null;
   company?: ICompany;
 }
 
-export const defaultValue: Readonly<IInvoice> = {};
+export const defaultValue: Readonly<IInvoice> = {
+  isClosed: false,
+};

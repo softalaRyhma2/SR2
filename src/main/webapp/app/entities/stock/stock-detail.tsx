@@ -39,12 +39,6 @@ export const StockDetail = () => {
           </dt>
           <dd>{stockEntity.stockDate ? <TextFormat value={stockEntity.stockDate} type="date" format={APP_LOCAL_DATE_FORMAT} /> : null}</dd>
           <dt>
-            <span id="stockId">
-              <Translate contentKey="sr2App.stock.stockId">Stock Id</Translate>
-            </span>
-          </dt>
-          <dd>{stockEntity.stockId}</dd>
-          <dt>
             <Translate contentKey="sr2App.stock.invoice">Invoice</Translate>
           </dt>
           <dd>{stockEntity.invoice ? stockEntity.invoice.id : ''}</dd>

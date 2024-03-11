@@ -11,18 +11,14 @@ public class StockItemTestSamples {
     private static final AtomicInteger intCount = new AtomicInteger(random.nextInt() + (2 * Short.MAX_VALUE));
 
     public static StockItem getStockItemSample1() {
-        return new StockItem().id(1L).quantity(1).availability(1).stockItemId(1L);
+        return new StockItem().id(1L).quantity(1).available(1);
     }
 
     public static StockItem getStockItemSample2() {
-        return new StockItem().id(2L).quantity(2).availability(2).stockItemId(2L);
+        return new StockItem().id(2L).quantity(2).available(2);
     }
 
     public static StockItem getStockItemRandomSampleGenerator() {
-        return new StockItem()
-            .id(longCount.incrementAndGet())
-            .quantity(intCount.incrementAndGet())
-            .availability(intCount.incrementAndGet())
-            .stockItemId(longCount.incrementAndGet());
+        return new StockItem().id(longCount.incrementAndGet()).quantity(intCount.incrementAndGet()).available(intCount.incrementAndGet());
     }
 }

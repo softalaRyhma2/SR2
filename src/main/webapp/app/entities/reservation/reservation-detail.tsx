@@ -33,12 +33,6 @@ export const ReservationDetail = () => {
           </dt>
           <dd>{reservationEntity.id}</dd>
           <dt>
-            <span id="reservedQuantity">
-              <Translate contentKey="sr2App.reservation.reservedQuantity">Reserved Quantity</Translate>
-            </span>
-          </dt>
-          <dd>{reservationEntity.reservedQuantity}</dd>
-          <dt>
             <span id="reservationDate">
               <Translate contentKey="sr2App.reservation.reservationDate">Reservation Date</Translate>
             </span>
@@ -54,12 +48,6 @@ export const ReservationDetail = () => {
             </span>
           </dt>
           <dd>{reservationEntity.isPickedUp ? 'true' : 'false'}</dd>
-          <dt>
-            <span id="reservationId">
-              <Translate contentKey="sr2App.reservation.reservationId">Reservation Id</Translate>
-            </span>
-          </dt>
-          <dd>{reservationEntity.reservationId}</dd>
         </dl>
         <Button tag={Link} to="/reservation" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

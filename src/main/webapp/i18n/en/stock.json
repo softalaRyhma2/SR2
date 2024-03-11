@@ -19,7 +19,6 @@
       },
       "id": "ID",
       "stockDate": "Stock Date",
-      "stockId": "Stock Id",
       "stockItem": "Stock Item",
       "invoice": "Invoice"
     }

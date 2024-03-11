@@ -10,21 +10,11 @@ public class CompanyTestSamples {
     private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     public static Company getCompanySample1() {
-        return new Company()
-            .id(1L)
-            .companyName("companyName1")
-            .companyEmail("companyEmail1")
-            .companyDetails("companyDetails1")
-            .companyId(1L);
+        return new Company().id(1L).companyName("companyName1").companyEmail("companyEmail1").companyDetails("companyDetails1");
     }
 
     public static Company getCompanySample2() {
-        return new Company()
-            .id(2L)
-            .companyName("companyName2")
-            .companyEmail("companyEmail2")
-            .companyDetails("companyDetails2")
-            .companyId(2L);
+        return new Company().id(2L).companyName("companyName2").companyEmail("companyEmail2").companyDetails("companyDetails2");
     }
 
     public static Company getCompanyRandomSampleGenerator() {
@@ -32,7 +22,6 @@ public class CompanyTestSamples {
             .id(longCount.incrementAndGet())
             .companyName(UUID.randomUUID().toString())
             .companyEmail(UUID.randomUUID().toString())
-            .companyDetails(UUID.randomUUID().toString())
-            .companyId(longCount.incrementAndGet());
+            .companyDetails(UUID.randomUUID().toString());
     }
 }

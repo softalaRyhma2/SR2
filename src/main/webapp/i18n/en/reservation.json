@@ -18,10 +18,8 @@
         "title": "Reservation"
       },
       "id": "ID",
-      "reservedQuantity": "Reserved Quantity",
       "reservationDate": "Reservation Date",
       "isPickedUp": "Is Picked Up",
-      "reservationId": "Reservation Id",
       "reservedItem": "Reserved Item"
     }
   }

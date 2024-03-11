@@ -65,8 +65,8 @@ public class InvoiceService {
                 if (invoice.getInvoiceDate() != null) {
                     existingInvoice.setInvoiceDate(invoice.getInvoiceDate());
                 }
-                if (invoice.getInvoiceId() != null) {
-                    existingInvoice.setInvoiceId(invoice.getInvoiceId());
+                if (invoice.getIsClosed() != null) {
+                    existingInvoice.setIsClosed(invoice.getIsClosed());
                 }
 
                 return existingInvoice;

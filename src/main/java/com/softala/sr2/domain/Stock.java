@@ -31,9 +31,6 @@ public class Stock implements Serializable {
     @Column(name = "stock_date", nullable = false)
     private LocalDate stockDate;
 
-    @Column(name = "stock_id")
-    private Long stockId;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "stock")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "reservedItems", "stock", "stockItemType" }, allowSetters = true)
@@ -70,19 +67,6 @@ public class Stock implements Serializable {
 
     public void setStockDate(LocalDate stockDate) {
         this.stockDate = stockDate;
-    }
-
-    public Long getStockId() {
-        return this.stockId;
-    }
-
-    public Stock stockId(Long stockId) {
-        this.setStockId(stockId);
-        return this;
-    }
-
-    public void setStockId(Long stockId) {
-        this.stockId = stockId;
     }
 
     public Set<StockItem> getStockItems() {
@@ -154,7 +138,6 @@ public class Stock implements Serializable {
         return "Stock{" +
             "id=" + getId() +
             ", stockDate='" + getStockDate() + "'" +
-            ", stockId=" + getStockId() +
             "}";
     }
 }

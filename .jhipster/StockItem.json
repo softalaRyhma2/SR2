@@ -11,7 +11,7 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "availability",
+      "fieldName": "available",
       "fieldType": "Integer",
       "fieldValidateRules": ["required"]
     },
@@ -19,10 +19,6 @@
       "fieldName": "price",
       "fieldType": "BigDecimal",
       "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "stockItemId",
-      "fieldType": "Long"
     }
   ],
   "name": "StockItem",

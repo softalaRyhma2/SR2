@@ -5,7 +5,6 @@ import { IInvoice } from 'app/shared/model/invoice.model';
 export interface IStock {
   id?: number;
   stockDate?: dayjs.Dayjs;
-  stockId?: number | null;
   stockItems?: IStockItem[] | null;
   invoice?: IInvoice;
 }

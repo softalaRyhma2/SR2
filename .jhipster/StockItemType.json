@@ -6,13 +6,9 @@
   "entityTableName": "stock_item_type",
   "fields": [
     {
-      "fieldName": "name",
+      "fieldName": "typeName",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "stockItemTypeId",
-      "fieldType": "Long"
     }
   ],
   "name": "StockItemType",

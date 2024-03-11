@@ -52,9 +52,6 @@ export const StockUpdate = () => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
-    if (values.stockId !== undefined && typeof values.stockId !== 'number') {
-      values.stockId = Number(values.stockId);
-    }
 
     const entity = {
       ...stockEntity,
@@ -112,7 +109,6 @@ export const StockUpdate = () => {
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
               />
-              <ValidatedField label={translate('sr2App.stock.stockId')} id="stock-stockId" name="stockId" data-cy="stockId" type="text" />
               <ValidatedField
                 id="stock-invoice"
                 name="invoice"

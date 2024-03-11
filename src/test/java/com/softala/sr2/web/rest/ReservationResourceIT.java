@@ -31,17 +31,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ReservationResourceIT {
 
-    private static final Integer DEFAULT_RESERVED_QUANTITY = 1;
-    private static final Integer UPDATED_RESERVED_QUANTITY = 2;
-
     private static final LocalDate DEFAULT_RESERVATION_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_RESERVATION_DATE = LocalDate.now(ZoneId.systemDefault());
 
     private static final Boolean DEFAULT_IS_PICKED_UP = false;
     private static final Boolean UPDATED_IS_PICKED_UP = true;
-
-    private static final Long DEFAULT_RESERVATION_ID = 1L;
-    private static final Long UPDATED_RESERVATION_ID = 2L;
 
     private static final String ENTITY_API_URL = "/api/reservations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -67,11 +61,7 @@ class ReservationResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Reservation createEntity(EntityManager em) {
-        Reservation reservation = new Reservation()
-            .reservedQuantity(DEFAULT_RESERVED_QUANTITY)
-            .reservationDate(DEFAULT_RESERVATION_DATE)
-            .isPickedUp(DEFAULT_IS_PICKED_UP)
-            .reservationId(DEFAULT_RESERVATION_ID);
+        Reservation reservation = new Reservation().reservationDate(DEFAULT_RESERVATION_DATE).isPickedUp(DEFAULT_IS_PICKED_UP);
         return reservation;
     }
 
@@ -82,11 +72,7 @@ class ReservationResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Reservation createUpdatedEntity(EntityManager em) {
-        Reservation reservation = new Reservation()
-            .reservedQuantity(UPDATED_RESERVED_QUANTITY)
-            .reservationDate(UPDATED_RESERVATION_DATE)
-            .isPickedUp(UPDATED_IS_PICKED_UP)
-            .reservationId(UPDATED_RESERVATION_ID);
+        Reservation reservation = new Reservation().reservationDate(UPDATED_RESERVATION_DATE).isPickedUp(UPDATED_IS_PICKED_UP);
         return reservation;
     }
 
@@ -108,10 +94,8 @@ class ReservationResourceIT {
         List<Reservation> reservationList = reservationRepository.findAll();
         assertThat(reservationList).hasSize(databaseSizeBeforeCreate + 1);
         Reservation testReservation = reservationList.get(reservationList.size() - 1);
-        assertThat(testReservation.getReservedQuantity()).isEqualTo(DEFAULT_RESERVED_QUANTITY);
         assertThat(testReservation.getReservationDate()).isEqualTo(DEFAULT_RESERVATION_DATE);
         assertThat(testReservation.getIsPickedUp()).isEqualTo(DEFAULT_IS_PICKED_UP);
-        assertThat(testReservation.getReservationId()).isEqualTo(DEFAULT_RESERVATION_ID);
     }
 
     @Test
@@ -130,23 +114,6 @@ class ReservationResourceIT {
         // Validate the Reservation in the database
         List<Reservation> reservationList = reservationRepository.findAll();
         assertThat(reservationList).hasSize(databaseSizeBeforeCreate);
-    }
-
-    @Test
-    @Transactional
-    void checkReservedQuantityIsRequired() throws Exception {
-        int databaseSizeBeforeTest = reservationRepository.findAll().size();
-        // set the field null
-        reservation.setReservedQuantity(null);
-
-        // Create the Reservation, which fails.
-
-        restReservationMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(reservation)))
-            .andExpect(status().isBadRequest());
-
-        List<Reservation> reservationList = reservationRepository.findAll();
-        assertThat(reservationList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -195,10 +162,8 @@ class ReservationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(reservation.getId().intValue())))
-            .andExpect(jsonPath("$.[*].reservedQuantity").value(hasItem(DEFAULT_RESERVED_QUANTITY)))
             .andExpect(jsonPath("$.[*].reservationDate").value(hasItem(DEFAULT_RESERVATION_DATE.toString())))
-            .andExpect(jsonPath("$.[*].isPickedUp").value(hasItem(DEFAULT_IS_PICKED_UP.booleanValue())))
-            .andExpect(jsonPath("$.[*].reservationId").value(hasItem(DEFAULT_RESERVATION_ID.intValue())));
+            .andExpect(jsonPath("$.[*].isPickedUp").value(hasItem(DEFAULT_IS_PICKED_UP.booleanValue())));
     }
 
     @Test
@@ -213,10 +178,8 @@ class ReservationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(reservation.getId().intValue()))
-            .andExpect(jsonPath("$.reservedQuantity").value(DEFAULT_RESERVED_QUANTITY))
             .andExpect(jsonPath("$.reservationDate").value(DEFAULT_RESERVATION_DATE.toString()))
-            .andExpect(jsonPath("$.isPickedUp").value(DEFAULT_IS_PICKED_UP.booleanValue()))
-            .andExpect(jsonPath("$.reservationId").value(DEFAULT_RESERVATION_ID.intValue()));
+            .andExpect(jsonPath("$.isPickedUp").value(DEFAULT_IS_PICKED_UP.booleanValue()));
     }
 
     @Test
@@ -238,11 +201,7 @@ class ReservationResourceIT {
         Reservation updatedReservation = reservationRepository.findById(reservation.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedReservation are not directly saved in db
         em.detach(updatedReservation);
-        updatedReservation
-            .reservedQuantity(UPDATED_RESERVED_QUANTITY)
-            .reservationDate(UPDATED_RESERVATION_DATE)
-            .isPickedUp(UPDATED_IS_PICKED_UP)
-            .reservationId(UPDATED_RESERVATION_ID);
+        updatedReservation.reservationDate(UPDATED_RESERVATION_DATE).isPickedUp(UPDATED_IS_PICKED_UP);
 
         restReservationMockMvc
             .perform(
@@ -256,10 +215,8 @@ class ReservationResourceIT {
         List<Reservation> reservationList = reservationRepository.findAll();
         assertThat(reservationList).hasSize(databaseSizeBeforeUpdate);
         Reservation testReservation = reservationList.get(reservationList.size() - 1);
-        assertThat(testReservation.getReservedQuantity()).isEqualTo(UPDATED_RESERVED_QUANTITY);
         assertThat(testReservation.getReservationDate()).isEqualTo(UPDATED_RESERVATION_DATE);
         assertThat(testReservation.getIsPickedUp()).isEqualTo(UPDATED_IS_PICKED_UP);
-        assertThat(testReservation.getReservationId()).isEqualTo(UPDATED_RESERVATION_ID);
     }
 
     @Test
@@ -330,7 +287,7 @@ class ReservationResourceIT {
         Reservation partialUpdatedReservation = new Reservation();
         partialUpdatedReservation.setId(reservation.getId());
 
-        partialUpdatedReservation.reservationDate(UPDATED_RESERVATION_DATE).isPickedUp(UPDATED_IS_PICKED_UP);
+        partialUpdatedReservation.isPickedUp(UPDATED_IS_PICKED_UP);
 
         restReservationMockMvc
             .perform(
@@ -344,10 +301,8 @@ class ReservationResourceIT {
         List<Reservation> reservationList = reservationRepository.findAll();
         assertThat(reservationList).hasSize(databaseSizeBeforeUpdate);
         Reservation testReservation = reservationList.get(reservationList.size() - 1);
-        assertThat(testReservation.getReservedQuantity()).isEqualTo(DEFAULT_RESERVED_QUANTITY);
-        assertThat(testReservation.getReservationDate()).isEqualTo(UPDATED_RESERVATION_DATE);
+        assertThat(testReservation.getReservationDate()).isEqualTo(DEFAULT_RESERVATION_DATE);
         assertThat(testReservation.getIsPickedUp()).isEqualTo(UPDATED_IS_PICKED_UP);
-        assertThat(testReservation.getReservationId()).isEqualTo(DEFAULT_RESERVATION_ID);
     }
 
     @Test
@@ -362,11 +317,7 @@ class ReservationResourceIT {
         Reservation partialUpdatedReservation = new Reservation();
         partialUpdatedReservation.setId(reservation.getId());
 
-        partialUpdatedReservation
-            .reservedQuantity(UPDATED_RESERVED_QUANTITY)
-            .reservationDate(UPDATED_RESERVATION_DATE)
-            .isPickedUp(UPDATED_IS_PICKED_UP)
-            .reservationId(UPDATED_RESERVATION_ID);
+        partialUpdatedReservation.reservationDate(UPDATED_RESERVATION_DATE).isPickedUp(UPDATED_IS_PICKED_UP);
 
         restReservationMockMvc
             .perform(
@@ -380,10 +331,8 @@ class ReservationResourceIT {
         List<Reservation> reservationList = reservationRepository.findAll();
         assertThat(reservationList).hasSize(databaseSizeBeforeUpdate);
         Reservation testReservation = reservationList.get(reservationList.size() - 1);
-        assertThat(testReservation.getReservedQuantity()).isEqualTo(UPDATED_RESERVED_QUANTITY);
         assertThat(testReservation.getReservationDate()).isEqualTo(UPDATED_RESERVATION_DATE);
         assertThat(testReservation.getIsPickedUp()).isEqualTo(UPDATED_IS_PICKED_UP);
-        assertThat(testReservation.getReservationId()).isEqualTo(UPDATED_RESERVATION_ID);
     }
 
     @Test

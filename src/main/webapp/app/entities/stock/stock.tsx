@@ -118,10 +118,6 @@ export const Stock = () => {
                   <Translate contentKey="sr2App.stock.stockDate">Stock Date</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('stockDate')} />
                 </th>
-                <th className="hand" onClick={sort('stockId')}>
-                  <Translate contentKey="sr2App.stock.stockId">Stock Id</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('stockId')} />
-                </th>
                 <th>
                   <Translate contentKey="sr2App.stock.invoice">Invoice</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
@@ -137,7 +133,6 @@ export const Stock = () => {
                     </Button>
                   </td>
                   <td>{stock.stockDate ? <TextFormat type="date" value={stock.stockDate} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
-                  <td>{stock.stockId}</td>
                   <td>{stock.invoice ? <Link to={`/invoice/${stock.invoice.id}`}>{stock.invoice.id}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">

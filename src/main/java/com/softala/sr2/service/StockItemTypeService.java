@@ -59,11 +59,8 @@ public class StockItemTypeService {
         return stockItemTypeRepository
             .findById(stockItemType.getId())
             .map(existingStockItemType -> {
-                if (stockItemType.getName() != null) {
-                    existingStockItemType.setName(stockItemType.getName());
-                }
-                if (stockItemType.getStockItemTypeId() != null) {
-                    existingStockItemType.setStockItemTypeId(stockItemType.getStockItemTypeId());
+                if (stockItemType.getTypeName() != null) {
+                    existingStockItemType.setTypeName(stockItemType.getTypeName());
                 }
 
                 return existingStockItemType;

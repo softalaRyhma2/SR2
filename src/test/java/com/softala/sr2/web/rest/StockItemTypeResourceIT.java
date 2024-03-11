@@ -29,11 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class StockItemTypeResourceIT {
 
-    private static final String DEFAULT_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NAME = "BBBBBBBBBB";
-
-    private static final Long DEFAULT_STOCK_ITEM_TYPE_ID = 1L;
-    private static final Long UPDATED_STOCK_ITEM_TYPE_ID = 2L;
+    private static final String DEFAULT_TYPE_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_TYPE_NAME = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/stock-item-types";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -59,7 +56,7 @@ class StockItemTypeResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static StockItemType createEntity(EntityManager em) {
-        StockItemType stockItemType = new StockItemType().name(DEFAULT_NAME).stockItemTypeId(DEFAULT_STOCK_ITEM_TYPE_ID);
+        StockItemType stockItemType = new StockItemType().typeName(DEFAULT_TYPE_NAME);
         return stockItemType;
     }
 
@@ -70,7 +67,7 @@ class StockItemTypeResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static StockItemType createUpdatedEntity(EntityManager em) {
-        StockItemType stockItemType = new StockItemType().name(UPDATED_NAME).stockItemTypeId(UPDATED_STOCK_ITEM_TYPE_ID);
+        StockItemType stockItemType = new StockItemType().typeName(UPDATED_TYPE_NAME);
         return stockItemType;
     }
 
@@ -92,8 +89,7 @@ class StockItemTypeResourceIT {
         List<StockItemType> stockItemTypeList = stockItemTypeRepository.findAll();
         assertThat(stockItemTypeList).hasSize(databaseSizeBeforeCreate + 1);
         StockItemType testStockItemType = stockItemTypeList.get(stockItemTypeList.size() - 1);
-        assertThat(testStockItemType.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testStockItemType.getStockItemTypeId()).isEqualTo(DEFAULT_STOCK_ITEM_TYPE_ID);
+        assertThat(testStockItemType.getTypeName()).isEqualTo(DEFAULT_TYPE_NAME);
     }
 
     @Test
@@ -116,10 +112,10 @@ class StockItemTypeResourceIT {
 
     @Test
     @Transactional
-    void checkNameIsRequired() throws Exception {
+    void checkTypeNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = stockItemTypeRepository.findAll().size();
         // set the field null
-        stockItemType.setName(null);
+        stockItemType.setTypeName(null);
 
         // Create the StockItemType, which fails.
 
@@ -143,8 +139,7 @@ class StockItemTypeResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(stockItemType.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].stockItemTypeId").value(hasItem(DEFAULT_STOCK_ITEM_TYPE_ID.intValue())));
+            .andExpect(jsonPath("$.[*].typeName").value(hasItem(DEFAULT_TYPE_NAME)));
     }
 
     @Test
@@ -159,8 +154,7 @@ class StockItemTypeResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(stockItemType.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.stockItemTypeId").value(DEFAULT_STOCK_ITEM_TYPE_ID.intValue()));
+            .andExpect(jsonPath("$.typeName").value(DEFAULT_TYPE_NAME));
     }
 
     @Test
@@ -182,7 +176,7 @@ class StockItemTypeResourceIT {
         StockItemType updatedStockItemType = stockItemTypeRepository.findById(stockItemType.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedStockItemType are not directly saved in db
         em.detach(updatedStockItemType);
-        updatedStockItemType.name(UPDATED_NAME).stockItemTypeId(UPDATED_STOCK_ITEM_TYPE_ID);
+        updatedStockItemType.typeName(UPDATED_TYPE_NAME);
 
         restStockItemTypeMockMvc
             .perform(
@@ -196,8 +190,7 @@ class StockItemTypeResourceIT {
         List<StockItemType> stockItemTypeList = stockItemTypeRepository.findAll();
         assertThat(stockItemTypeList).hasSize(databaseSizeBeforeUpdate);
         StockItemType testStockItemType = stockItemTypeList.get(stockItemTypeList.size() - 1);
-        assertThat(testStockItemType.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testStockItemType.getStockItemTypeId()).isEqualTo(UPDATED_STOCK_ITEM_TYPE_ID);
+        assertThat(testStockItemType.getTypeName()).isEqualTo(UPDATED_TYPE_NAME);
     }
 
     @Test
@@ -268,8 +261,6 @@ class StockItemTypeResourceIT {
         StockItemType partialUpdatedStockItemType = new StockItemType();
         partialUpdatedStockItemType.setId(stockItemType.getId());
 
-        partialUpdatedStockItemType.stockItemTypeId(UPDATED_STOCK_ITEM_TYPE_ID);
-
         restStockItemTypeMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedStockItemType.getId())
@@ -282,8 +273,7 @@ class StockItemTypeResourceIT {
         List<StockItemType> stockItemTypeList = stockItemTypeRepository.findAll();
         assertThat(stockItemTypeList).hasSize(databaseSizeBeforeUpdate);
         StockItemType testStockItemType = stockItemTypeList.get(stockItemTypeList.size() - 1);
-        assertThat(testStockItemType.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testStockItemType.getStockItemTypeId()).isEqualTo(UPDATED_STOCK_ITEM_TYPE_ID);
+        assertThat(testStockItemType.getTypeName()).isEqualTo(DEFAULT_TYPE_NAME);
     }
 
     @Test
@@ -298,7 +288,7 @@ class StockItemTypeResourceIT {
         StockItemType partialUpdatedStockItemType = new StockItemType();
         partialUpdatedStockItemType.setId(stockItemType.getId());
 
-        partialUpdatedStockItemType.name(UPDATED_NAME).stockItemTypeId(UPDATED_STOCK_ITEM_TYPE_ID);
+        partialUpdatedStockItemType.typeName(UPDATED_TYPE_NAME);
 
         restStockItemTypeMockMvc
             .perform(
@@ -312,8 +302,7 @@ class StockItemTypeResourceIT {
         List<StockItemType> stockItemTypeList = stockItemTypeRepository.findAll();
         assertThat(stockItemTypeList).hasSize(databaseSizeBeforeUpdate);
         StockItemType testStockItemType = stockItemTypeList.get(stockItemTypeList.size() - 1);
-        assertThat(testStockItemType.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testStockItemType.getStockItemTypeId()).isEqualTo(UPDATED_STOCK_ITEM_TYPE_ID);
+        assertThat(testStockItemType.getTypeName()).isEqualTo(UPDATED_TYPE_NAME);
     }
 
     @Test

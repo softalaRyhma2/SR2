@@ -122,9 +122,9 @@ export const Invoice = () => {
                   <Translate contentKey="sr2App.invoice.invoiceDate">Invoice Date</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('invoiceDate')} />
                 </th>
-                <th className="hand" onClick={sort('invoiceId')}>
-                  <Translate contentKey="sr2App.invoice.invoiceId">Invoice Id</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('invoiceId')} />
+                <th className="hand" onClick={sort('isClosed')}>
+                  <Translate contentKey="sr2App.invoice.isClosed">Is Closed</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('isClosed')} />
                 </th>
                 <th>
                   <Translate contentKey="sr2App.invoice.company">Company</Translate> <FontAwesomeIcon icon="sort" />
@@ -144,7 +144,7 @@ export const Invoice = () => {
                   <td>
                     {invoice.invoiceDate ? <TextFormat type="date" value={invoice.invoiceDate} format={APP_LOCAL_DATE_FORMAT} /> : null}
                   </td>
-                  <td>{invoice.invoiceId}</td>
+                  <td>{invoice.isClosed ? 'true' : 'false'}</td>
                   <td>{invoice.company ? <Link to={`/company/${invoice.company.id}`}>{invoice.company.id}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">

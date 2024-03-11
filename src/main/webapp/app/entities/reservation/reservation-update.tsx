@@ -47,12 +47,6 @@ export const ReservationUpdate = () => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
-    if (values.reservedQuantity !== undefined && typeof values.reservedQuantity !== 'number') {
-      values.reservedQuantity = Number(values.reservedQuantity);
-    }
-    if (values.reservationId !== undefined && typeof values.reservationId !== 'number') {
-      values.reservationId = Number(values.reservationId);
-    }
 
     const entity = {
       ...reservationEntity,
@@ -99,17 +93,6 @@ export const ReservationUpdate = () => {
                 />
               ) : null}
               <ValidatedField
-                label={translate('sr2App.reservation.reservedQuantity')}
-                id="reservation-reservedQuantity"
-                name="reservedQuantity"
-                data-cy="reservedQuantity"
-                type="text"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                  validate: v => isNumber(v) || translate('entity.validation.number'),
-                }}
-              />
-              <ValidatedField
                 label={translate('sr2App.reservation.reservationDate')}
                 id="reservation-reservationDate"
                 name="reservationDate"
@@ -126,13 +109,6 @@ export const ReservationUpdate = () => {
                 data-cy="isPickedUp"
                 check
                 type="checkbox"
-              />
-              <ValidatedField
-                label={translate('sr2App.reservation.reservationId')}
-                id="reservation-reservationId"
-                name="reservationId"
-                data-cy="reservationId"
-                type="text"
               />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/reservation" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />

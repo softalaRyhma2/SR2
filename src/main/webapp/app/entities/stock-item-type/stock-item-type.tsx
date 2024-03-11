@@ -113,13 +113,9 @@ export const StockItemType = () => {
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="sr2App.stockItemType.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
-                <th className="hand" onClick={sort('name')}>
-                  <Translate contentKey="sr2App.stockItemType.name">Name</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('name')} />
-                </th>
-                <th className="hand" onClick={sort('stockItemTypeId')}>
-                  <Translate contentKey="sr2App.stockItemType.stockItemTypeId">Stock Item Type Id</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('stockItemTypeId')} />
+                <th className="hand" onClick={sort('typeName')}>
+                  <Translate contentKey="sr2App.stockItemType.typeName">Type Name</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('typeName')} />
                 </th>
                 <th />
               </tr>
@@ -132,8 +128,7 @@ export const StockItemType = () => {
                       {stockItemType.id}
                     </Button>
                   </td>
-                  <td>{stockItemType.name}</td>
-                  <td>{stockItemType.stockItemTypeId}</td>
+                  <td>{stockItemType.typeName}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/stock-item-type/${stockItemType.id}`} color="info" size="sm" data-cy="entityDetailsButton">

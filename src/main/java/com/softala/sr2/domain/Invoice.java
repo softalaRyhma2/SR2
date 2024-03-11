@@ -34,8 +34,9 @@ public class Invoice implements Serializable {
     @Column(name = "invoice_date")
     private LocalDate invoiceDate;
 
-    @Column(name = "invoice_id")
-    private Long invoiceId;
+    @NotNull
+    @Column(name = "is_closed", nullable = false)
+    private Boolean isClosed;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "invoice")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -88,17 +89,17 @@ public class Invoice implements Serializable {
         this.invoiceDate = invoiceDate;
     }
 
-    public Long getInvoiceId() {
-        return this.invoiceId;
+    public Boolean getIsClosed() {
+        return this.isClosed;
     }
 
-    public Invoice invoiceId(Long invoiceId) {
-        this.setInvoiceId(invoiceId);
+    public Invoice isClosed(Boolean isClosed) {
+        this.setIsClosed(isClosed);
         return this;
     }
 
-    public void setInvoiceId(Long invoiceId) {
-        this.invoiceId = invoiceId;
+    public void setIsClosed(Boolean isClosed) {
+        this.isClosed = isClosed;
     }
 
     public Set<Stock> getStocks() {
@@ -171,7 +172,7 @@ public class Invoice implements Serializable {
             "id=" + getId() +
             ", totalSum=" + getTotalSum() +
             ", invoiceDate='" + getInvoiceDate() + "'" +
-            ", invoiceId=" + getInvoiceId() +
+            ", isClosed='" + getIsClosed() + "'" +
             "}";
     }
 }

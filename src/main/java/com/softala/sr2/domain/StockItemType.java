@@ -27,11 +27,8 @@ public class StockItemType implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "stock_item_type_id")
-    private Long stockItemTypeId;
+    @Column(name = "type_name", nullable = false)
+    private String typeName;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "stockItemType")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -53,30 +50,17 @@ public class StockItemType implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return this.name;
+    public String getTypeName() {
+        return this.typeName;
     }
 
-    public StockItemType name(String name) {
-        this.setName(name);
+    public StockItemType typeName(String typeName) {
+        this.setTypeName(typeName);
         return this;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getStockItemTypeId() {
-        return this.stockItemTypeId;
-    }
-
-    public StockItemType stockItemTypeId(Long stockItemTypeId) {
-        this.setStockItemTypeId(stockItemTypeId);
-        return this;
-    }
-
-    public void setStockItemTypeId(Long stockItemTypeId) {
-        this.stockItemTypeId = stockItemTypeId;
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 
     public Set<StockItem> getStockItems() {
@@ -134,8 +118,7 @@ public class StockItemType implements Serializable {
     public String toString() {
         return "StockItemType{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", stockItemTypeId=" + getStockItemTypeId() +
+            ", typeName='" + getTypeName() + "'" +
             "}";
     }
 }

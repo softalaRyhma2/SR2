@@ -59,14 +59,11 @@ export const StockItemUpdate = () => {
     if (values.quantity !== undefined && typeof values.quantity !== 'number') {
       values.quantity = Number(values.quantity);
     }
-    if (values.availability !== undefined && typeof values.availability !== 'number') {
-      values.availability = Number(values.availability);
+    if (values.available !== undefined && typeof values.available !== 'number') {
+      values.available = Number(values.available);
     }
     if (values.price !== undefined && typeof values.price !== 'number') {
       values.price = Number(values.price);
-    }
-    if (values.stockItemId !== undefined && typeof values.stockItemId !== 'number') {
-      values.stockItemId = Number(values.stockItemId);
     }
 
     const entity = {
@@ -129,10 +126,10 @@ export const StockItemUpdate = () => {
                 }}
               />
               <ValidatedField
-                label={translate('sr2App.stockItem.availability')}
-                id="stock-item-availability"
-                name="availability"
-                data-cy="availability"
+                label={translate('sr2App.stockItem.available')}
+                id="stock-item-available"
+                name="available"
+                data-cy="available"
                 type="text"
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
@@ -149,13 +146,6 @@ export const StockItemUpdate = () => {
                   required: { value: true, message: translate('entity.validation.required') },
                   validate: v => isNumber(v) || translate('entity.validation.number'),
                 }}
-              />
-              <ValidatedField
-                label={translate('sr2App.stockItem.stockItemId')}
-                id="stock-item-stockItemId"
-                name="stockItemId"
-                data-cy="stockItemId"
-                type="text"
               />
               <ValidatedField
                 id="stock-item-stock"

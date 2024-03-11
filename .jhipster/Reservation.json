@@ -6,11 +6,6 @@
   "entityTableName": "reservation",
   "fields": [
     {
-      "fieldName": "reservedQuantity",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["required"]
-    },
-    {
       "fieldName": "reservationDate",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
@@ -19,10 +14,6 @@
       "fieldName": "isPickedUp",
       "fieldType": "Boolean",
       "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "reservationId",
-      "fieldType": "Long"
     }
   ],
   "name": "Reservation",

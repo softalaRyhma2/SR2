@@ -10,17 +10,14 @@ public class StockItemTypeTestSamples {
     private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     public static StockItemType getStockItemTypeSample1() {
-        return new StockItemType().id(1L).name("name1").stockItemTypeId(1L);
+        return new StockItemType().id(1L).typeName("typeName1");
     }
 
     public static StockItemType getStockItemTypeSample2() {
-        return new StockItemType().id(2L).name("name2").stockItemTypeId(2L);
+        return new StockItemType().id(2L).typeName("typeName2");
     }
 
     public static StockItemType getStockItemTypeRandomSampleGenerator() {
-        return new StockItemType()
-            .id(longCount.incrementAndGet())
-            .name(UUID.randomUUID().toString())
-            .stockItemTypeId(longCount.incrementAndGet());
+        return new StockItemType().id(longCount.incrementAndGet()).typeName(UUID.randomUUID().toString());
     }
 }

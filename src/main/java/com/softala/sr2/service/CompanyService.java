@@ -68,9 +68,6 @@ public class CompanyService {
                 if (company.getCompanyDetails() != null) {
                     existingCompany.setCompanyDetails(company.getCompanyDetails());
                 }
-                if (company.getCompanyId() != null) {
-                    existingCompany.setCompanyId(company.getCompanyId());
-                }
 
                 return existingCompany;
             })

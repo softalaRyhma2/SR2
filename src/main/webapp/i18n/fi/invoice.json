@@ -20,7 +20,7 @@
       "id": "ID",
       "totalSum": "Total Sum",
       "invoiceDate": "Invoice Date",
-      "invoiceId": "Invoice Id",
+      "isClosed": "Is Closed",
       "stock": "Stock",
       "company": "Company"
     }

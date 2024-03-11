@@ -47,9 +47,6 @@ export const StockItemTypeUpdate = () => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
-    if (values.stockItemTypeId !== undefined && typeof values.stockItemTypeId !== 'number') {
-      values.stockItemTypeId = Number(values.stockItemTypeId);
-    }
 
     const entity = {
       ...stockItemTypeEntity,
@@ -96,21 +93,14 @@ export const StockItemTypeUpdate = () => {
                 />
               ) : null}
               <ValidatedField
-                label={translate('sr2App.stockItemType.name')}
-                id="stock-item-type-name"
-                name="name"
-                data-cy="name"
+                label={translate('sr2App.stockItemType.typeName')}
+                id="stock-item-type-typeName"
+                name="typeName"
+                data-cy="typeName"
                 type="text"
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
-              />
-              <ValidatedField
-                label={translate('sr2App.stockItemType.stockItemTypeId')}
-                id="stock-item-type-stockItemTypeId"
-                name="stockItemTypeId"
-                data-cy="stockItemTypeId"
-                type="text"
               />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/stock-item-type" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />

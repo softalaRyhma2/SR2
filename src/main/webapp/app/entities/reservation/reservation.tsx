@@ -114,10 +114,6 @@ export const Reservation = () => {
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="sr2App.reservation.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
-                <th className="hand" onClick={sort('reservedQuantity')}>
-                  <Translate contentKey="sr2App.reservation.reservedQuantity">Reserved Quantity</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('reservedQuantity')} />
-                </th>
                 <th className="hand" onClick={sort('reservationDate')}>
                   <Translate contentKey="sr2App.reservation.reservationDate">Reservation Date</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('reservationDate')} />
@@ -125,10 +121,6 @@ export const Reservation = () => {
                 <th className="hand" onClick={sort('isPickedUp')}>
                   <Translate contentKey="sr2App.reservation.isPickedUp">Is Picked Up</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('isPickedUp')} />
-                </th>
-                <th className="hand" onClick={sort('reservationId')}>
-                  <Translate contentKey="sr2App.reservation.reservationId">Reservation Id</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('reservationId')} />
                 </th>
                 <th />
               </tr>
@@ -141,14 +133,12 @@ export const Reservation = () => {
                       {reservation.id}
                     </Button>
                   </td>
-                  <td>{reservation.reservedQuantity}</td>
                   <td>
                     {reservation.reservationDate ? (
                       <TextFormat type="date" value={reservation.reservationDate} format={APP_LOCAL_DATE_FORMAT} />
                     ) : null}
                   </td>
                   <td>{reservation.isPickedUp ? 'true' : 'false'}</td>
-                  <td>{reservation.reservationId}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/reservation/${reservation.id}`} color="info" size="sm" data-cy="entityDetailsButton">

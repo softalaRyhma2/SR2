@@ -5,9 +5,8 @@ import { IStockItemType } from 'app/shared/model/stock-item-type.model';
 export interface IStockItem {
   id?: number;
   quantity?: number;
-  availability?: number;
+  available?: number;
   price?: number;
-  stockItemId?: number | null;
   reservedItems?: IReservedItem[] | null;
   stock?: IStock;
   stockItemType?: IStockItemType;

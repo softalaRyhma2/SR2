@@ -9,14 +9,14 @@ public class StockTestSamples {
     private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     public static Stock getStockSample1() {
-        return new Stock().id(1L).stockId(1L);
+        return new Stock().id(1L);
     }
 
     public static Stock getStockSample2() {
-        return new Stock().id(2L).stockId(2L);
+        return new Stock().id(2L);
     }
 
     public static Stock getStockRandomSampleGenerator() {
-        return new Stock().id(longCount.incrementAndGet()).stockId(longCount.incrementAndGet());
+        return new Stock().id(longCount.incrementAndGet());
     }
 }

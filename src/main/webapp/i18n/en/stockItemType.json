@@ -18,8 +18,7 @@
         "title": "Stock Item Type"
       },
       "id": "ID",
-      "name": "Name",
-      "stockItemTypeId": "Stock Item Type Id",
+      "typeName": "Type Name",
       "stockItem": "Stock Item"
     }
   }

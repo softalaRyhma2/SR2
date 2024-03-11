@@ -62,9 +62,6 @@ public class StockService {
                 if (stock.getStockDate() != null) {
                     existingStock.setStockDate(stock.getStockDate());
                 }
-                if (stock.getStockId() != null) {
-                    existingStock.setStockId(stock.getStockId());
-                }
 
                 return existingStock;
             })

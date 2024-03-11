@@ -2,8 +2,7 @@ import { IStockItem } from 'app/shared/model/stock-item.model';
 
 export interface IStockItemType {
   id?: number;
-  name?: string;
-  stockItemTypeId?: number | null;
+  typeName?: string;
   stockItems?: IStockItem[] | null;
 }
 

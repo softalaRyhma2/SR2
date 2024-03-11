@@ -36,14 +36,11 @@ class StockItemResourceIT {
     private static final Integer DEFAULT_QUANTITY = 1;
     private static final Integer UPDATED_QUANTITY = 2;
 
-    private static final Integer DEFAULT_AVAILABILITY = 1;
-    private static final Integer UPDATED_AVAILABILITY = 2;
+    private static final Integer DEFAULT_AVAILABLE = 1;
+    private static final Integer UPDATED_AVAILABLE = 2;
 
     private static final BigDecimal DEFAULT_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_PRICE = new BigDecimal(2);
-
-    private static final Long DEFAULT_STOCK_ITEM_ID = 1L;
-    private static final Long UPDATED_STOCK_ITEM_ID = 2L;
 
     private static final String ENTITY_API_URL = "/api/stock-items";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -69,11 +66,7 @@ class StockItemResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static StockItem createEntity(EntityManager em) {
-        StockItem stockItem = new StockItem()
-            .quantity(DEFAULT_QUANTITY)
-            .availability(DEFAULT_AVAILABILITY)
-            .price(DEFAULT_PRICE)
-            .stockItemId(DEFAULT_STOCK_ITEM_ID);
+        StockItem stockItem = new StockItem().quantity(DEFAULT_QUANTITY).available(DEFAULT_AVAILABLE).price(DEFAULT_PRICE);
         // Add required entity
         Stock stock;
         if (TestUtil.findAll(em, Stock.class).isEmpty()) {
@@ -104,11 +97,7 @@ class StockItemResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static StockItem createUpdatedEntity(EntityManager em) {
-        StockItem stockItem = new StockItem()
-            .quantity(UPDATED_QUANTITY)
-            .availability(UPDATED_AVAILABILITY)
-            .price(UPDATED_PRICE)
-            .stockItemId(UPDATED_STOCK_ITEM_ID);
+        StockItem stockItem = new StockItem().quantity(UPDATED_QUANTITY).available(UPDATED_AVAILABLE).price(UPDATED_PRICE);
         // Add required entity
         Stock stock;
         if (TestUtil.findAll(em, Stock.class).isEmpty()) {
@@ -151,9 +140,8 @@ class StockItemResourceIT {
         assertThat(stockItemList).hasSize(databaseSizeBeforeCreate + 1);
         StockItem testStockItem = stockItemList.get(stockItemList.size() - 1);
         assertThat(testStockItem.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
-        assertThat(testStockItem.getAvailability()).isEqualTo(DEFAULT_AVAILABILITY);
+        assertThat(testStockItem.getAvailable()).isEqualTo(DEFAULT_AVAILABLE);
         assertThat(testStockItem.getPrice()).isEqualByComparingTo(DEFAULT_PRICE);
-        assertThat(testStockItem.getStockItemId()).isEqualTo(DEFAULT_STOCK_ITEM_ID);
     }
 
     @Test
@@ -193,10 +181,10 @@ class StockItemResourceIT {
 
     @Test
     @Transactional
-    void checkAvailabilityIsRequired() throws Exception {
+    void checkAvailableIsRequired() throws Exception {
         int databaseSizeBeforeTest = stockItemRepository.findAll().size();
         // set the field null
-        stockItem.setAvailability(null);
+        stockItem.setAvailable(null);
 
         // Create the StockItem, which fails.
 
@@ -238,9 +226,8 @@ class StockItemResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(stockItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
-            .andExpect(jsonPath("$.[*].availability").value(hasItem(DEFAULT_AVAILABILITY)))
-            .andExpect(jsonPath("$.[*].price").value(hasItem(sameNumber(DEFAULT_PRICE))))
-            .andExpect(jsonPath("$.[*].stockItemId").value(hasItem(DEFAULT_STOCK_ITEM_ID.intValue())));
+            .andExpect(jsonPath("$.[*].available").value(hasItem(DEFAULT_AVAILABLE)))
+            .andExpect(jsonPath("$.[*].price").value(hasItem(sameNumber(DEFAULT_PRICE))));
     }
 
     @Test
@@ -256,9 +243,8 @@ class StockItemResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(stockItem.getId().intValue()))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
-            .andExpect(jsonPath("$.availability").value(DEFAULT_AVAILABILITY))
-            .andExpect(jsonPath("$.price").value(sameNumber(DEFAULT_PRICE)))
-            .andExpect(jsonPath("$.stockItemId").value(DEFAULT_STOCK_ITEM_ID.intValue()));
+            .andExpect(jsonPath("$.available").value(DEFAULT_AVAILABLE))
+            .andExpect(jsonPath("$.price").value(sameNumber(DEFAULT_PRICE)));
     }
 
     @Test
@@ -280,11 +266,7 @@ class StockItemResourceIT {
         StockItem updatedStockItem = stockItemRepository.findById(stockItem.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedStockItem are not directly saved in db
         em.detach(updatedStockItem);
-        updatedStockItem
-            .quantity(UPDATED_QUANTITY)
-            .availability(UPDATED_AVAILABILITY)
-            .price(UPDATED_PRICE)
-            .stockItemId(UPDATED_STOCK_ITEM_ID);
+        updatedStockItem.quantity(UPDATED_QUANTITY).available(UPDATED_AVAILABLE).price(UPDATED_PRICE);
 
         restStockItemMockMvc
             .perform(
@@ -299,9 +281,8 @@ class StockItemResourceIT {
         assertThat(stockItemList).hasSize(databaseSizeBeforeUpdate);
         StockItem testStockItem = stockItemList.get(stockItemList.size() - 1);
         assertThat(testStockItem.getQuantity()).isEqualTo(UPDATED_QUANTITY);
-        assertThat(testStockItem.getAvailability()).isEqualTo(UPDATED_AVAILABILITY);
+        assertThat(testStockItem.getAvailable()).isEqualTo(UPDATED_AVAILABLE);
         assertThat(testStockItem.getPrice()).isEqualByComparingTo(UPDATED_PRICE);
-        assertThat(testStockItem.getStockItemId()).isEqualTo(UPDATED_STOCK_ITEM_ID);
     }
 
     @Test
@@ -387,9 +368,8 @@ class StockItemResourceIT {
         assertThat(stockItemList).hasSize(databaseSizeBeforeUpdate);
         StockItem testStockItem = stockItemList.get(stockItemList.size() - 1);
         assertThat(testStockItem.getQuantity()).isEqualTo(UPDATED_QUANTITY);
-        assertThat(testStockItem.getAvailability()).isEqualTo(DEFAULT_AVAILABILITY);
+        assertThat(testStockItem.getAvailable()).isEqualTo(DEFAULT_AVAILABLE);
         assertThat(testStockItem.getPrice()).isEqualByComparingTo(DEFAULT_PRICE);
-        assertThat(testStockItem.getStockItemId()).isEqualTo(DEFAULT_STOCK_ITEM_ID);
     }
 
     @Test
@@ -404,11 +384,7 @@ class StockItemResourceIT {
         StockItem partialUpdatedStockItem = new StockItem();
         partialUpdatedStockItem.setId(stockItem.getId());
 
-        partialUpdatedStockItem
-            .quantity(UPDATED_QUANTITY)
-            .availability(UPDATED_AVAILABILITY)
-            .price(UPDATED_PRICE)
-            .stockItemId(UPDATED_STOCK_ITEM_ID);
+        partialUpdatedStockItem.quantity(UPDATED_QUANTITY).available(UPDATED_AVAILABLE).price(UPDATED_PRICE);
 
         restStockItemMockMvc
             .perform(
@@ -423,9 +399,8 @@ class StockItemResourceIT {
         assertThat(stockItemList).hasSize(databaseSizeBeforeUpdate);
         StockItem testStockItem = stockItemList.get(stockItemList.size() - 1);
         assertThat(testStockItem.getQuantity()).isEqualTo(UPDATED_QUANTITY);
-        assertThat(testStockItem.getAvailability()).isEqualTo(UPDATED_AVAILABILITY);
+        assertThat(testStockItem.getAvailable()).isEqualTo(UPDATED_AVAILABLE);
         assertThat(testStockItem.getPrice()).isEqualByComparingTo(UPDATED_PRICE);
-        assertThat(testStockItem.getStockItemId()).isEqualTo(UPDATED_STOCK_ITEM_ID);
     }
 
     @Test

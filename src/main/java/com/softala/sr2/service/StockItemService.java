@@ -62,14 +62,11 @@ public class StockItemService {
                 if (stockItem.getQuantity() != null) {
                     existingStockItem.setQuantity(stockItem.getQuantity());
                 }
-                if (stockItem.getAvailability() != null) {
-                    existingStockItem.setAvailability(stockItem.getAvailability());
+                if (stockItem.getAvailable() != null) {
+                    existingStockItem.setAvailable(stockItem.getAvailable());
                 }
                 if (stockItem.getPrice() != null) {
                     existingStockItem.setPrice(stockItem.getPrice());
-                }
-                if (stockItem.getStockItemId() != null) {
-                    existingStockItem.setStockItemId(stockItem.getStockItemId());
                 }
 
                 return existingStockItem;

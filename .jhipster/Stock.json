@@ -9,10 +9,6 @@
       "fieldName": "stockDate",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "stockId",
-      "fieldType": "Long"
     }
   ],
   "name": "Stock",

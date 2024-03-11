@@ -23,10 +23,6 @@
       "fieldType": "String",
       "fieldValidateRules": ["maxlength"],
       "fieldValidateRulesMaxlength": "500"
-    },
-    {
-      "fieldName": "companyId",
-      "fieldType": "Long"
     }
   ],
   "name": "Company",

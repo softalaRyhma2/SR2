@@ -117,17 +117,13 @@ export const StockItem = () => {
                   <Translate contentKey="sr2App.stockItem.quantity">Quantity</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('quantity')} />
                 </th>
-                <th className="hand" onClick={sort('availability')}>
-                  <Translate contentKey="sr2App.stockItem.availability">Availability</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('availability')} />
+                <th className="hand" onClick={sort('available')}>
+                  <Translate contentKey="sr2App.stockItem.available">Available</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('available')} />
                 </th>
                 <th className="hand" onClick={sort('price')}>
                   <Translate contentKey="sr2App.stockItem.price">Price</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('price')} />
-                </th>
-                <th className="hand" onClick={sort('stockItemId')}>
-                  <Translate contentKey="sr2App.stockItem.stockItemId">Stock Item Id</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('stockItemId')} />
                 </th>
                 <th>
                   <Translate contentKey="sr2App.stockItem.stock">Stock</Translate> <FontAwesomeIcon icon="sort" />
@@ -147,9 +143,8 @@ export const StockItem = () => {
                     </Button>
                   </td>
                   <td>{stockItem.quantity}</td>
-                  <td>{stockItem.availability}</td>
+                  <td>{stockItem.available}</td>
                   <td>{stockItem.price}</td>
-                  <td>{stockItem.stockItemId}</td>
                   <td>{stockItem.stock ? <Link to={`/stock/${stockItem.stock.id}`}>{stockItem.stock.id}</Link> : ''}</td>
                   <td>
                     {stockItem.stockItemType ? (

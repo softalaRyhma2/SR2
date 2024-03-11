@@ -5,7 +5,6 @@ export interface ICompany {
   companyName?: string;
   companyEmail?: string;
   companyDetails?: string | null;
-  companyId?: number | null;
   invoices?: IInvoice[] | null;
 }
 

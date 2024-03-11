@@ -28,19 +28,12 @@ public class Reservation implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "reserved_quantity", nullable = false)
-    private Integer reservedQuantity;
-
-    @NotNull
     @Column(name = "reservation_date", nullable = false)
     private LocalDate reservationDate;
 
     @NotNull
     @Column(name = "is_picked_up", nullable = false)
     private Boolean isPickedUp;
-
-    @Column(name = "reservation_id")
-    private Long reservationId;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "reservation")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -64,19 +57,6 @@ public class Reservation implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getReservedQuantity() {
-        return this.reservedQuantity;
-    }
-
-    public Reservation reservedQuantity(Integer reservedQuantity) {
-        this.setReservedQuantity(reservedQuantity);
-        return this;
-    }
-
-    public void setReservedQuantity(Integer reservedQuantity) {
-        this.reservedQuantity = reservedQuantity;
     }
 
     public LocalDate getReservationDate() {
@@ -103,19 +83,6 @@ public class Reservation implements Serializable {
 
     public void setIsPickedUp(Boolean isPickedUp) {
         this.isPickedUp = isPickedUp;
-    }
-
-    public Long getReservationId() {
-        return this.reservationId;
-    }
-
-    public Reservation reservationId(Long reservationId) {
-        this.setReservationId(reservationId);
-        return this;
-    }
-
-    public void setReservationId(Long reservationId) {
-        this.reservationId = reservationId;
     }
 
     public Set<ReservedItem> getReservedItems() {
@@ -181,10 +148,8 @@ public class Reservation implements Serializable {
     public String toString() {
         return "Reservation{" +
             "id=" + getId() +
-            ", reservedQuantity=" + getReservedQuantity() +
             ", reservationDate='" + getReservationDate() + "'" +
             ", isPickedUp='" + getIsPickedUp() + "'" +
-            ", reservationId=" + getReservationId() +
             "}";
     }
 }

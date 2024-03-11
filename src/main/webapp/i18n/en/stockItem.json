@@ -19,9 +19,8 @@
       },
       "id": "ID",
       "quantity": "Quantity",
-      "availability": "Availability",
+      "available": "Available",
       "price": "Price",
-      "stockItemId": "Stock Item Id",
       "reservedItem": "Reserved Item",
       "stock": "Stock",
       "stockItemType": "Stock Item Type"
