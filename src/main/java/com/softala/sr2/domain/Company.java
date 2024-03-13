@@ -33,7 +33,7 @@ public class Company implements Serializable {
 
     @NotNull
     @Size(max = 60)
-    @Pattern(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
+    @Pattern(regexp = "^[^@\\s]+@[^@\\s]+.[^@\\s]+$")
     @Column(name = "company_email", length = 60, nullable = false)
     private String companyEmail;
 
@@ -43,7 +43,7 @@ public class Company implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "stocks", "company" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

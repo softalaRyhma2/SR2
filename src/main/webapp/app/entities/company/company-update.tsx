@@ -113,8 +113,8 @@ export const CompanyUpdate = () => {
                   required: { value: true, message: translate('entity.validation.required') },
                   maxLength: { value: 60, message: translate('entity.validation.maxlength', { max: 60 }) },
                   pattern: {
-                    value: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
-                    message: translate('entity.validation.pattern', { pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$' }),
+                    value: /^[^@\s]+@[^@\s]+.[^@\s]+$/,
+                    message: translate('entity.validation.pattern', { pattern: '^[^@\\s]+@[^@\\s]+.[^@\\s]+$' }),
                   },
                 }}
               />

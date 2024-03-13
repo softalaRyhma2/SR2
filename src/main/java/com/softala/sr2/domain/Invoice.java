@@ -6,6 +6,8 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -31,6 +33,15 @@ public class Invoice implements Serializable {
 
     @Column(name = "invoice_date")
     private LocalDate invoiceDate;
+
+    @NotNull
+    @Column(name = "is_closed", nullable = false)
+    private Boolean isClosed;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "invoice")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "stockItems", "invoice" }, allowSetters = true)
+    private Set<Stock> stocks = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
@@ -78,6 +89,50 @@ public class Invoice implements Serializable {
         this.invoiceDate = invoiceDate;
     }
 
+    public Boolean getIsClosed() {
+        return this.isClosed;
+    }
+
+    public Invoice isClosed(Boolean isClosed) {
+        this.setIsClosed(isClosed);
+        return this;
+    }
+
+    public void setIsClosed(Boolean isClosed) {
+        this.isClosed = isClosed;
+    }
+
+    public Set<Stock> getStocks() {
+        return this.stocks;
+    }
+
+    public void setStocks(Set<Stock> stocks) {
+        if (this.stocks != null) {
+            this.stocks.forEach(i -> i.setInvoice(null));
+        }
+        if (stocks != null) {
+            stocks.forEach(i -> i.setInvoice(this));
+        }
+        this.stocks = stocks;
+    }
+
+    public Invoice stocks(Set<Stock> stocks) {
+        this.setStocks(stocks);
+        return this;
+    }
+
+    public Invoice addStock(Stock stock) {
+        this.stocks.add(stock);
+        stock.setInvoice(this);
+        return this;
+    }
+
+    public Invoice removeStock(Stock stock) {
+        this.stocks.remove(stock);
+        stock.setInvoice(null);
+        return this;
+    }
+
     public Company getCompany() {
         return this.company;
     }
@@ -117,6 +172,7 @@ public class Invoice implements Serializable {
             "id=" + getId() +
             ", totalSum=" + getTotalSum() +
             ", invoiceDate='" + getInvoiceDate() + "'" +
+            ", isClosed='" + getIsClosed() + "'" +
             "}";
     }
 }

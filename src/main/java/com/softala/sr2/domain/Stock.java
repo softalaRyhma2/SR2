@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -27,24 +28,16 @@ public class Stock implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "quantity", nullable = false)
-    private Integer quantity;
-
-    @NotNull
-    @Column(name = "available", nullable = false)
-    private Integer available;
-
-    @NotNull
-    @Column(name = "price", precision = 21, scale = 2, nullable = false)
-    private BigDecimal price;
-
-    @NotNull
     @Column(name = "stock_date", nullable = false)
     private LocalDate stockDate;
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "stock")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "reservedItems", "stock", "stockItemType" }, allowSetters = true)
+    private Set<StockItem> stockItems = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "stocks", "company" }, allowSetters = true)
     private Invoice invoice;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -62,45 +55,6 @@ public class Stock implements Serializable {
         this.id = id;
     }
 
-    public Integer getQuantity() {
-        return this.quantity;
-    }
-
-    public Stock quantity(Integer quantity) {
-        this.setQuantity(quantity);
-        return this;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Integer getAvailable() {
-        return this.available;
-    }
-
-    public Stock available(Integer available) {
-        this.setAvailable(available);
-        return this;
-    }
-
-    public void setAvailable(Integer available) {
-        this.available = available;
-    }
-
-    public BigDecimal getPrice() {
-        return this.price;
-    }
-
-    public Stock price(BigDecimal price) {
-        this.setPrice(price);
-        return this;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
     public LocalDate getStockDate() {
         return this.stockDate;
     }
@@ -112,6 +66,37 @@ public class Stock implements Serializable {
 
     public void setStockDate(LocalDate stockDate) {
         this.stockDate = stockDate;
+    }
+
+    public Set<StockItem> getStockItems() {
+        return this.stockItems;
+    }
+
+    public void setStockItems(Set<StockItem> stockItems) {
+        if (this.stockItems != null) {
+            this.stockItems.forEach(i -> i.setStock(null));
+        }
+        if (stockItems != null) {
+            stockItems.forEach(i -> i.setStock(this));
+        }
+        this.stockItems = stockItems;
+    }
+
+    public Stock stockItems(Set<StockItem> stockItems) {
+        this.setStockItems(stockItems);
+        return this;
+    }
+
+    public Stock addStockItem(StockItem stockItem) {
+        this.stockItems.add(stockItem);
+        stockItem.setStock(this);
+        return this;
+    }
+
+    public Stock removeStockItem(StockItem stockItem) {
+        this.stockItems.remove(stockItem);
+        stockItem.setStock(null);
+        return this;
     }
 
     public Invoice getInvoice() {
@@ -151,9 +136,6 @@ public class Stock implements Serializable {
     public String toString() {
         return "Stock{" +
             "id=" + getId() +
-            ", quantity=" + getQuantity() +
-            ", available=" + getAvailable() +
-            ", price=" + getPrice() +
             ", stockDate='" + getStockDate() + "'" +
             "}";
     }

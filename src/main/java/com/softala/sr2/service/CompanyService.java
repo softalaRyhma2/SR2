@@ -1,12 +1,7 @@
 package com.softala.sr2.service;
 
 import com.softala.sr2.domain.Company;
-import com.softala.sr2.domain.User;
 import com.softala.sr2.repository.CompanyRepository;
-import com.softala.sr2.repository.UserRepository;
-import com.softala.sr2.security.SecurityUtils;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,38 +21,8 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
-    private final UserRepository userRepository;
-
-    public CompanyService(CompanyRepository companyRepository, UserRepository userRepository) {
+    public CompanyService(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
-        this.userRepository = userRepository;
-    }
-
-    public List<Company> findAllCompaniesByLoggedInUser() {
-        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
-        if (currentUserLogin.isPresent()) {
-            String login = currentUserLogin.get();
-            Optional<User> user = userRepository.findOneByLogin(login);
-            if (user.isPresent()) {
-                if (isAdmin(user.get()) || isRecser(user.get())) {
-                    return companyRepository.findAll();
-                } else {
-                    Company userCompany = user.get().getCompany();
-                    if (userCompany != null) {
-                        return Collections.singletonList(userCompany);
-                    }
-                }
-            }
-        }
-        return Collections.emptyList();
-    }
-
-    private boolean isRecser(User user) {
-        return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_RECSER"));
-    }
-
-    private boolean isAdmin(User user) {
-        return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_ADMIN"));
     }
 
     /**
@@ -140,13 +105,6 @@ public class CompanyService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Company : {}", id);
-
-        Optional<Company> companyOptional = companyRepository.findById(id);
-        companyOptional.ifPresent(company -> {
-            List<User> users = userRepository.findByCompany(company);
-            users.forEach(user -> user.setCompany(null));
-        });
-
         companyRepository.deleteById(id);
     }
 }

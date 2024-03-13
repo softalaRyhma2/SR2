@@ -16,7 +16,7 @@
       "fieldType": "String",
       "fieldValidateRules": ["required", "maxlength", "pattern"],
       "fieldValidateRulesMaxlength": "60",
-      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+.[^@\\s]+$"
     },
     {
       "fieldName": "companyDetails",

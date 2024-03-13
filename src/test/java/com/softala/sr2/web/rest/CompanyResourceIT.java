@@ -32,8 +32,8 @@ class CompanyResourceIT {
     private static final String DEFAULT_COMPANY_NAME = "AAAAAAAAAA";
     private static final String UPDATED_COMPANY_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_COMPANY_EMAIL = ">&H_Vf@E%lMz.&";
-    private static final String UPDATED_COMPANY_EMAIL = "+p~Vq@^`B.}(A";
+    private static final String DEFAULT_COMPANY_EMAIL = ">&H_Vf@E%lMz$o";
+    private static final String UPDATED_COMPANY_EMAIL = "p@VqC^`B@(AE2sL";
 
     private static final String DEFAULT_COMPANY_DETAILS = "AAAAAAAAAA";
     private static final String UPDATED_COMPANY_DETAILS = "BBBBBBBBBB";
@@ -298,7 +298,7 @@ class CompanyResourceIT {
         Company partialUpdatedCompany = new Company();
         partialUpdatedCompany.setId(company.getId());
 
-        partialUpdatedCompany.companyName(UPDATED_COMPANY_NAME).companyEmail(UPDATED_COMPANY_EMAIL);
+        partialUpdatedCompany.companyDetails(UPDATED_COMPANY_DETAILS);
 
         restCompanyMockMvc
             .perform(
@@ -312,9 +312,9 @@ class CompanyResourceIT {
         List<Company> companyList = companyRepository.findAll();
         assertThat(companyList).hasSize(databaseSizeBeforeUpdate);
         Company testCompany = companyList.get(companyList.size() - 1);
-        assertThat(testCompany.getCompanyName()).isEqualTo(UPDATED_COMPANY_NAME);
-        assertThat(testCompany.getCompanyEmail()).isEqualTo(UPDATED_COMPANY_EMAIL);
-        assertThat(testCompany.getCompanyDetails()).isEqualTo(DEFAULT_COMPANY_DETAILS);
+        assertThat(testCompany.getCompanyName()).isEqualTo(DEFAULT_COMPANY_NAME);
+        assertThat(testCompany.getCompanyEmail()).isEqualTo(DEFAULT_COMPANY_EMAIL);
+        assertThat(testCompany.getCompanyDetails()).isEqualTo(UPDATED_COMPANY_DETAILS);
     }
 
     @Test

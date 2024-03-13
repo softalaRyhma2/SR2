@@ -117,6 +117,14 @@ export const InvoiceUpdate = () => {
                 type="date"
               />
               <ValidatedField
+                label={translate('sr2App.invoice.isClosed')}
+                id="invoice-isClosed"
+                name="isClosed"
+                data-cy="isClosed"
+                check
+                type="checkbox"
+              />
+              <ValidatedField
                 id="invoice-company"
                 name="company"
                 data-cy="company"

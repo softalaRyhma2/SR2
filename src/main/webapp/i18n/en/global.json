@@ -11,7 +11,10 @@
         "company": "Company",
         "stock": "Stock",
         "reservation": "Reservation",
-        "invoice": "Invoice"
+        "invoice": "Invoice",
+        "stockItem": "Stock Item",
+        "stockItemType": "Stock Item Type",
+        "reservedItem": "Reserved Item"
       },
       "account": {
         "main": "Account",

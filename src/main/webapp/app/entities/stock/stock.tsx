@@ -114,17 +114,6 @@ export const Stock = () => {
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="sr2App.stock.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
-                <th className="hand" onClick={sort('quantity')}>
-                  <Translate contentKey="sr2App.stock.quantity">Quantity</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('quantity')} />
-                </th>
-                <th className="hand" onClick={sort('available')}>
-                  <Translate contentKey="sr2App.stock.available">Available</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('available')} />
-                </th>
-                <th className="hand" onClick={sort('price')}>
-                  <Translate contentKey="sr2App.stock.price">Price</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('price')} />
-                </th>
                 <th className="hand" onClick={sort('stockDate')}>
                   <Translate contentKey="sr2App.stock.stockDate">Stock Date</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('stockDate')} />
@@ -143,9 +132,6 @@ export const Stock = () => {
                       {stock.id}
                     </Button>
                   </td>
-                  <td>{stock.quantity}</td>
-                  <td>{stock.available}</td>
-                  <td>{stock.price}</td>
                   <td>{stock.stockDate ? <TextFormat type="date" value={stock.stockDate} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
                   <td>{stock.invoice ? <Link to={`/invoice/${stock.invoice.id}`}>{stock.invoice.id}</Link> : ''}</td>
                   <td className="text-end">

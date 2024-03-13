@@ -7,10 +7,8 @@ import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons'
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { AUTHORITIES } from 'app/config/constants';
 
 import { getEntities } from './company.reducer';
-import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
 export const Company = () => {
   const dispatch = useAppDispatch();
@@ -25,9 +23,6 @@ export const Company = () => {
   const companyList = useAppSelector(state => state.company.entities);
   const loading = useAppSelector(state => state.company.loading);
   const totalItems = useAppSelector(state => state.company.totalItems);
-  const isAdmin = useAppSelector(state =>
-    hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]),
-  );
 
   const getAllEntities = () => {
     dispatch(
@@ -103,14 +98,11 @@ export const Company = () => {
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="sr2App.company.home.refreshListLabel">Refresh List</Translate>
           </Button>
-
-          {isAdmin && (
-            <Link to="/company/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-              <FontAwesomeIcon icon="plus" />
-              &nbsp;
-              <Translate contentKey="sr2App.company.home.createLabel">Create new Company</Translate>
-            </Link>
-          )}
+          <Link to="/company/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="sr2App.company.home.createLabel">Create new Company</Translate>
+          </Link>
         </div>
       </h2>
       <div className="table-responsive">

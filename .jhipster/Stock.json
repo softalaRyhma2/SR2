@@ -6,21 +6,6 @@
   "entityTableName": "stock",
   "fields": [
     {
-      "fieldName": "quantity",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "available",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "price",
-      "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required"]
-    },
-    {
       "fieldName": "stockDate",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
@@ -30,11 +15,18 @@
   "pagination": "pagination",
   "relationships": [
     {
-      "otherEntityName": "invoice",
-      "relationshipName": "invoice",
+      "otherEntityName": "stockItem",
+      "otherEntityRelationshipName": "stock",
+      "relationshipName": "stockItem",
       "relationshipSide": "left",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "invoice",
+      "otherEntityRelationshipName": "stock",
+      "relationshipName": "invoice",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
     }
   ],
   "searchEngine": "no",

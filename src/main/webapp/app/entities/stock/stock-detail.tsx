@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Row, Col } from 'reactstrap';
+import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -33,24 +33,6 @@ export const StockDetail = () => {
           </dt>
           <dd>{stockEntity.id}</dd>
           <dt>
-            <span id="quantity">
-              <Translate contentKey="sr2App.stock.quantity">Quantity</Translate>
-            </span>
-          </dt>
-          <dd>{stockEntity.quantity}</dd>
-          <dt>
-            <span id="available">
-              <Translate contentKey="sr2App.stock.available">Available</Translate>
-            </span>
-          </dt>
-          <dd>{stockEntity.available}</dd>
-          <dt>
-            <span id="price">
-              <Translate contentKey="sr2App.stock.price">Price</Translate>
-            </span>
-          </dt>
-          <dd>{stockEntity.price}</dd>
-          <dt>
             <span id="stockDate">
               <Translate contentKey="sr2App.stock.stockDate">Stock Date</Translate>
             </span>
@@ -74,6 +56,34 @@ export const StockDetail = () => {
             <Translate contentKey="entity.action.edit">Edit</Translate>
           </span>
         </Button>
+      </Col>
+      <Col md="4">
+        <h2>Stock Items</h2>
+        <Table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>View</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stockEntity.stockItemList &&
+              stockEntity.stockItemList.map(stockItem => (
+                <tr key={stockItem.id}>
+                  <td>{stockItem.id}</td>
+                  <td>{stockItem.name}</td>
+                  <td>{stockItem.quantity}</td>
+                  <td>
+                    <Button tag={Link} to={`/stock-item/${stockItem.id}`} color="primary">
+                      <FontAwesomeIcon icon="eye" /> View
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
       </Col>
     </Row>
   );

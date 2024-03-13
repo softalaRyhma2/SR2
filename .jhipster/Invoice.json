@@ -12,13 +12,26 @@
     {
       "fieldName": "invoiceDate",
       "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "isClosed",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
     }
   ],
   "name": "Invoice",
   "pagination": "pagination",
   "relationships": [
     {
+      "otherEntityName": "stock",
+      "otherEntityRelationshipName": "invoice",
+      "relationshipName": "stock",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
       "otherEntityName": "company",
+      "otherEntityRelationshipName": "invoice",
       "relationshipName": "company",
       "relationshipSide": "right",
       "relationshipType": "many-to-one",
