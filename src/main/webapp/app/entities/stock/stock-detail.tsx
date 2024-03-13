@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Row, Col } from 'reactstrap';
+import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -56,6 +56,34 @@ export const StockDetail = () => {
             <Translate contentKey="entity.action.edit">Edit</Translate>
           </span>
         </Button>
+      </Col>
+      <Col md="4">
+        <h2>Stock Items</h2>
+        <Table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>View</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stockEntity.stockItemList &&
+              stockEntity.stockItemList.map(stockItem => (
+                <tr key={stockItem.id}>
+                  <td>{stockItem.id}</td>
+                  <td>{stockItem.name}</td>
+                  <td>{stockItem.quantity}</td>
+                  <td>
+                    <Button tag={Link} to={`/stock-item/${stockItem.id}`} color="primary">
+                      <FontAwesomeIcon icon="eye" /> View
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
       </Col>
     </Row>
   );

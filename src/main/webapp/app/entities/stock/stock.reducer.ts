@@ -3,6 +3,8 @@ import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IStock, defaultValue } from 'app/shared/model/stock.model';
+import { combineReducers } from '@reduxjs/toolkit';
+import stockItemReducer, { StockItemSlice } from '../stock-item/stock-item.reducer';
 
 const initialState: EntityState<IStock> = {
   loading: false,
@@ -119,6 +121,17 @@ export const StockSlice = createEntitySlice({
 });
 
 export const { reset } = StockSlice.actions;
+
+//testing stock & stockItem
+export const rootReducer = combineReducers({
+  stock: StockSlice.reducer,
+  stockItem: StockItemSlice.reducer, //stockItemReducer,
+});
+
+export const { reset: resetStock } = StockSlice.actions;
+export const { reset: resetStockItem } = StockItemSlice.actions;
+
+//export default rootReducer;
 
 // Reducer
 export default StockSlice.reducer;
