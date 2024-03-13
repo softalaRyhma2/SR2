@@ -47,6 +47,12 @@ public class CompanyResource {
         this.companyRepository = companyRepository;
     }
 
+    @GetMapping("/companies/current")
+    public ResponseEntity<List<Company>> findAllCompaniesByLoggedInUser() {
+        List<Company> companies = companyService.findAllCompaniesByLoggedInUser();
+        return ResponseEntity.ok().body(companies);
+    }
+
     /**
      * {@code POST  /companies} : Create a new company.
      *
@@ -144,11 +150,9 @@ public class CompanyResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of companies in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<Company>> getAllCompanies(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Companies");
-        Page<Company> page = companyService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    public ResponseEntity<List<Company>> getAllCompaniesForLoggedInUser() {
+        List<Company> companies = companyService.findAllCompaniesByLoggedInUser();
+        return ResponseEntity.ok().body(companies);
     }
 
     /**

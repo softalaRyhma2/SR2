@@ -1,5 +1,6 @@
 package com.softala.sr2.web.rest;
 
+import com.softala.sr2.domain.Company;
 import com.softala.sr2.domain.Invoice;
 import com.softala.sr2.repository.InvoiceRepository;
 import com.softala.sr2.service.InvoiceService;
@@ -47,11 +48,19 @@ public class InvoiceResource {
         this.invoiceRepository = invoiceRepository;
     }
 
+    @GetMapping("/invoices/current")
+    public ResponseEntity<List<Invoice>> findAllInvoicesByLoggedInUser() {
+        List<Invoice> invoices = invoiceService.findAllInvoicesByLoggedInUser();
+        return ResponseEntity.ok().body(invoices);
+    }
+
     /**
      * {@code POST  /invoices} : Create a new invoice.
      *
      * @param invoice the invoice to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new invoice, or with status {@code 400 (Bad Request)} if the invoice has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new invoice, or with status {@code 400 (Bad Request)} if the
+     *         invoice has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -70,11 +79,13 @@ public class InvoiceResource {
     /**
      * {@code PUT  /invoices/:id} : Updates an existing invoice.
      *
-     * @param id the id of the invoice to save.
+     * @param id      the id of the invoice to save.
      * @param invoice the invoice to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated invoice,
-     * or with status {@code 400 (Bad Request)} if the invoice is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the invoice couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated invoice,
+     *         or with status {@code 400 (Bad Request)} if the invoice is not valid,
+     *         or with status {@code 500 (Internal Server Error)} if the invoice
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
@@ -102,14 +113,17 @@ public class InvoiceResource {
     }
 
     /**
-     * {@code PATCH  /invoices/:id} : Partial updates given fields of an existing invoice, field will ignore if it is null
+     * {@code PATCH  /invoices/:id} : Partial updates given fields of an existing
+     * invoice, field will ignore if it is null
      *
-     * @param id the id of the invoice to save.
+     * @param id      the id of the invoice to save.
      * @param invoice the invoice to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated invoice,
-     * or with status {@code 400 (Bad Request)} if the invoice is not valid,
-     * or with status {@code 404 (Not Found)} if the invoice is not found,
-     * or with status {@code 500 (Internal Server Error)} if the invoice couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated invoice,
+     *         or with status {@code 400 (Bad Request)} if the invoice is not valid,
+     *         or with status {@code 404 (Not Found)} if the invoice is not found,
+     *         or with status {@code 500 (Internal Server Error)} if the invoice
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -138,24 +152,24 @@ public class InvoiceResource {
     }
 
     /**
-     * {@code GET  /invoices} : get all the invoices.
+     * {@code GET  /invoices} : get all the invoices by logged in user.
      *
      * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of invoices in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of invoices in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<Invoice>> getAllInvoices(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Invoices");
-        Page<Invoice> page = invoiceService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    public ResponseEntity<List<Invoice>> getAllInvoicesForLoggedInUser() {
+        List<Invoice> invoices = invoiceService.findAllInvoicesByLoggedInUser();
+        return ResponseEntity.ok().body(invoices);
     }
 
     /**
      * {@code GET  /invoices/:id} : get the "id" invoice.
      *
      * @param id the id of the invoice to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the invoice, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the invoice, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<Invoice> getInvoice(@PathVariable("id") Long id) {
