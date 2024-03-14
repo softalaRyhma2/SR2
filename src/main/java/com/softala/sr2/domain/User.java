@@ -61,9 +61,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Reservation> reservations = new HashSet<>();
-
     @NotNull
     @Column(nullable = false)
     private boolean activated = false;
@@ -88,6 +85,9 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     @Column(name = "reset_date")
     private Instant resetDate = null;
+
+    @OneToMany(mappedBy = "")
+    private Set<ReservedItem> reservedItems = new HashSet<>();
 
     @JsonIgnore
     @ManyToMany
@@ -157,24 +157,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         this.company = company;
     }
 
-    public Set<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(Set<Reservation> reservations) {
-        this.reservations = reservations;
-    }
-
-    public void addReservation(Reservation reservation) {
-        this.reservations.add(reservation);
-        reservation.setUser(this);
-    }
-
-    public void removeReservation(Reservation reservation) {
-        this.reservations.remove(reservation);
-        reservation.setUser(null);
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
@@ -229,6 +211,24 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public Set<ReservedItem> getReservedItems() {
+        return reservedItems;
+    }
+
+    public void setReservedItems(Set<ReservedItem> reservedItems) {
+        this.reservedItems = reservedItems;
+    }
+
+    public void addReservedItem(ReservedItem reservedItem) {
+        this.reservedItems.add(reservedItem);
+        reservedItem.setUser(this); // Assuming ReservedItem has a setUser method
+    }
+
+    public void removeReservedItem(ReservedItem reservedItem) {
+        this.reservedItems.remove(reservedItem);
+        reservedItem.setUser(null); // Assuming ReservedItem has a setUser method that accepts null
     }
 
     @Override
