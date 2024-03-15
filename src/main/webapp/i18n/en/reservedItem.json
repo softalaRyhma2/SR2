@@ -20,7 +20,8 @@
       "id": "ID",
       "quantity": "Quantity",
       "reservation": "Reservation",
-      "stockItem": "Stock Item"
+      "stockItem": "Stock Item",
+      "user": "User"
     }
   }
 }

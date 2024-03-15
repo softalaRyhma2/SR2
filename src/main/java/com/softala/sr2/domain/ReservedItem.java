@@ -36,6 +36,10 @@ public class ReservedItem implements Serializable {
     @JsonIgnoreProperties(value = { "reservedItems", "stock", "stockItemType" }, allowSetters = true)
     private StockItem stockItem;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -88,6 +92,14 @@ public class ReservedItem implements Serializable {
     public ReservedItem stockItem(StockItem stockItem) {
         this.setStockItem(stockItem);
         return this;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

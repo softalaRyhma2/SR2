@@ -2,6 +2,8 @@ package com.softala.sr2.web.rest;
 
 import com.softala.sr2.domain.ReservedItem;
 import com.softala.sr2.repository.ReservedItemRepository;
+import com.softala.sr2.repository.UserRepository;
+import com.softala.sr2.security.SecurityUtils;
 import com.softala.sr2.service.ReservedItemService;
 import com.softala.sr2.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -39,12 +41,17 @@ public class ReservedItemResource {
     private String applicationName;
 
     private final ReservedItemService reservedItemService;
-
     private final ReservedItemRepository reservedItemRepository;
+    private final UserRepository userRepository;
 
-    public ReservedItemResource(ReservedItemService reservedItemService, ReservedItemRepository reservedItemRepository) {
+    public ReservedItemResource(
+        ReservedItemService reservedItemService,
+        ReservedItemRepository reservedItemRepository,
+        UserRepository userRepository
+    ) {
         this.reservedItemService = reservedItemService;
         this.reservedItemRepository = reservedItemRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -60,6 +67,9 @@ public class ReservedItemResource {
         if (reservedItem.getId() != null) {
             throw new BadRequestAlertException("A new reservedItem cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        // Fetch the currently authenticated user and set it on the reservation
+        SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(reservedItem::setUser);
+
         ReservedItem result = reservedItemService.save(reservedItem);
         return ResponseEntity
             .created(new URI("/api/reserved-items/" + result.getId()))
@@ -94,6 +104,8 @@ public class ReservedItemResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
+        // Optionally, fetch and set the current user as the user for the reservation
+        SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(reservedItem::setUser);
         ReservedItem result = reservedItemService.update(reservedItem);
         return ResponseEntity
             .ok()

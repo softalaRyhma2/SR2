@@ -123,6 +123,9 @@ export const ReservedItem = () => {
                 <th>
                   <Translate contentKey="sr2App.reservedItem.stockItem">Stock Item</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+                <th>
+                  <Translate contentKey="sr2App.reservedItem.user">User ID</Translate>
+                </th>
                 <th />
               </tr>
             </thead>
@@ -145,6 +148,7 @@ export const ReservedItem = () => {
                   <td>
                     {reservedItem.stockItem ? <Link to={`/stock-item/${reservedItem.stockItem.id}`}>{reservedItem.stockItem.id}</Link> : ''}
                   </td>
+                  <td>{reservedItem.user ? reservedItem.user.login : ' '}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/reserved-item/${reservedItem.id}`} color="info" size="sm" data-cy="entityDetailsButton">
