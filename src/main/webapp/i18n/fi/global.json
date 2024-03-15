@@ -55,7 +55,7 @@
       "info": {
         "authenticated": {
           "prefix": "Väliaikaiset kirjautumistunnukset.<br/>",
-          "suffix": "- Administrator (login=\"admin\" ja salasana=\"admin\") <br />- Recser User (login=\"recser\" and password=\"recser\") <br/>- User (login=\"user\" ja salasana=\"user\") <br/>- transport1 (login=\"transport1\" ja salasana=\"user\").",
+          "suffix": "- Ylläpitäjä (login=\"admin\" ja salasana=\"admin\") <br />- Recser käyttäjä (login=\"recser\" ja salasana=\"recser\") <br/>- Pcenter käyttäjä (login=\"pcenter\" ja salasana=\"user\") <br/>- Transport1 käyttäjä (login=\"transport1\" ja salasana=\"user\").",
           "button": "Kirjaudu sisään"
         },
         "register": {

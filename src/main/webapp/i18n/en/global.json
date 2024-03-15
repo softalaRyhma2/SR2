@@ -55,7 +55,7 @@
       "info": {
         "authenticated": {
           "prefix": "Temporary accounts <br/>",
-          "suffix": "- Administrator (login=\"admin\" and password=\"admin\") <br />- Recser User (login=\"recser\" and password=\"recser\") <br/>- User (login=\"user\" and password=\"user\") <br/>- Transport 1 (login=\"transport1\" and password=\"user\").",
+          "suffix": "- Administrator (login=\"admin\" and password=\"admin\") <br />- Recser user (login=\"recser\" and password=\"recser\") <br/>- Pcenter user (login=\"pcenter\" and password=\"user\") <br/>- Transport 1 (login=\"transport1\" and password=\"user\").",
           "button": "Sign in"
         },
         "register": {
