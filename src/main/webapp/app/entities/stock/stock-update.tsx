@@ -74,6 +74,8 @@ export const StockUpdate = () => {
           invoice: stockEntity?.invoice?.id,
         };
 
+  const today = new Date().toISOString().substring(0, 10);
+
   return (
     <div>
       <Row className="justify-content-center">
@@ -105,13 +107,13 @@ export const StockUpdate = () => {
                 name="stockDate"
                 data-cy="stockDate"
                 type="date"
+                defaultValue={today}
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
               />
               {isNew ? (
                 <ValidatedField id="stock-invoice" name="invoice" data-cy="invoice" label={translate('sr2App.stock.invoice')} type="select">
-                  <option value="" key="0" />
                   {invoices
                     ? invoices.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
