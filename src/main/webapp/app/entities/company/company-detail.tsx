@@ -18,6 +18,11 @@ export const CompanyDetail = () => {
   }, []);
 
   const companyEntity = useAppSelector(state => state.company.entity);
+
+  const handleGoBack = () => {
+    history.back(); // Palaa edelliselle sivulle
+  };
+
   return (
     <Row>
       <Col md="8">
@@ -50,7 +55,8 @@ export const CompanyDetail = () => {
           </dt>
           <dd>{companyEntity.companyDetails}</dd>
         </dl>
-        <Button tag={Link} to="/company" replace color="info" data-cy="entityDetailsBackButton">
+        {/*<Button tag={Link} to="/company" replace color="info" data-cy="entityDetailsBackButton">*/}
+        <Button onClick={handleGoBack} replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
           <span className="d-none d-md-inline">
             <Translate contentKey="entity.action.back">Back</Translate>
