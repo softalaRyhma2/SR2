@@ -20,7 +20,8 @@
       "id": "ID",
       "stockDate": "Stock Date",
       "stockItem": "Stock Item",
-      "invoice": "Invoice"
+      "invoice": "Invoice",
+      "companyName": "Company Name"
     }
   }
 }

@@ -10,3 +10,25 @@ export interface IStock {
 }
 
 export const defaultValue: Readonly<IStock> = {};
+
+export interface IStockState {
+  loading: boolean;
+  errorMessage: string | null;
+  entities: IStock[];
+  entity: IStock;
+  updating: boolean;
+  totalItems: number;
+  updateSuccess: boolean;
+  companyNames: Record<string, string>;
+}
+
+const initialState: IStockState = {
+  loading: false,
+  errorMessage: null,
+  entities: [],
+  entity: defaultValue,
+  updating: false,
+  totalItems: 0,
+  updateSuccess: false,
+  companyNames: {},
+};

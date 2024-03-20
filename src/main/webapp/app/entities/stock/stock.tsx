@@ -9,7 +9,7 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.cons
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntities } from './stock.reducer';
+import { getCompanyNameByInvoiceId, getEntities } from './stock.reducer';
 
 export const Stock = () => {
   const dispatch = useAppDispatch();
@@ -24,6 +24,8 @@ export const Stock = () => {
   const stockList = useAppSelector(state => state.stock.entities);
   const loading = useAppSelector(state => state.stock.loading);
   const totalItems = useAppSelector(state => state.stock.totalItems);
+
+  const companyNames = useAppSelector(state => state.stock.companyNames);
 
   const getAllEntities = () => {
     dispatch(
@@ -90,6 +92,18 @@ export const Stock = () => {
     }
   };
 
+  useEffect(() => {
+    stockList.forEach(stock => {
+      if (stock.invoice && stock.invoice.id) {
+        dispatch(getCompanyNameByInvoiceId(String(stock.invoice.id)));
+      }
+    });
+  }, [stockList]);
+
+  const getCompanyNameForInvoiceId = (invoiceId: string) => {
+    return companyNames[invoiceId] || '';
+  };
+
   return (
     <div>
       <h2 id="stock-heading" data-cy="StockHeading">
@@ -121,6 +135,9 @@ export const Stock = () => {
                 <th>
                   <Translate contentKey="sr2App.stock.invoice">Invoice</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+                <th>
+                  <Translate contentKey="sr2App.stock.companyName">Company Name</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
                 <th />
               </tr>
             </thead>
@@ -134,6 +151,7 @@ export const Stock = () => {
                   </td>
                   <td>{stock.stockDate ? <TextFormat type="date" value={stock.stockDate} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
                   <td>{stock.invoice ? <Link to={`/invoice/${stock.invoice.id}`}>{stock.invoice.id}</Link> : ''}</td>
+                  <td>{getCompanyNameForInvoiceId(stock.invoice.id)}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/stock/${stock.id}`} color="info" size="sm" data-cy="entityDetailsButton">
