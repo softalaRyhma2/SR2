@@ -115,6 +115,15 @@ export const StockSlice = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(getEntity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.entity = action.payload.data;
+      })
+      .addCase(deleteEntity.fulfilled, state => {
+        state.updating = false;
+        state.updateSuccess = true;
+        state.entity = {};
+      })
       .addCase(getCompanyNameByInvoiceId.fulfilled, (state, action) => {
         const companyName = action.payload;
         if (companyName) {
