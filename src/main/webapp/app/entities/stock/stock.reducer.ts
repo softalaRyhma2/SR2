@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice, isFulfilled, isPending, PayloadAction } from '@reduxjs/toolkit';
 import { cleanEntity } from 'app/shared/util/entity-utils';
-import { IQueryParams, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
+import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IStock, defaultValue } from 'app/shared/model/stock.model';
 import { combineReducers } from '@reduxjs/toolkit';
 import stockItemReducer, { StockItemSlice } from '../stock-item/stock-item.reducer';
@@ -124,25 +124,28 @@ export const StockSlice = createSlice({
         state.updateSuccess = true;
         state.entity = {};
       })
-      .addCase(getCompanyNameByInvoiceId.fulfilled, (state, action) => {
-        const companyName = action.payload;
-        if (companyName) {
-          const invoiceId = action.meta.arg;
-          state.companyNames[invoiceId] = companyName;
-        }
-      })
-      .addCase(getEntities.fulfilled, (state, action) => {
+      .addMatcher(isFulfilled(getEntities), (state, action) => {
         const { data, headers } = action.payload;
-        state.loading = false;
-        state.entities = data;
-        state.totalItems = parseInt(headers['x-total-count'], 10);
+
+        return {
+          ...state,
+          loading: false,
+          entities: data,
+          totalItems: parseInt(headers['x-total-count'], 10),
+        };
       })
-      .addMatcher(isPending(getEntities), state => {
+      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {
+        state.updating = false;
+        state.loading = false;
+        state.updateSuccess = true;
+        state.entity = action.payload.data;
+      })
+      .addMatcher(isPending(getEntities, getEntity), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;
       })
-      .addMatcher(isPending(getCompanyNameByInvoiceId), state => {
+      .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;
