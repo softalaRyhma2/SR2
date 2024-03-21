@@ -164,6 +164,13 @@ public class StockItemResource {
         return ResponseUtil.wrapOrNotFound(stockItem);
     }
 
+    @GetMapping("/stock/{id}")
+    public ResponseEntity<List<StockItem>> getAllStockItemsForStock(@PathVariable Long id) {
+        log.debug("REST request to get all StockItems for Stock : {}", id);
+        List<StockItem> stockItem = stockItemRepository.findByStockId(id);
+        return ResponseEntity.ok().body(stockItem);
+    }
+
     /**
      * {@code DELETE  /stock-items/:id} : delete the "id" stockItem.
      *

@@ -8,6 +8,7 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './stock.reducer';
+import { getEntitiesForStock } from '../stock-item/stock-item.reducer';
 
 export const StockDetail = () => {
   const dispatch = useAppDispatch();
@@ -16,12 +17,16 @@ export const StockDetail = () => {
 
   useEffect(() => {
     dispatch(getEntity(id));
-  }, []);
+    dispatch(getEntitiesForStock(id));
+  }, [id]);
 
   const stockEntity = useAppSelector(state => state.stock.entity);
+  const stockItemList = useAppSelector(state => state.stockItem.entities);
+  console.log('STOCKITEMLIST: ' + JSON.stringify(stockItemList));
+
   return (
     <Row>
-      <Col md="8">
+      <Col md="4">
         <h2 data-cy="stockDetailsHeading">
           <Translate contentKey="sr2App.stock.detail.title">Stock</Translate>
         </h2>
@@ -57,31 +62,40 @@ export const StockDetail = () => {
           </span>
         </Button>
       </Col>
-      <Col md="4">
+      <Col md="8">
         <h2>Stock Items</h2>
         <Table>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Name</th>
+              <th>StockItemID</th>
               <th>Quantity</th>
-              <th>View</th>
+              <th>Available</th>
+              <th>Price</th>
+              <th>Type</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            {stockEntity.stockItemList &&
-              stockEntity.stockItemList.map(stockItem => (
-                <tr key={stockItem.id}>
-                  <td>{stockItem.id}</td>
-                  <td>{stockItem.name}</td>
-                  <td>{stockItem.quantity}</td>
+            {stockItemList.length === 0 ? (
+              <tr>
+                <td colSpan={8}>Stock items not found</td>
+              </tr>
+            ) : (
+              stockItemList.map(stockItemEntity => (
+                <tr key={stockItemEntity.id}>
+                  <td>{stockItemEntity.id}</td>
+                  <td>{stockItemEntity.quantity}</td>
+                  <td>{stockItemEntity.available}</td>
+                  <td>{stockItemEntity.price} €</td>
+                  <td>Tyyppinimi</td>
                   <td>
-                    <Button tag={Link} to={`/stock-item/${stockItem.id}`} color="primary">
+                    <Button tag={Link} to={`/stock-item/${stockItemEntity.id}`} color="primary">
                       <FontAwesomeIcon icon="eye" /> View
                     </Button>
                   </td>
                 </tr>
-              ))}
+              ))
+            )}
           </tbody>
         </Table>
       </Col>

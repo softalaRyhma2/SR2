@@ -2,13 +2,14 @@ import axios from 'axios';
 import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
-import { IStockItem, defaultValue } from 'app/shared/model/stock-item.model';
+import { IStockItem, defaultValue as defaultStockItem } from 'app/shared/model/stock-item.model';
+import { IStock, defaultValue as defaultStock } from 'app/shared/model/stock.model';
 
 const initialState: EntityState<IStockItem> = {
   loading: false,
   errorMessage: null,
   entities: [],
-  entity: defaultValue,
+  entity: defaultStockItem,
   updating: false,
   totalItems: 0,
   updateSuccess: false,
@@ -22,6 +23,16 @@ export const getEntities = createAsyncThunk('stockItem/fetch_entity_list', async
   const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
   return axios.get<IStockItem[]>(requestUrl);
 });
+
+//OK:
+export const getEntitiesForStock = createAsyncThunk(
+  'stockItem/fetch_entity_list_for_stock',
+  async (id: string | number) => {
+    const requestUrl = `/api/stock-items/stock/${id}`;
+    return axios.get<IStockItem[]>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
 
 export const getEntity = createAsyncThunk(
   'stockItem/fetch_entity',
@@ -98,6 +109,11 @@ export const StockItemSlice = createEntitySlice({
           entities: data,
           totalItems: parseInt(headers['x-total-count'], 10),
         };
+      })
+      .addMatcher(isFulfilled(getEntitiesForStock), (state, action) => {
+        const { data } = action.payload;
+        state.loading = false;
+        state.entities = data;
       })
       .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {
         state.updating = false;

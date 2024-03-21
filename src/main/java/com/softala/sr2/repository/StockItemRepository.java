@@ -1,6 +1,7 @@
 package com.softala.sr2.repository;
 
 import com.softala.sr2.domain.StockItem;
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface StockItemRepository extends JpaRepository<StockItem, Long> {}
+public interface StockItemRepository extends JpaRepository<StockItem, Long> {
+    List<StockItem> findByStockId(Long id);
+}

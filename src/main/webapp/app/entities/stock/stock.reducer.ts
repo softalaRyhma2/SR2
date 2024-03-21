@@ -4,7 +4,7 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IStock, defaultValue } from 'app/shared/model/stock.model';
 import { combineReducers } from '@reduxjs/toolkit';
-import stockItemReducer, { StockItemSlice } from '../stock-item/stock-item.reducer';
+import stockItemReducer, { getEntitiesForStock, StockItemSlice } from '../stock-item/stock-item.reducer';
 import { produce } from 'immer';
 
 export interface IStockState extends EntityState<IStock> {
@@ -149,6 +149,14 @@ export const StockSlice = createSlice({
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;
+      })
+      .addMatcher(isFulfilled(getEntitiesForStock), (state, action) => {
+        const { data } = action.payload;
+        return {
+          ...state,
+          loading: false,
+          entities: data,
+        };
       });
   },
 });
