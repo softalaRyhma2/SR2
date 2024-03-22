@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntity } from './stock.reducer';
+import { getCompanyNameByInvoiceId, getEntity } from './stock.reducer';
 import { getEntitiesForStock } from '../stock-item/stock-item.reducer';
 
 export const StockDetail = () => {
@@ -23,6 +23,15 @@ export const StockDetail = () => {
   const stockEntity = useAppSelector(state => state.stock.entity);
   const stockItemList = useAppSelector(state => state.stockItem.entities);
   console.log('STOCKITEMLIST: ' + JSON.stringify(stockItemList));
+  const [companyName, setCompanyName] = useState('');
+
+  useEffect(() => {
+    if (stockEntity.invoice && stockEntity.invoice.id) {
+      dispatch(getCompanyNameByInvoiceId(String(stockEntity.invoice.id))).then((response: any) => {
+        setCompanyName(response.payload);
+      });
+    }
+  }, [stockEntity.invoice]);
 
   return (
     <Row>
@@ -47,6 +56,10 @@ export const StockDetail = () => {
             <Translate contentKey="sr2App.stock.invoice">Invoice</Translate>
           </dt>
           <dd>{stockEntity.invoice ? stockEntity.invoice.id : ''}</dd>
+          <dt>
+            <Translate contentKey="sr2App.stock.companyName">Company Name</Translate>
+          </dt>
+          <dd>{companyName}</dd>
         </dl>
         <Button tag={Link} to="/stock" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
