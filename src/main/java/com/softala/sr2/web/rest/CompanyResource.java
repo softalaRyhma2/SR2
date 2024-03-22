@@ -195,8 +195,10 @@ public class CompanyResource {
     @GetMapping("/{id}")
     public ResponseEntity<Company> getCompany(@PathVariable("id") Long id) {
         log.debug("REST request to get Company : {}", id);
-        Optional<Company> company = companyService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(company);
+        List<Company> companies = companyService.findAllCompaniesByLoggedInUser();
+        Optional<Company> requestedCompany = companies.stream().filter(company -> company.getId().equals(id)).findFirst();
+
+        return requestedCompany.map(company -> ResponseEntity.ok().body(company)).orElse(ResponseEntity.notFound().build());
     }
 
     /**

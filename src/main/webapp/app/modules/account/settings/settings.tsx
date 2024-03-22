@@ -13,8 +13,8 @@ export const SettingsPage = () => {
   const dispatch = useAppDispatch();
   const account = useAppSelector(state => state.authentication.account);
   const successMessage = useAppSelector(state => state.settings.successMessage);
-  //const [companyName, setCompanyName] = useState('');
-  const companyName = useAppSelector(state => state.company.entity.companyName); // Lisätään tämä rivi
+
+  const companyName = useAppSelector(state => state.company.entity.companyName);
 
   useEffect(() => {
     dispatch(getSession());
