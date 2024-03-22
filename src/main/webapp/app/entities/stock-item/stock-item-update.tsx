@@ -148,18 +148,20 @@ export const StockItemUpdate = () => {
                   validate: v => isNumber(v) || translate('entity.validation.number'),
                 }}
               />
-              <ValidatedField
-                label={translate('sr2App.stockItem.price')}
-                id="stock-item-price"
-                name="price"
-                data-cy="price"
-                type="text"
-                validate={{
-                  validate: v => isNumber(v) || translate('entity.validation.number'),
-                  ...(isAdminOrRecser && { required: { value: true, message: translate('entity.validation.required') } }),
-                }}
-                disabled={!isAdminOrRecser}
-              />
+              {isAdminOrRecser && (
+                <ValidatedField
+                  label={translate('sr2App.stockItem.price')}
+                  id="stock-item-price"
+                  name="price"
+                  data-cy="price"
+                  type="text"
+                  validate={{
+                    validate: v => isNumber(v) || translate('entity.validation.number'),
+                    ...(isAdminOrRecser && { required: { value: true, message: translate('entity.validation.required') } }),
+                  }}
+                  disabled={!isAdminOrRecser}
+                />
+              )}
               <ValidatedField id="stock-item-stock" name="stock" data-cy="stock" label={translate('sr2App.stockItem.stock')} type="select">
                 <option value="" key="0" />
                 {stocks
