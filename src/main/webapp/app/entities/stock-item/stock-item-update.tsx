@@ -1,3 +1,4 @@
+// stock-item-update.tsx
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Row, Col, FormText } from 'reactstrap';
@@ -14,9 +15,11 @@ import { IStockItemType } from 'app/shared/model/stock-item-type.model';
 import { getEntities as getStockItemTypes } from 'app/entities/stock-item-type/stock-item-type.reducer';
 import { IStockItem } from 'app/shared/model/stock-item.model';
 import { getEntity, updateEntity, createEntity, reset } from './stock-item.reducer';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
 export const StockItemUpdate = () => {
   const dispatch = useAppDispatch();
+  const isAdminOrRecser = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, ['ROLE_ADMIN', 'ROLE_RECSER']));
 
   const navigate = useNavigate();
 
@@ -52,6 +55,7 @@ export const StockItemUpdate = () => {
   }, [updateSuccess]);
 
   // eslint-disable-next-line complexity
+  // eslint-disable-next-line complexity
   const saveEntity = values => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
@@ -66,12 +70,20 @@ export const StockItemUpdate = () => {
       values.price = Number(values.price);
     }
 
+    // Default price value for non-admin users
+    const DEFAULT_PRICE = 0;
+
     const entity = {
       ...stockItemEntity,
       ...values,
       stock: stocks.find(it => it.id.toString() === values.stock.toString()),
       stockItemType: stockItemTypes.find(it => it.id.toString() === values.stockItemType.toString()),
     };
+
+    // Set default price if user is not admin or recser
+    if (!isAdminOrRecser) {
+      entity.price = DEFAULT_PRICE;
+    }
 
     if (isNew) {
       dispatch(createEntity(entity));
@@ -143,9 +155,10 @@ export const StockItemUpdate = () => {
                 data-cy="price"
                 type="text"
                 validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
                   validate: v => isNumber(v) || translate('entity.validation.number'),
+                  ...(isAdminOrRecser && { required: { value: true, message: translate('entity.validation.required') } }),
                 }}
+                disabled={!isAdminOrRecser}
               />
               <ValidatedField id="stock-item-stock" name="stock" data-cy="stock" label={translate('sr2App.stockItem.stock')} type="select">
                 <option value="" key="0" />
