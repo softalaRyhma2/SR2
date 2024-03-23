@@ -145,13 +145,22 @@ export const Stock = () => {
               {stockList.map((stock, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
+                    {
+                      stock.id /*
                     <Button tag={Link} to={`/stock/${stock.id}`} color="link" size="sm">
                       {stock.id}
-                    </Button>
+              </Button>*/
+                    }
                   </td>
                   <td>{stock.stockDate ? <TextFormat type="date" value={stock.stockDate} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
-                  <td>{stock.invoice ? <Link to={`/invoice/${stock.invoice.id}`}>{stock.invoice.id}</Link> : ''}</td>
-                  <td>{getCompanyNameForInvoiceId(stock.invoice.id)}</td>
+                  <td>
+                    {
+                      stock.invoice
+                        ? stock.invoice.id
+                        : '' /*stock.invoice ? <Link to={`/invoice/${stock.invoice.id}`}>{stock.invoice.id}</Link> : ''*/
+                    }
+                  </td>
+                  <td>{stock.invoice ? getCompanyNameForInvoiceId(stock.invoice.id) : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/stock/${stock.id}`} color="info" size="sm" data-cy="entityDetailsButton">
