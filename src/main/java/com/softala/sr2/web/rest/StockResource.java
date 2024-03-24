@@ -47,6 +47,22 @@ public class StockResource {
         this.stockRepository = stockRepository;
     }
 
+   
+   
+    @GetMapping("/stocks/current")
+    public ResponseEntity<List<Stock>> findAllStocksByLoggedInUserCompan() {
+        List<Stock> stocks = stockService.findAllStocksByLoggedInUserCompany();
+        return ResponseEntity.ok().body(stocks);
+    }
+   
+   
+   
+   
+   
+   
+   
+   
+   
     /**
      * {@code POST  /stocks} : Create a new stock.
      *

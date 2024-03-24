@@ -9,6 +9,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.softala.sr2.service.InvoiceService;
+import com.softala.sr2.domain.Invoice;
+import java.util.List;
+import com.softala.sr2.domain.User;
+import com.softala.sr2.repository.UserRepository;
+import com.softala.sr2.security.SecurityUtils;
+import com.softala.sr2.domain.Company;
+import com.softala.sr2.repository.InvoiceRepository;
+import java.util.Collections;
+import org.springframework.stereotype.Service;  
+
+
+
 
 /**
  * Service Implementation for managing {@link com.softala.sr2.domain.Stock}.
@@ -20,10 +33,70 @@ public class StockService {
     private final Logger log = LoggerFactory.getLogger(StockService.class);
 
     private final StockRepository stockRepository;
+    private final InvoiceService invoiceService;
+    private final UserRepository userRepository;
+    private final InvoiceRepository invoiceRepository;
 
-    public StockService(StockRepository stockRepository) {
+
+    public StockService(StockRepository stockRepository, InvoiceService invoiceService, UserRepository userRepository, InvoiceRepository invoiceRepository) {
         this.stockRepository = stockRepository;
+        this.invoiceService = invoiceService;
+        this.userRepository = userRepository;
+        this.invoiceRepository = invoiceRepository;
     }
+
+
+
+    /**
+     * Method to find all stocks linked to the current user's company's invoices.
+     *
+     * @return the list of stocks linked to the current user's company's invoices.
+     */
+    public List<Stock> findAllStocksByLoggedInUserCompany() {
+        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+        if (currentUserLogin.isPresent()) {
+            String login = currentUserLogin.get();
+            Optional<User> user = userRepository.findOneByLogin(login);
+            if (user.isPresent()) {
+                // Check if the user is admin or recser
+                if (isAdmin(user.get()) || isRecser(user.get())) {
+                    // Return all stocks if the user is admin or recser
+                    return stockRepository.findAll();
+                } else {
+                    // Get the user's company
+                    Company userCompany = user.get().getCompany();
+                    if (userCompany != null) {
+                        // Return all stocks associated with the user's company
+                        List<Invoice> invoices = invoiceRepository.findByCompany(userCompany);
+                    return stockRepository.findAllByInvoice(invoices.get(0));
+                        
+                       
+                    }
+                }
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    private boolean isRecser(User user) {
+        return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_RECSER"));
+    }
+
+    private boolean isAdmin(User user) {
+        // Voit toteuttaa adminin tarkistuksen tarpeidesi mukaan.
+        // Tässä esimerkissä tarkistetaan, onko käyttäjällä ADMIN-rooli.
+        return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_ADMIN"));
+    }
+
+    
+
+
+
+
+
+
+
+
 
     /**
      * Save a stock.
