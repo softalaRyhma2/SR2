@@ -32,13 +32,10 @@ spring:
     livereload:
       enabled: false
   datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:file:/app/tmp/sr2;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
-    username: sr2
-    password:
-    hikari:
-      poolName: Hikari
-      auto-commit: false
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod

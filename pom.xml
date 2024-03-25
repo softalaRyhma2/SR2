@@ -270,6 +270,17 @@
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.18</version> <!-- Use the latest version compatible with your PostgreSQL server -->
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -804,11 +815,11 @@
                             <artifactId>jakarta.validation-api</artifactId>
                             <version>${validation-api.version}</version>
                         </dependency>
-                        <dependency>
+                        <!--<dependency>
                             <groupId>com.h2database</groupId>
                             <artifactId>h2</artifactId>
                             <version>${h2.version}</version>
-                        </dependency>
+                        </dependency>-->
                     </dependencies>
                 </plugin>
                 <plugin>
@@ -836,12 +847,13 @@
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}</spring.profiles.active>
                 <profile.test>testdev</profile.test>
-                <liquibase-plugin.hibernate-dialect>org.hibernate.dialect.H2Dialect</liquibase-plugin.hibernate-dialect>
-                <liquibase-plugin.driver>org.h2.Driver</liquibase-plugin.driver>
-                <liquibase-plugin.url>jdbc:h2:tcp://localhost:18080/mem:sr2</liquibase-plugin.url>
-                <liquibase-plugin.username>sr2</liquibase-plugin.username>
-                <liquibase-plugin.password/>
+                <liquibase-plugin.hibernate-dialect>org.hibernate.dialect.PostgreSQLDialect</liquibase-plugin.hibernate-dialect>
+                <liquibase-plugin.driver>org.postgresql.Driver</liquibase-plugin.driver>
+                <liquibase-plugin.url>${DATABASE_URL}</liquibase-plugin.url>
+                <liquibase-plugin.username>${DATABASE_USERNAME}</liquibase-plugin.username>
+                <liquibase-plugin.password>${DATABASE_PASSWORD}</liquibase-plugin.password>
             </properties>
+
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
@@ -965,9 +977,10 @@
                 <profile.test>testprod</profile.test>
                 <liquibase-plugin.hibernate-dialect>org.hibernate.dialect.PostgreSQLDialect</liquibase-plugin.hibernate-dialect>
                 <liquibase-plugin.driver>org.postgresql.Driver</liquibase-plugin.driver>
-                <liquibase-plugin.url>jdbc:postgresql://localhost:5432/sr2</liquibase-plugin.url>
-                <liquibase-plugin.username>sr2</liquibase-plugin.username>
-                <liquibase-plugin.password/>
+                <liquibase-plugin.url>${DATABASE_URL}</liquibase-plugin.url>
+                <liquibase-plugin.username>${DATABASE_USERNAME}</liquibase-plugin.username>
+                <liquibase-plugin.password>${DATABASE_PASSWORD}</liquibase-plugin.password>
+
             </properties>
             <build>
                 <plugins>
