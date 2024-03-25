@@ -104,4 +104,13 @@ public final class SecurityUtils {
     private static Stream<String> getAuthorities(Authentication authentication) {
         return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority);
     }
+
+    /**
+     * Checks if the current user has the "ADMIN" or "RECSER" authority.
+     *
+     * @return true if the current user has the "ADMIN" or "RECSER" authority, false otherwise.
+     */
+    public static boolean isCurrentUserAdminOrRecser() {
+        return hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.ADMIN, AuthoritiesConstants.RECSER);
+    }
 }
