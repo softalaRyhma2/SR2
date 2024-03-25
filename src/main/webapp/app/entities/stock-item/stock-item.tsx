@@ -148,7 +148,7 @@ export const StockItem = () => {
                   <td>{stockItem.stock ? <Link to={`/stock/${stockItem.stock.id}`}>{stockItem.stock.id}</Link> : ''}</td>
                   <td>
                     {stockItem.stockItemType ? (
-                      <Link to={`/stock-item-type/${stockItem.stockItemType.id}`}>{stockItem.stockItemType.id}</Link>
+                      <Link to={`/stock-item-type/${stockItem.stockItemType.id}`}>{stockItem.stockItemType.typeName}</Link>
                     ) : (
                       ''
                     )}

@@ -108,7 +108,7 @@ export const StockDetail = () => {
                   <td>{stockItemEntity.quantity}</td>
                   <td>{stockItemEntity.available}</td>
                   <td>{stockItemEntity.price} €</td>
-                  <td>{stockItemEntity.stockItemType ? stockItemEntity.stockItemType.id : ''}</td>
+                  <td>{stockItemEntity.stockItemType ? stockItemEntity.stockItemType.typeName : ''}</td>
                   <td>
                     <Button tag={Link} to={`/stock-item/${stockItemEntity.id}`} color="primary">
                       <FontAwesomeIcon icon="eye" /> View
