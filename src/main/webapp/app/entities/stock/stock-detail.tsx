@@ -8,7 +8,7 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getCompanyNameByInvoiceId, getEntity } from './stock.reducer';
-import { getEntitiesForStock } from '../stock-item/stock-item.reducer';
+import { getStockItemEntitiesForStock } from '../stock-item/stock-item.reducer';
 
 export const StockDetail = () => {
   const dispatch = useAppDispatch();
@@ -17,13 +17,21 @@ export const StockDetail = () => {
 
   useEffect(() => {
     dispatch(getEntity(id));
-    dispatch(getEntitiesForStock(id));
+    dispatch(getStockItemEntitiesForStock(id));
+    //  dispatch(getEntitiesForStockItem(id));
   }, [id]);
 
   const stockEntity = useAppSelector(state => state.stock.entity);
   const stockItemList = useAppSelector(state => state.stockItem.entities);
   console.log('STOCKITEMLIST: ' + JSON.stringify(stockItemList));
+  const stockItemTypeList = useAppSelector(state => state.stockItemType.entities);
+  console.log('STOCKITEMTYPELIST: ' + JSON.stringify(stockItemTypeList));
   const [companyName, setCompanyName] = useState('');
+
+  const getStockItemTypeName = (stockItemTypeId: number) => {
+    const stockItemType = stockItemTypeList.find(item => item.id === stockItemTypeId);
+    return stockItemType ? stockItemType.name : ''; // Olettaen, että stock item typellä on "name" -kenttä
+  };
 
   useEffect(() => {
     if (stockEntity.invoice && stockEntity.invoice.id) {
@@ -100,7 +108,7 @@ export const StockDetail = () => {
                   <td>{stockItemEntity.quantity}</td>
                   <td>{stockItemEntity.available}</td>
                   <td>{stockItemEntity.price} €</td>
-                  <td>Tyyppinimi</td>
+                  <td>{stockItemEntity.stockItemType ? stockItemEntity.stockItemType.id : ''}</td>
                   <td>
                     <Button tag={Link} to={`/stock-item/${stockItemEntity.id}`} color="primary">
                       <FontAwesomeIcon icon="eye" /> View

@@ -25,10 +25,10 @@ export const getEntities = createAsyncThunk('stockItem/fetch_entity_list', async
 });
 
 //OK:
-export const getEntitiesForStock = createAsyncThunk(
+export const getStockItemEntitiesForStock = createAsyncThunk(
   'stockItem/fetch_entity_list_for_stock',
   async (id: string | number) => {
-    const requestUrl = `/api/stock-items/stock/${id}`;
+    const requestUrl = `${apiUrl}/stock/${id}`;
     return axios.get<IStockItem[]>(requestUrl);
   },
   { serializeError: serializeAxiosError },
@@ -110,7 +110,7 @@ export const StockItemSlice = createEntitySlice({
           totalItems: parseInt(headers['x-total-count'], 10),
         };
       })
-      .addMatcher(isFulfilled(getEntitiesForStock), (state, action) => {
+      .addMatcher(isFulfilled(getStockItemEntitiesForStock), (state, action) => {
         const { data } = action.payload;
         state.loading = false;
         state.entities = data;

@@ -4,7 +4,8 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IStock, defaultValue } from 'app/shared/model/stock.model';
 import { combineReducers } from '@reduxjs/toolkit';
-import stockItemReducer, { getEntitiesForStock, StockItemSlice } from '../stock-item/stock-item.reducer';
+import stockItemReducer, { getStockItemEntitiesForStock, StockItemSlice } from '../stock-item/stock-item.reducer';
+import stockItemTypeReducer, { StockItemTypeSlice } from '../stock-item-type/stock-item-type.reducer';
 import { produce } from 'immer';
 
 export interface IStockState extends EntityState<IStock> {
@@ -150,7 +151,7 @@ export const StockSlice = createSlice({
         state.updateSuccess = false;
         state.updating = true;
       })
-      .addMatcher(isFulfilled(getEntitiesForStock), (state, action) => {
+      .addMatcher(isFulfilled(getStockItemEntitiesForStock), (state, action) => {
         const { data } = action.payload;
         return {
           ...state,
@@ -174,10 +175,11 @@ export const fetchCompanyNames = () => async (dispatch, getState) => {
 export const rootReducer = combineReducers({
   stock: StockSlice.reducer,
   stockItem: StockItemSlice.reducer,
+  stockItemType: StockItemTypeSlice.reducer,
 });
 
 export const { reset: resetStock } = StockSlice.actions;
 export const { reset: resetStockItem } = StockItemSlice.actions;
-
+export const { reset: resetStockItemType } = StockItemTypeSlice.actions;
 // Reducer
 export default StockSlice.reducer;
