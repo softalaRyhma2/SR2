@@ -38,12 +38,16 @@ const databaseItem = () => (
   </DropdownItem>
 );
 
-export const AdminMenu = ({ showOpenAPI, showDatabase }) => (
+export const AdminMenu = ({ isAdmin, isRecser, showOpenAPI, showDatabase, showUserManagement }) => (
   <NavDropdown icon="users-cog" name={translate('global.menu.admin.main')} id="admin-menu" data-cy="adminMenu">
-    {adminMenuItems()}
-    {showOpenAPI && openAPIItem()}
-
-    {showDatabase && databaseItem()}
+    {isRecser && showUserManagement && (
+      <MenuItem icon="users" to="/admin/user-management">
+        <Translate contentKey="global.menu.admin.userManagement">User management</Translate>
+      </MenuItem>
+    )}
+    {isAdmin && adminMenuItems()}
+    {isAdmin && showOpenAPI && openAPIItem()}
+    {isAdmin && showDatabase && databaseItem()}
   </NavDropdown>
 );
 
