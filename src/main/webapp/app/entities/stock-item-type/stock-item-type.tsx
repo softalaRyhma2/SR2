@@ -102,10 +102,10 @@ export const StockItemType = () => {
             <Translate contentKey="sr2App.stockItemType.home.refreshListLabel">Refresh List</Translate>
           </Button>
           {isAuthorized && (
-            <Link to="/company/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+            <Link to="/stock-item-type/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
               <FontAwesomeIcon icon="plus" />
               &nbsp;
-              <Translate contentKey="sr2App.company.home.createLabel">Create new Company</Translate>
+              <Translate contentKey="sr2App.stockItemType.home.createLabel">Create new Stock Item Type</Translate>
             </Link>
           )}
         </div>
