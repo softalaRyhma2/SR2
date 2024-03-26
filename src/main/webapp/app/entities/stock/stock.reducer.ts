@@ -15,6 +15,7 @@ export interface IStockState extends EntityState<IStock> {
   totalItems: number;
   updateSuccess: boolean;
   companyNames: Record<string, string>;
+  stockTotal: number;
 }
 
 const initialState: IStockState = {
@@ -26,6 +27,7 @@ const initialState: IStockState = {
   totalItems: 0,
   updateSuccess: false,
   companyNames: {},
+  stockTotal: 0,
 };
 
 const apiUrl = 'api/stocks';
@@ -124,6 +126,14 @@ export const StockSlice = createSlice({
         state.updating = false;
         state.updateSuccess = true;
         state.entity = {};
+      })
+      .addCase(getStockItemEntitiesForStock.fulfilled, (state, action) => {
+        const stockItems = action.payload.data;
+        let stockItemTotal = 0;
+        stockItems.forEach(stockItem => {
+          stockItemTotal += stockItem.quantity * stockItem.price;
+        });
+        state.stockTotal = stockItemTotal;
       })
       .addMatcher(isFulfilled(getEntities), (state, action) => {
         const { data, headers } = action.payload;

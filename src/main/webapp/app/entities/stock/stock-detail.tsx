@@ -18,30 +18,20 @@ export const StockDetail = () => {
   useEffect(() => {
     dispatch(getEntity(id));
     dispatch(getStockItemEntitiesForStock(id));
-    //  dispatch(getEntitiesForStockItem(id));
   }, [id]);
 
   const stockEntity = useAppSelector(state => state.stock.entity);
   const stockItemList = useAppSelector(state => state.stockItem.entities);
   console.log('STOCKITEMLIST: ' + JSON.stringify(stockItemList));
-  const stockItemTypeList = useAppSelector(state => state.stockItemType.entities);
-  console.log('STOCKITEMTYPELIST: ' + JSON.stringify(stockItemTypeList));
+  //const stockItemTypeList = useAppSelector(state => state.stockItemType.entities);
+  //console.log('STOCKITEMTYPELIST: ' + JSON.stringify(stockItemTypeList));
   const [companyName, setCompanyName] = useState('');
+  const stockTotal = useAppSelector(state => state.stock.stockTotal);
 
-  /*const getStockItemTypeName = (stockItemTypeId: number) => {
-    const stockItemType = stockItemTypeList.find(item => item.id === stockItemTypeId);
-    return stockItemType ? stockItemType.name : ''; // Olettaen, että stock item typellä on "name" -kenttä
-  };*/
   const calculateTotal = (quantity: number, price: number) => {
     return quantity * price;
   };
-  const calculateStockTotal = () => {
-    let total = 0;
-    stockItemList.forEach(stockItem => {
-      total += calculateTotal(stockItem.quantity, stockItem.price);
-    });
-    return total;
-  };
+
   useEffect(() => {
     if (stockEntity.invoice && stockEntity.invoice.id) {
       dispatch(getCompanyNameByInvoiceId(String(stockEntity.invoice.id))).then((response: any) => {
@@ -82,7 +72,7 @@ export const StockDetail = () => {
               <Translate contentKey="sr2App.stock.total">Total</Translate>
             </span>
           </dt>
-          <dd>{calculateStockTotal()} €</dd>
+          <dd>{stockTotal} €</dd>
         </dl>
         <Button tag={Link} to="/stock" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
