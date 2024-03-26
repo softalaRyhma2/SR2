@@ -21,7 +21,8 @@
       "stockDate": "Stock Date",
       "stockItem": "Stock Item",
       "invoice": "Invoice",
-      "companyName": "Company Name"
+      "companyName": "Company Name",
+      "total": "Total"
     }
   }
 }

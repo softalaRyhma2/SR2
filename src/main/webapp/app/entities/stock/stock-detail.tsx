@@ -98,17 +98,29 @@ export const StockDetail = () => {
           </span>
         </Button>
       </Col>
-      <Col md="8">
+      <Col md="8" className="jh-entity-details">
         <h2>Stock Items</h2>
         <Table>
           <thead>
             <tr>
-              <th>StockItemID</th>
-              <th>Quantity</th>
-              <th>Available</th>
-              <th>Price</th>
-              <th>Total</th>
-              <th>Type</th>
+              <th>
+                <Translate contentKey="global.field.id">ID</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sr2App.stockItem.quantity">Quantity</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sr2App.stockItem.available">Available</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sr2App.stockItem.price">Price</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sr2App.stockItem.total">Total</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sr2App.stockItem.stockItemType">Stock Item Type</Translate>
+              </th>
               <th></th>
             </tr>
           </thead>

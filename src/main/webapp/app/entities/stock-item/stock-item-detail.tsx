@@ -60,7 +60,9 @@ export const StockItemDetail = () => {
             <Translate contentKey="sr2App.stockItem.stockItemType">Stock Item Type</Translate>
           </dt>
           <dd>{stockItemEntity.stockItemType ? stockItemEntity.stockItemType.typeName : ''}</dd>
-          <dt>Total</dt>
+          <dt>
+            <Translate contentKey="sr2App.stockItem.total">Total</Translate>
+          </dt>
           <dd>{stockItemPricePerDay} €</dd>
         </dl>
         <Button tag={Link} to="/stock-item" replace color="info" data-cy="entityDetailsBackButton">

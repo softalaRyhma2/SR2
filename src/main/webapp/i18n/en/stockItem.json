@@ -21,6 +21,7 @@
       "quantity": "Quantity",
       "available": "Available",
       "price": "Price",
+      "total": "Total",
       "reservedItem": "Reserved Item",
       "stock": "Stock",
       "stockItemType": "Stock Item Type"

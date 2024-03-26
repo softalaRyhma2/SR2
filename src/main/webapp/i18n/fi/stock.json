@@ -2,26 +2,27 @@
   "sr2App": {
     "stock": {
       "home": {
-        "title": "Stocks",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Luo Stock",
-        "createOrEditLabel": "Luo tai muokkaa Stock",
+        "title": "Varastot",
+        "refreshListLabel": "Päivitä lista",
+        "createLabel": "Luo varasto",
+        "createOrEditLabel": "Luo tai muokkaa varasto",
         "notFound": "Stock ei löytynyt"
       },
-      "created": "Uusi Stock on luotu, id: {{ param }}",
-      "updated": "Stock on päivitetty, id: {{ param }}",
-      "deleted": "Stock on päivitetty, id: {{ param }}",
+      "created": "Uusi varasto on luotu, id: {{ param }}",
+      "updated": "Varasto on päivitetty, id: {{ param }}",
+      "deleted": "Varasto on poistettu, id: {{ param }}",
       "delete": {
-        "question": "Haluatko varmasti poistaa Stock {{ id }}?"
+        "question": "Haluatko varmasti poistaa varasto {{ id }}?"
       },
       "detail": {
-        "title": "Stock"
+        "title": "Varasto"
       },
       "id": "ID",
-      "stockDate": "Stock Date",
-      "stockItem": "Stock Item",
-      "invoice": "Invoice",
-      "companyName": "Company Name"
+      "stockDate": "Varaston pvm",
+      "stockItem": "Lava",
+      "invoice": "Lasku",
+      "companyName": "Organisaatio",
+      "total": "Yhteensä"
     }
   }
 }

@@ -18,12 +18,13 @@
         "title": "Stock Item"
       },
       "id": "ID",
-      "quantity": "Quantity",
-      "available": "Available",
-      "price": "Price",
+      "quantity": "Lavamäärä",
+      "available": "Varattavissa",
+      "price": "Hinta",
+      "total": "Yhteensä",
       "reservedItem": "Reserved Item",
-      "stock": "Stock",
-      "stockItemType": "Stock Item Type"
+      "stock": "Varasto",
+      "stockItemType": "Lavatyyppi"
     }
   }
 }
