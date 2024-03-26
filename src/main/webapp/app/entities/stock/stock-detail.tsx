@@ -28,11 +28,20 @@ export const StockDetail = () => {
   console.log('STOCKITEMTYPELIST: ' + JSON.stringify(stockItemTypeList));
   const [companyName, setCompanyName] = useState('');
 
-  const getStockItemTypeName = (stockItemTypeId: number) => {
+  /*const getStockItemTypeName = (stockItemTypeId: number) => {
     const stockItemType = stockItemTypeList.find(item => item.id === stockItemTypeId);
     return stockItemType ? stockItemType.name : ''; // Olettaen, että stock item typellä on "name" -kenttä
+  };*/
+  const calculateTotal = (quantity: number, price: number) => {
+    return quantity * price;
   };
-
+  const calculateStockTotal = () => {
+    let total = 0;
+    stockItemList.forEach(stockItem => {
+      total += calculateTotal(stockItem.quantity, stockItem.price);
+    });
+    return total;
+  };
   useEffect(() => {
     if (stockEntity.invoice && stockEntity.invoice.id) {
       dispatch(getCompanyNameByInvoiceId(String(stockEntity.invoice.id))).then((response: any) => {
@@ -68,6 +77,12 @@ export const StockDetail = () => {
             <Translate contentKey="sr2App.stock.companyName">Company Name</Translate>
           </dt>
           <dd>{companyName}</dd>
+          <dt>
+            <span id="stockDate">
+              <Translate contentKey="sr2App.stock.total">Total</Translate>
+            </span>
+          </dt>
+          <dd>{calculateStockTotal()} €</dd>
         </dl>
         <Button tag={Link} to="/stock" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
@@ -92,6 +107,7 @@ export const StockDetail = () => {
               <th>Quantity</th>
               <th>Available</th>
               <th>Price</th>
+              <th>Total</th>
               <th>Type</th>
               <th></th>
             </tr>
@@ -108,6 +124,7 @@ export const StockDetail = () => {
                   <td>{stockItemEntity.quantity}</td>
                   <td>{stockItemEntity.available}</td>
                   <td>{stockItemEntity.price} €</td>
+                  <td>{calculateTotal(stockItemEntity.quantity, stockItemEntity.price)} €</td>
                   <td>{stockItemEntity.stockItemType ? stockItemEntity.stockItemType.typeName : ''}</td>
                   <td>
                     <Button tag={Link} to={`/stock-item/${stockItemEntity.id}`} color="primary">

@@ -18,6 +18,9 @@ export const StockItemDetail = () => {
   }, []);
 
   const stockItemEntity = useAppSelector(state => state.stockItem.entity);
+
+  const stockItemPricePerDay = stockItemEntity.quantity * stockItemEntity.price;
+
   return (
     <Row>
       <Col md="8">
@@ -57,6 +60,8 @@ export const StockItemDetail = () => {
             <Translate contentKey="sr2App.stockItem.stockItemType">Stock Item Type</Translate>
           </dt>
           <dd>{stockItemEntity.stockItemType ? stockItemEntity.stockItemType.typeName : ''}</dd>
+          <dt>Total</dt>
+          <dd>{stockItemPricePerDay} €</dd>
         </dl>
         <Button tag={Link} to="/stock-item" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
