@@ -7,7 +7,9 @@ import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons'
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { AUTHORITIES } from 'app/config/constants';
 
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import { getEntities } from './company.reducer';
 
 export const Company = () => {
@@ -20,6 +22,7 @@ export const Company = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
+  const canCreateCompany = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN]));
   const companyList = useAppSelector(state => state.company.entities);
   const loading = useAppSelector(state => state.company.loading);
   const totalItems = useAppSelector(state => state.company.totalItems);
@@ -98,11 +101,13 @@ export const Company = () => {
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="sr2App.company.home.refreshListLabel">Refresh List</Translate>
           </Button>
-          <Link to="/company/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" />
-            &nbsp;
-            <Translate contentKey="sr2App.company.home.createLabel">Create new Company</Translate>
-          </Link>
+          {canCreateCompany && ( // Conditionally render the button
+            <Link to="/company/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+              <FontAwesomeIcon icon="plus" />
+              &nbsp;
+              <Translate contentKey="sr2App.company.home.createLabel">Create new Company</Translate>
+            </Link>
+          )}
         </div>
       </h2>
       <div className="table-responsive">

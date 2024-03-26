@@ -72,12 +72,27 @@ export const UserManagement = () => {
   };
 
   const toggleActive = user => () => {
-    dispatch(
-      updateUser({
-        ...user,
-        activated: !user.activated,
-      }),
-    );
+    console.log('User Authorities:', user.authorities);
+    const allowedRoles = ['recser', 'admin'];
+    const userRoles = user.authorities || [];
+    const canToggle = userRoles.some(role => allowedRoles.includes(role));
+
+    if (canToggle) {
+      dispatch(
+        updateUser({
+          ...user,
+          activated: !user.activated,
+        }),
+      );
+    } else {
+      return (
+        <div className="insufficient-authority">
+          <div className="alert alert-danger">
+            <Translate contentKey="error.http.403">You are not authorized to access this page.</Translate>
+          </div>
+        </div>
+      );
+    }
   };
 
   const account = useAppSelector(state => state.authentication.account);
