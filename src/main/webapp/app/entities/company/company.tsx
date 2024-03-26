@@ -27,6 +27,13 @@ export const Company = () => {
   const loading = useAppSelector(state => state.company.loading);
   const totalItems = useAppSelector(state => state.company.totalItems);
 
+  const [showIdColumn, setShowIdColumn] = useState(false);
+  const authorities = useAppSelector(state => state.authentication.account.authorities);
+
+  useEffect(() => {
+    setShowIdColumn(hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]));
+  }, [authorities]);
+
   const getAllEntities = () => {
     dispatch(
       getEntities({
@@ -115,8 +122,9 @@ export const Company = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  <Translate contentKey="sr2App.company.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                <th className="hand" onClick={sort('id')} style={{ display: showIdColumn ? 'table-cell' : 'none' }}>
+                  <Translate contentKey="sr2App.company.id">ID</Translate>
+                  {showIdColumn && <FontAwesomeIcon icon={getSortIconByFieldName('id')} />}
                 </th>
                 <th className="hand" onClick={sort('companyName')}>
                   <Translate contentKey="sr2App.company.companyName">Company Name</Translate>{' '}
@@ -136,7 +144,7 @@ export const Company = () => {
             <tbody>
               {companyList.map((company, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
+                  <td style={{ display: showIdColumn ? 'table-cell' : 'none' }}>
                     <Button tag={Link} to={`/company/${company.id}`} color="link" size="sm">
                       {company.id}
                     </Button>
