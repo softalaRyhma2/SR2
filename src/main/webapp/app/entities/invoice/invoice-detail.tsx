@@ -47,9 +47,15 @@ export const InvoiceDetail = () => {
             {invoiceEntity.invoiceDate ? <TextFormat value={invoiceEntity.invoiceDate} type="date" format={APP_LOCAL_DATE_FORMAT} /> : null}
           </dd>
           <dt>
+            <span id="isClosed">
+              <Translate contentKey="sr2App.invoice.isClosed">Is Closed</Translate>
+            </span>
+          </dt>
+          <dd>{invoiceEntity.isClosed ? 'true' : 'false'}</dd>
+          <dt>
             <Translate contentKey="sr2App.invoice.company">Company</Translate>
           </dt>
-          <dd>{invoiceEntity.company ? invoiceEntity.company.id : ''}</dd>
+          <dd>{invoiceEntity.company ? invoiceEntity.company.companyName : ''}</dd>
         </dl>
         <Button tag={Link} to="/invoice" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

@@ -18,11 +18,11 @@
         "title": "Stock"
       },
       "id": "ID",
-      "quantity": "Quantity",
-      "available": "Available",
-      "price": "Price",
       "stockDate": "Stock Date",
-      "invoice": "Invoice"
+      "stockItem": "Stock Item",
+      "invoice": "Invoice",
+      "companyName": "Company Name",
+      "total": "Total"
     }
   }
 }

@@ -82,12 +82,20 @@ public class SecurityConfiguration {
                         .requestMatchers(mvc.pattern("/api/activate")).permitAll()
                         // todo change api/companies to other than permitAll, it's like this for testing
                         // nothing else works.
-                        .requestMatchers(mvc.pattern("/api/companies")).permitAll()
+                        // .requestMatchers(mvc.pattern("/api/companies")).permitAll()
+                        .requestMatchers(mvc.pattern("/api/companies")).authenticated() // might be unnecessary
                         .requestMatchers(mvc.pattern("/api/company/new")).hasAnyAuthority(AuthoritiesConstants.ADMIN,
-                                 AuthoritiesConstants.RECSER)
+                                AuthoritiesConstants.RECSER)
+                        // .requestMatchers(mvc.pattern("/api/reservations")).hasAnyAuthority(AuthoritiesConstants.ADMIN,
+                        // AuthoritiesConstants.RECSER, AuthoritiesConstants.TRANSPORT) //one way of not
+                        // allowing pcenter auth to use reservations, currently done via preauth
+                        // reservationresource
+                        .requestMatchers(mvc.pattern("/currentUserCompany")).authenticated()
+                        .requestMatchers(mvc.pattern("/api/companies/currentUserCompany")).authenticated()
                         .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
                         .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
-                        .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                        .requestMatchers(mvc.pattern("/api/admin/**"))
+                        .hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.RECSER)
                         .requestMatchers(mvc.pattern("/api/**")).authenticated()
                         .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                         .requestMatchers(mvc.pattern("/management/health")).permitAll()

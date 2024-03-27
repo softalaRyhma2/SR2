@@ -1,10 +1,12 @@
 package com.softala.sr2.domain;
 
 import static com.softala.sr2.domain.ReservationTestSamples.*;
-import static com.softala.sr2.domain.StockTestSamples.*;
+import static com.softala.sr2.domain.ReservedItemTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.softala.sr2.web.rest.TestUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class ReservationTest {
@@ -24,14 +26,24 @@ class ReservationTest {
     }
 
     @Test
-    void stockTest() throws Exception {
+    void reservedItemTest() throws Exception {
         Reservation reservation = getReservationRandomSampleGenerator();
-        Stock stockBack = getStockRandomSampleGenerator();
+        ReservedItem reservedItemBack = getReservedItemRandomSampleGenerator();
 
-        reservation.setStock(stockBack);
-        assertThat(reservation.getStock()).isEqualTo(stockBack);
+        reservation.addReservedItem(reservedItemBack);
+        assertThat(reservation.getReservedItems()).containsOnly(reservedItemBack);
+        assertThat(reservedItemBack.getReservation()).isEqualTo(reservation);
 
-        reservation.stock(null);
-        assertThat(reservation.getStock()).isNull();
+        reservation.removeReservedItem(reservedItemBack);
+        assertThat(reservation.getReservedItems()).doesNotContain(reservedItemBack);
+        assertThat(reservedItemBack.getReservation()).isNull();
+
+        reservation.reservedItems(new HashSet<>(Set.of(reservedItemBack)));
+        assertThat(reservation.getReservedItems()).containsOnly(reservedItemBack);
+        assertThat(reservedItemBack.getReservation()).isEqualTo(reservation);
+
+        reservation.setReservedItems(new HashSet<>());
+        assertThat(reservation.getReservedItems()).doesNotContain(reservedItemBack);
+        assertThat(reservedItemBack.getReservation()).isNull();
     }
 }

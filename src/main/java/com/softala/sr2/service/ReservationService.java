@@ -59,9 +59,6 @@ public class ReservationService {
         return reservationRepository
             .findById(reservation.getId())
             .map(existingReservation -> {
-                if (reservation.getReservedQuantity() != null) {
-                    existingReservation.setReservedQuantity(reservation.getReservedQuantity());
-                }
                 if (reservation.getReservationDate() != null) {
                     existingReservation.setReservationDate(reservation.getReservationDate());
                 }

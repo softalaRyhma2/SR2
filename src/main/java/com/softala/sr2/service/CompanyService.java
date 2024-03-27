@@ -4,6 +4,7 @@ import com.softala.sr2.domain.Company;
 import com.softala.sr2.domain.User;
 import com.softala.sr2.repository.CompanyRepository;
 import com.softala.sr2.repository.UserRepository;
+import com.softala.sr2.security.AuthoritiesConstants;
 import com.softala.sr2.security.SecurityUtils;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +69,12 @@ public class CompanyService {
      */
     public Company save(Company company) {
         log.debug("Request to save Company : {}", company);
+
+        // Perform authorization check
+        if (!SecurityUtils.isCurrentUserAdminOrRecser()) {
+            throw new AccessDeniedException("You do not have permission to save a new company");
+        }
+
         return companyRepository.save(company);
     }
 
@@ -139,13 +147,6 @@ public class CompanyService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Company : {}", id);
-
-        Optional<Company> companyOptional = companyRepository.findById(id);
-        companyOptional.ifPresent(company -> {
-            List<User> users = userRepository.findByCompany(company);
-            users.forEach(user -> user.setCompany(null));
-        });
-
         companyRepository.deleteById(id);
     }
 }

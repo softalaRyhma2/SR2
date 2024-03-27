@@ -9,8 +9,8 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { AUTHORITIES } from 'app/config/constants';
 
-import { getEntities } from './company.reducer';
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
+import { getEntities } from './company.reducer';
 
 export const Company = () => {
   const dispatch = useAppDispatch();
@@ -22,12 +22,17 @@ export const Company = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
+  const canCreateCompany = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN]));
   const companyList = useAppSelector(state => state.company.entities);
   const loading = useAppSelector(state => state.company.loading);
   const totalItems = useAppSelector(state => state.company.totalItems);
-  const isAdmin = useAppSelector(state =>
-    hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]),
-  );
+
+  const [showIdColumn, setShowIdColumn] = useState(false);
+  const authorities = useAppSelector(state => state.authentication.account.authorities);
+
+  useEffect(() => {
+    setShowIdColumn(hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]));
+  }, [authorities]);
 
   const getAllEntities = () => {
     dispatch(
@@ -103,8 +108,7 @@ export const Company = () => {
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="sr2App.company.home.refreshListLabel">Refresh List</Translate>
           </Button>
-
-          {isAdmin && (
+          {canCreateCompany && ( // Conditionally render the button
             <Link to="/company/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
               <FontAwesomeIcon icon="plus" />
               &nbsp;
@@ -118,8 +122,9 @@ export const Company = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  <Translate contentKey="sr2App.company.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                <th className="hand" onClick={sort('id')} style={{ display: showIdColumn ? 'table-cell' : 'none' }}>
+                  <Translate contentKey="sr2App.company.id">ID</Translate>
+                  {showIdColumn && <FontAwesomeIcon icon={getSortIconByFieldName('id')} />}
                 </th>
                 <th className="hand" onClick={sort('companyName')}>
                   <Translate contentKey="sr2App.company.companyName">Company Name</Translate>{' '}
@@ -139,7 +144,7 @@ export const Company = () => {
             <tbody>
               {companyList.map((company, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
+                  <td style={{ display: showIdColumn ? 'table-cell' : 'none' }}>
                     <Button tag={Link} to={`/company/${company.id}`} color="link" size="sm">
                       {company.id}
                     </Button>

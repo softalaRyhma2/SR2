@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Row, Col } from 'reactstrap';
+import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntity } from './stock.reducer';
+import { getCompanyNameByInvoiceId, getEntity } from './stock.reducer';
+import { getStockItemEntitiesForStock } from '../stock-item/stock-item.reducer';
 
 export const StockDetail = () => {
   const dispatch = useAppDispatch();
@@ -16,12 +17,32 @@ export const StockDetail = () => {
 
   useEffect(() => {
     dispatch(getEntity(id));
-  }, []);
+    dispatch(getStockItemEntitiesForStock(id));
+  }, [id]);
 
   const stockEntity = useAppSelector(state => state.stock.entity);
+  const stockItemList = useAppSelector(state => state.stockItem.entities);
+  console.log('STOCKITEMLIST: ' + JSON.stringify(stockItemList));
+  //const stockItemTypeList = useAppSelector(state => state.stockItemType.entities);
+  //console.log('STOCKITEMTYPELIST: ' + JSON.stringify(stockItemTypeList));
+  const [companyName, setCompanyName] = useState('');
+  const stockTotal = useAppSelector(state => state.stock.stockTotal);
+
+  const calculateTotal = (quantity: number, price: number) => {
+    return quantity * price;
+  };
+
+  useEffect(() => {
+    if (stockEntity.invoice && stockEntity.invoice.id) {
+      dispatch(getCompanyNameByInvoiceId(String(stockEntity.invoice.id))).then((response: any) => {
+        setCompanyName(response.payload);
+      });
+    }
+  }, [stockEntity.invoice]);
+
   return (
     <Row>
-      <Col md="8">
+      <Col md="4">
         <h2 data-cy="stockDetailsHeading">
           <Translate contentKey="sr2App.stock.detail.title">Stock</Translate>
         </h2>
@@ -33,24 +54,6 @@ export const StockDetail = () => {
           </dt>
           <dd>{stockEntity.id}</dd>
           <dt>
-            <span id="quantity">
-              <Translate contentKey="sr2App.stock.quantity">Quantity</Translate>
-            </span>
-          </dt>
-          <dd>{stockEntity.quantity}</dd>
-          <dt>
-            <span id="available">
-              <Translate contentKey="sr2App.stock.available">Available</Translate>
-            </span>
-          </dt>
-          <dd>{stockEntity.available}</dd>
-          <dt>
-            <span id="price">
-              <Translate contentKey="sr2App.stock.price">Price</Translate>
-            </span>
-          </dt>
-          <dd>{stockEntity.price}</dd>
-          <dt>
             <span id="stockDate">
               <Translate contentKey="sr2App.stock.stockDate">Stock Date</Translate>
             </span>
@@ -60,6 +63,16 @@ export const StockDetail = () => {
             <Translate contentKey="sr2App.stock.invoice">Invoice</Translate>
           </dt>
           <dd>{stockEntity.invoice ? stockEntity.invoice.id : ''}</dd>
+          <dt>
+            <Translate contentKey="sr2App.stock.companyName">Company Name</Translate>
+          </dt>
+          <dd>{companyName}</dd>
+          <dt>
+            <span id="stockDate">
+              <Translate contentKey="sr2App.stock.total">Total</Translate>
+            </span>
+          </dt>
+          <dd>{stockTotal} €</dd>
         </dl>
         <Button tag={Link} to="/stock" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
@@ -74,6 +87,57 @@ export const StockDetail = () => {
             <Translate contentKey="entity.action.edit">Edit</Translate>
           </span>
         </Button>
+      </Col>
+      <Col md="8" className="jh-entity-details">
+        <h2>Stock Items</h2>
+        <Table>
+          <thead>
+            <tr>
+              <th>
+                <Translate contentKey="global.field.id">ID</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sr2App.stockItem.quantity">Quantity</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sr2App.stockItem.available">Available</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sr2App.stockItem.price">Price</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sr2App.stockItem.total">Total</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sr2App.stockItem.stockItemType">Stock Item Type</Translate>
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {stockItemList.length === 0 ? (
+              <tr>
+                <td colSpan={8}>Stock items not found</td>
+              </tr>
+            ) : (
+              stockItemList.map(stockItemEntity => (
+                <tr key={stockItemEntity.id}>
+                  <td>{stockItemEntity.id}</td>
+                  <td>{stockItemEntity.quantity}</td>
+                  <td>{stockItemEntity.available}</td>
+                  <td>{stockItemEntity.price} €</td>
+                  <td>{calculateTotal(stockItemEntity.quantity, stockItemEntity.price)} €</td>
+                  <td>{stockItemEntity.stockItemType ? stockItemEntity.stockItemType.typeName : ''}</td>
+                  <td>
+                    <Button tag={Link} to={`/stock-item/${stockItemEntity.id}`} color="primary">
+                      <FontAwesomeIcon icon="eye" /> View
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </Table>
       </Col>
     </Row>
   );

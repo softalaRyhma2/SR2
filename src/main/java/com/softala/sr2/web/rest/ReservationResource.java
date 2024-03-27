@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -54,6 +55,7 @@ public class ReservationResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new reservation, or with status {@code 400 (Bad Request)} if the reservation has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN', 'ROLE_TRANSPORT')")
     @PostMapping("")
     public ResponseEntity<Reservation> createReservation(@Valid @RequestBody Reservation reservation) throws URISyntaxException {
         log.debug("REST request to save Reservation : {}", reservation);
@@ -77,6 +79,7 @@ public class ReservationResource {
      * or with status {@code 500 (Internal Server Error)} if the reservation couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN', 'ROLE_TRANSPORT')")
     @PutMapping("/{id}")
     public ResponseEntity<Reservation> updateReservation(
         @PathVariable(value = "id", required = false) final Long id,
@@ -112,6 +115,7 @@ public class ReservationResource {
      * or with status {@code 500 (Internal Server Error)} if the reservation couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN', 'ROLE_TRANSPORT')")
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Reservation> partialUpdateReservation(
         @PathVariable(value = "id", required = false) final Long id,
@@ -143,6 +147,7 @@ public class ReservationResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of reservations in body.
      */
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN', 'ROLE_TRANSPORT')")
     @GetMapping("")
     public ResponseEntity<List<Reservation>> getAllReservations(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Reservations");
@@ -157,6 +162,7 @@ public class ReservationResource {
      * @param id the id of the reservation to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the reservation, or with status {@code 404 (Not Found)}.
      */
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN', 'ROLE_TRANSPORT')")
     @GetMapping("/{id}")
     public ResponseEntity<Reservation> getReservation(@PathVariable("id") Long id) {
         log.debug("REST request to get Reservation : {}", id);
@@ -170,6 +176,7 @@ public class ReservationResource {
      * @param id the id of the reservation to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN', 'ROLE_TRANSPORT')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable("id") Long id) {
         log.debug("REST request to delete Reservation : {}", id);

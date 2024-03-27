@@ -18,6 +18,16 @@ const apiUrl = 'api/companies';
 
 // Actions
 
+export const getCurrentUserCompany = createAsyncThunk(
+  'company/fetch_current_user_company',
+  async () => {
+    const requestUrl = `api/companies/currentUserCompany`;
+    const response = await axios.get<ICompany>(requestUrl);
+    return response.data;
+  },
+  { serializeError: serializeAxiosError },
+);
+
 export const getEntities = createAsyncThunk('company/fetch_entity_list', async ({ page, size, sort }: IQueryParams) => {
   const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
   return axios.get<ICompany[]>(requestUrl);
@@ -80,6 +90,10 @@ export const CompanySlice = createEntitySlice({
   initialState,
   extraReducers(builder) {
     builder
+      .addCase(getCurrentUserCompany.fulfilled, (state, action) => {
+        state.loading = false;
+        state.entity = action.payload;
+      })
       .addCase(getEntity.fulfilled, (state, action) => {
         state.loading = false;
         state.entity = action.payload.data;

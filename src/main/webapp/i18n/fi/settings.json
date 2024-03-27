@@ -1,6 +1,6 @@
 {
   "settings": {
-    "title": "Käyttäjäasetukset [<strong>{{username}}</strong>]",
+    "title": "Käyttäjäasetukset <strong>{{username}}</strong>",
     "form": {
       "firstname": "Etunimi",
       "firstname.placeholder": "Etunimesi",

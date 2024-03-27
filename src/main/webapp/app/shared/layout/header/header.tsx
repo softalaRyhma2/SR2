@@ -13,6 +13,7 @@ import { setLocale } from 'app/shared/reducers/locale';
 export interface IHeaderProps {
   isAuthenticated: boolean;
   isAdmin: boolean;
+  isRecser: boolean;
   ribbonEnv: string;
   isInProduction: boolean;
   isOpenAPIEnabled: boolean;
@@ -53,8 +54,14 @@ const Header = (props: IHeaderProps) => {
           <Nav id="header-tabs" className="ms-auto" navbar>
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
-            {props.isAuthenticated && props.isAdmin && (
-              <AdminMenu showOpenAPI={props.isOpenAPIEnabled} showDatabase={!props.isInProduction} />
+            {props.isAuthenticated && (props.isAdmin || props.isRecser) && (
+              <AdminMenu
+                isAdmin={props.isAdmin}
+                isRecser={props.isRecser}
+                showOpenAPI={props.isOpenAPIEnabled}
+                showDatabase={!props.isInProduction}
+                showUserManagement={props.isAdmin || props.isRecser}
+              />
             )}
             <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
             <AccountMenu isAuthenticated={props.isAuthenticated} />

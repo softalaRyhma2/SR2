@@ -39,7 +39,8 @@ export const AccountMenu = ({ isAuthenticated = false }) => {
       id="account-menu"
       data-cy="accountMenu"
     >
-      {isAuthenticated ? accountMenuItemsAuthenticated() : accountMenuItems()}
+      {isAuthenticated && accountMenuItemsAuthenticated()}
+      {!isAuthenticated && accountMenuItems()}
     </NavDropdown>
   );
 };

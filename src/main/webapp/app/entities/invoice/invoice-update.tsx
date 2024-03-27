@@ -117,25 +117,37 @@ export const InvoiceUpdate = () => {
                 type="date"
               />
               <ValidatedField
-                id="invoice-company"
-                name="company"
-                data-cy="company"
-                label={translate('sr2App.invoice.company')}
-                type="select"
-                required
-              >
-                <option value="" key="0" />
-                {companies
-                  ? companies.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <FormText>
-                <Translate contentKey="entity.validation.required">This field is required.</Translate>
-              </FormText>
+                label={translate('sr2App.invoice.isClosed')}
+                id="invoice-isClosed"
+                name="isClosed"
+                data-cy="isClosed"
+                check
+                type="checkbox"
+              />
+              {isNew ? (
+                <ValidatedField
+                  id="invoice-company"
+                  name="company"
+                  data-cy="company"
+                  label={translate('sr2App.invoice.company')}
+                  type="select"
+                  required
+                >
+                  <option value="" key="0" />
+                  {companies
+                    ? companies.map(company => (
+                        <option value={company.id} key={company.id}>
+                          {company.companyName}
+                        </option>
+                      ))
+                    : null}
+                </ValidatedField>
+              ) : (
+                <div>
+                  <span>Company: </span>
+                  <span>{invoiceEntity.company?.companyName}</span>
+                </div>
+              )}
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/invoice" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
