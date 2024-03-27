@@ -1,0 +1,34 @@
+{
+  "annotations": {
+    "changelogDate": "20240208082656"
+  },
+  "applications": "*",
+  "entityTableName": "reserved_item",
+  "fields": [
+    {
+      "fieldName": "quantity",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "ReservedItem",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "reservation",
+      "otherEntityRelationshipName": "reservedItem",
+      "relationshipName": "reservation",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "stockItem",
+      "otherEntityRelationshipName": "reservedItem",
+      "relationshipName": "stockItem",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

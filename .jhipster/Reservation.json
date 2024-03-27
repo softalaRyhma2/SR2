@@ -6,26 +6,25 @@
   "entityTableName": "reservation",
   "fields": [
     {
-      "fieldName": "reservedQuantity",
-      "fieldType": "Integer"
-    },
-    {
       "fieldName": "reservationDate",
-      "fieldType": "LocalDate"
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "isPickedUp",
-      "fieldType": "Boolean"
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
     }
   ],
   "name": "Reservation",
   "pagination": "pagination",
   "relationships": [
     {
-      "otherEntityName": "stock",
-      "relationshipName": "stock",
+      "otherEntityName": "reservedItem",
+      "otherEntityRelationshipName": "reservation",
+      "relationshipName": "reservedItem",
       "relationshipSide": "left",
-      "relationshipType": "many-to-one"
+      "relationshipType": "one-to-many"
     }
   ],
   "searchEngine": "no",

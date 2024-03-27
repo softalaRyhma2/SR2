@@ -12,4 +12,17 @@
       </column>
     </addColumn>
   </changeSet>
+
+    <changeSet id="20240226_update_company_id_for_user" author="zoka">
+    <sql>
+      UPDATE jhi_user SET company_id = 6 WHERE id = 1;
+      UPDATE jhi_user SET company_id = 6 WHERE id = 2;
+      UPDATE jhi_user SET company_id = 5 WHERE id = 3;
+      UPDATE jhi_user SET company_id = 1 WHERE id = 4;
+      UPDATE jhi_user SET company_id = 2 WHERE id = 5;
+      UPDATE jhi_user SET company_id = 3 WHERE id = 6;
+      UPDATE jhi_user SET company_id = 4 WHERE id = 7;
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>

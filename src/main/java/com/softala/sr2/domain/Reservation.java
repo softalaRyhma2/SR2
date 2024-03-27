@@ -1,8 +1,12 @@
 package com.softala.sr2.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -23,23 +27,24 @@ public class Reservation implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @NotNull
+    @Column(name = "reservation_date", nullable = false)
+    private LocalDate reservationDate;
+
+    @NotNull
+    @Column(name = "is_picked_up", nullable = false)
+    private Boolean isPickedUp;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reservation")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "reservation", "stockItem" }, allowSetters = true)
+    private Set<ReservedItem> reservedItems = new HashSet<>();
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Column(name = "reserved_quantity")
-    private Integer reservedQuantity;
-
-    @Column(name = "reservation_date")
-    private LocalDate reservationDate;
-
-    @Column(name = "is_picked_up")
-    private Boolean isPickedUp;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Stock stock;
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
         return this.id;
@@ -52,27 +57,6 @@ public class Reservation implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Integer getReservedQuantity() {
-        return this.reservedQuantity;
-    }
-
-    public Reservation reservedQuantity(Integer reservedQuantity) {
-        this.setReservedQuantity(reservedQuantity);
-        return this;
-    }
-
-    public void setReservedQuantity(Integer reservedQuantity) {
-        this.reservedQuantity = reservedQuantity;
     }
 
     public LocalDate getReservationDate() {
@@ -101,21 +85,46 @@ public class Reservation implements Serializable {
         this.isPickedUp = isPickedUp;
     }
 
-    public Stock getStock() {
-        return this.stock;
+    public Set<ReservedItem> getReservedItems() {
+        return this.reservedItems;
     }
 
-    public void setStock(Stock stock) {
-        this.stock = stock;
+    public void setReservedItems(Set<ReservedItem> reservedItems) {
+        if (this.reservedItems != null) {
+            this.reservedItems.forEach(i -> i.setReservation(null));
+        }
+        if (reservedItems != null) {
+            reservedItems.forEach(i -> i.setReservation(this));
+        }
+        this.reservedItems = reservedItems;
     }
 
-    public Reservation stock(Stock stock) {
-        this.setStock(stock);
+    public Reservation reservedItems(Set<ReservedItem> reservedItems) {
+        this.setReservedItems(reservedItems);
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    public Reservation addReservedItem(ReservedItem reservedItem) {
+        this.reservedItems.add(reservedItem);
+        reservedItem.setReservation(this);
+        return this;
+    }
+
+    public Reservation removeReservedItem(ReservedItem reservedItem) {
+        this.reservedItems.remove(reservedItem);
+        reservedItem.setReservation(null);
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -130,8 +139,7 @@ public class Reservation implements Serializable {
 
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -139,10 +147,9 @@ public class Reservation implements Serializable {
     @Override
     public String toString() {
         return "Reservation{" +
-                "id=" + getId() +
-                ", reservedQuantity=" + getReservedQuantity() +
-                ", reservationDate='" + getReservationDate() + "'" +
-                ", isPickedUp='" + getIsPickedUp() + "'" +
-                "}";
+            "id=" + getId() +
+            ", reservationDate='" + getReservationDate() + "'" +
+            ", isPickedUp='" + getIsPickedUp() + "'" +
+            "}";
     }
 }

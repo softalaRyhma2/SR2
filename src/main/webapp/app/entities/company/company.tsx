@@ -7,7 +7,9 @@ import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons'
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { AUTHORITIES } from 'app/config/constants';
 
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import { getEntities } from './company.reducer';
 
 export const Company = () => {
@@ -20,9 +22,17 @@ export const Company = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
+  const canCreateCompany = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN]));
   const companyList = useAppSelector(state => state.company.entities);
   const loading = useAppSelector(state => state.company.loading);
   const totalItems = useAppSelector(state => state.company.totalItems);
+
+  const [showIdColumn, setShowIdColumn] = useState(false);
+  const authorities = useAppSelector(state => state.authentication.account.authorities);
+
+  useEffect(() => {
+    setShowIdColumn(hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]));
+  }, [authorities]);
 
   const getAllEntities = () => {
     dispatch(
@@ -98,11 +108,13 @@ export const Company = () => {
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="sr2App.company.home.refreshListLabel">Refresh List</Translate>
           </Button>
-          <Link to="/company/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" />
-            &nbsp;
-            <Translate contentKey="sr2App.company.home.createLabel">Create new Company</Translate>
-          </Link>
+          {canCreateCompany && ( // Conditionally render the button
+            <Link to="/company/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+              <FontAwesomeIcon icon="plus" />
+              &nbsp;
+              <Translate contentKey="sr2App.company.home.createLabel">Create new Company</Translate>
+            </Link>
+          )}
         </div>
       </h2>
       <div className="table-responsive">
@@ -110,12 +122,21 @@ export const Company = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  <Translate contentKey="sr2App.company.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                <th className="hand" onClick={sort('id')} style={{ display: showIdColumn ? 'table-cell' : 'none' }}>
+                  <Translate contentKey="sr2App.company.id">ID</Translate>
+                  {showIdColumn && <FontAwesomeIcon icon={getSortIconByFieldName('id')} />}
                 </th>
                 <th className="hand" onClick={sort('companyName')}>
                   <Translate contentKey="sr2App.company.companyName">Company Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('companyName')} />
+                </th>
+                <th className="hand" onClick={sort('companyEmail')}>
+                  <Translate contentKey="sr2App.company.companyEmail">Company Email</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('companyEmail')} />
+                </th>
+                <th className="hand" onClick={sort('companyDetails')}>
+                  <Translate contentKey="sr2App.company.companyDetails">Company Details</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('companyDetails')} />
                 </th>
                 <th />
               </tr>
@@ -123,12 +144,14 @@ export const Company = () => {
             <tbody>
               {companyList.map((company, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
+                  <td style={{ display: showIdColumn ? 'table-cell' : 'none' }}>
                     <Button tag={Link} to={`/company/${company.id}`} color="link" size="sm">
                       {company.id}
                     </Button>
                   </td>
                   <td>{company.companyName}</td>
+                  <td>{company.companyEmail}</td>
+                  <td>{company.companyDetails}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/company/${company.id}`} color="info" size="sm" data-cy="entityDetailsButton">

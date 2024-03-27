@@ -16,7 +16,7 @@
     "enableHibernateCache": true,
     "enableSwaggerCodegen": false,
     "enableTranslation": true,
-    "entities": ["Company", "Stock", "Reservation", "Invoice"],
+    "entities": ["StockItem", "Company", "StockItemType", "Stock", "ReservedItem", "Reservation", "Invoice"],
     "feignClient": false,
     "gradleEnterpriseHost": null,
     "jhipsterVersion": "8.1.0",

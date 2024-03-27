@@ -37,12 +37,19 @@ const AppRoutes = () => {
           <Route
             path="*"
             element={
-              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.RECSER, AUTHORITIES.PCENTER, AUTHORITIES.TRANSPORT]}>
                 <Account />
               </PrivateRoute>
             }
           />
-          <Route path="register" element={<Register />} />
+          <Route
+            path="register"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.RECSER]}>
+                <Admin />
+              </PrivateRoute>
+            }
+          />
           <Route path="activate" element={<Activate />} />
           <Route path="reset">
             <Route path="request" element={<PasswordResetInit />} />
@@ -52,7 +59,7 @@ const AppRoutes = () => {
         <Route
           path="admin/*"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.RECSER]}>
               <Admin />
             </PrivateRoute>
           }
@@ -60,7 +67,7 @@ const AppRoutes = () => {
         <Route
           path="*"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.RECSER, AUTHORITIES.PCENTER, AUTHORITIES.TRANSPORT]}>
               <EntitiesRoutes />
             </PrivateRoute>
           }

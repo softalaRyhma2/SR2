@@ -4,6 +4,8 @@ import com.softala.sr2.domain.Stock;
 import com.softala.sr2.repository.StockRepository;
 import com.softala.sr2.service.StockService;
 import com.softala.sr2.web.rest.errors.BadRequestAlertException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -53,7 +55,7 @@ public class StockResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<Stock> createStock(@RequestBody Stock stock) throws URISyntaxException {
+    public ResponseEntity<Stock> createStock(@Valid @RequestBody Stock stock) throws URISyntaxException {
         log.debug("REST request to save Stock : {}", stock);
         if (stock.getId() != null) {
             throw new BadRequestAlertException("A new stock cannot already have an ID", ENTITY_NAME, "idexists");
@@ -76,7 +78,7 @@ public class StockResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Stock> updateStock(@PathVariable(value = "id", required = false) final Long id, @RequestBody Stock stock)
+    public ResponseEntity<Stock> updateStock(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Stock stock)
         throws URISyntaxException {
         log.debug("REST request to update Stock : {}, {}", id, stock);
         if (stock.getId() == null) {
@@ -109,8 +111,10 @@ public class StockResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Stock> partialUpdateStock(@PathVariable(value = "id", required = false) final Long id, @RequestBody Stock stock)
-        throws URISyntaxException {
+    public ResponseEntity<Stock> partialUpdateStock(
+        @PathVariable(value = "id", required = false) final Long id,
+        @NotNull @RequestBody Stock stock
+    ) throws URISyntaxException {
         log.debug("REST request to partial update Stock partially : {}, {}", id, stock);
         if (stock.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

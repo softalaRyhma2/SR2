@@ -8,6 +8,8 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
+import { IInvoice } from 'app/shared/model/invoice.model';
+import { getEntities as getInvoices } from 'app/entities/invoice/invoice.reducer';
 import { IStock } from 'app/shared/model/stock.model';
 import { getEntity, updateEntity, createEntity, reset } from './stock.reducer';
 
@@ -19,6 +21,7 @@ export const StockUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
+  const invoices = useAppSelector(state => state.invoice.entities);
   const stockEntity = useAppSelector(state => state.stock.entity);
   const loading = useAppSelector(state => state.stock.loading);
   const updating = useAppSelector(state => state.stock.updating);
@@ -34,6 +37,8 @@ export const StockUpdate = () => {
     } else {
       dispatch(getEntity(id));
     }
+
+    dispatch(getInvoices({}));
   }, []);
 
   useEffect(() => {
@@ -47,19 +52,11 @@ export const StockUpdate = () => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
-    if (values.quantity !== undefined && typeof values.quantity !== 'number') {
-      values.quantity = Number(values.quantity);
-    }
-    if (values.available !== undefined && typeof values.available !== 'number') {
-      values.available = Number(values.available);
-    }
-    if (values.price !== undefined && typeof values.price !== 'number') {
-      values.price = Number(values.price);
-    }
 
     const entity = {
       ...stockEntity,
       ...values,
+      invoice: invoices.find(it => it.id.toString() === values.invoice.toString()),
     };
 
     if (isNew) {
@@ -74,7 +71,10 @@ export const StockUpdate = () => {
       ? {}
       : {
           ...stockEntity,
+          invoice: stockEntity?.invoice?.id,
         };
+
+  const today = new Date().toISOString().substring(0, 10);
 
   return (
     <div>
@@ -102,21 +102,34 @@ export const StockUpdate = () => {
                 />
               ) : null}
               <ValidatedField
-                label={translate('sr2App.stock.quantity')}
-                id="stock-quantity"
-                name="quantity"
-                data-cy="quantity"
-                type="text"
+                label={translate('sr2App.stock.stockDate')}
+                id="stock-stockDate"
+                name="stockDate"
+                data-cy="stockDate"
+                type="date"
+                defaultValue={today}
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
               />
-              <ValidatedField
-                label={translate('sr2App.stock.available')}
-                id="stock-available"
-                name="available"
-                data-cy="available"
-                type="text"
-              />
-              <ValidatedField label={translate('sr2App.stock.price')} id="stock-price" name="price" data-cy="price" type="text" />
-              <ValidatedField label={translate('sr2App.stock.date')} id="stock-date" name="date" data-cy="date" type="date" />
+              {isNew ? (
+                <ValidatedField id="stock-invoice" name="invoice" data-cy="invoice" label={translate('sr2App.stock.invoice')} type="select">
+                  {invoices
+                    ? invoices.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.id}
+                        </option>
+                      ))
+                    : null}
+                </ValidatedField>
+              ) : (
+                <div>
+                  <span>Invoice number: </span>
+                  <span>{stockEntity.invoice?.id}</span>
+                  <br />
+                  <br />
+                </div>
+              )}
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/stock" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

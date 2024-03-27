@@ -1,0 +1,30 @@
+{
+  "sr2App": {
+    "stockItem": {
+      "home": {
+        "title": "Stock Items",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Luo Stock Item",
+        "createOrEditLabel": "Luo tai muokkaa Stock Item",
+        "notFound": "Stock Item ei löytynyt"
+      },
+      "created": "Uusi Stock Item on luotu, id: {{ param }}",
+      "updated": "Stock Item on päivitetty, id: {{ param }}",
+      "deleted": "Stock Item on päivitetty, id: {{ param }}",
+      "delete": {
+        "question": "Haluatko varmasti poistaa Stock Item {{ id }}?"
+      },
+      "detail": {
+        "title": "Stock Item"
+      },
+      "id": "ID",
+      "quantity": "Lavamäärä",
+      "available": "Varattavissa",
+      "price": "Hinta",
+      "total": "Yhteensä",
+      "reservedItem": "Reserved Item",
+      "stock": "Varasto",
+      "stockItemType": "Lavatyyppi"
+    }
+  }
+}

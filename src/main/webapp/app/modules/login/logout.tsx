@@ -14,8 +14,13 @@ export const Logout = () => {
     }
   });
 
+  const centerStyle = {
+    display: 'flex', // Enables Flexbox
+    justifyContent: 'center', // Centers horizontally
+    alignItems: 'center', // Centers vertically
+  };
   return (
-    <div className="p-5">
+    <div style={centerStyle}>
       <h4>Logged out successfully!</h4>
     </div>
   );

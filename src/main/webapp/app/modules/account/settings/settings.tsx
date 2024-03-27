@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Col, Row } from 'reactstrap';
 import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
 import { toast } from 'react-toastify';
@@ -7,14 +7,30 @@ import { locales, languages } from 'app/config/translation';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getSession } from 'app/shared/reducers/authentication';
 import { saveAccountSettings, reset } from './settings.reducer';
+import { getCurrentUserCompany } from 'app/entities/company/company.reducer';
 
 export const SettingsPage = () => {
   const dispatch = useAppDispatch();
   const account = useAppSelector(state => state.authentication.account);
   const successMessage = useAppSelector(state => state.settings.successMessage);
 
+  const companyName = useAppSelector(state => state.company.entity.companyName);
+
   useEffect(() => {
     dispatch(getSession());
+    dispatch(getCurrentUserCompany())
+      .then((response: any) => {
+        console.log('API-vastaus:', response);
+        if (response.payload.data && response.payload.data.companyName) {
+          console.log('companyName:', response.payload.data.companyName);
+          companyName(response.payload.data.companyName);
+        } else {
+          console.error('Error: companyName is empty or null');
+        }
+      })
+      .catch((error: any) => {
+        console.error('Error fetching user company:', error);
+      });
     return () => {
       dispatch(reset());
     };
@@ -44,6 +60,7 @@ export const SettingsPage = () => {
               User settings for {account.login}
             </Translate>
           </h2>
+          <h4>Company: {companyName}</h4>
           <ValidatedForm id="settings-form" onSubmit={handleValidSubmit} defaultValues={account}>
             <ValidatedField
               name="firstName"

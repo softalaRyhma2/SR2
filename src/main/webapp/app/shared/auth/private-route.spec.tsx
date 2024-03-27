@@ -6,7 +6,7 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 
-import { AUTHORITIES } from 'app/config/constants';
+import { AUTHORITIES, AuthoritiesConstants } from 'app/config/constants';
 import PrivateRoute, { hasAnyAuthority } from './private-route';
 
 const TestComp = () => <div>Test</div>;
@@ -69,7 +69,39 @@ describe('private-route component', () => {
         isAuthenticated: true,
         sessionHasBeenFetched: true,
         account: {
-          authorities: ['ADMIN'],
+          authorities: [AuthoritiesConstants.ADMIN],
+        },
+      },
+    );
+    expect(container.innerHTML).toEqual('<div>Test</div>');
+  });
+
+  it('Should render a route for the component provided when authenticated with TRANSPORT role', () => {
+    const { container } = wrapper(
+      <PrivateRoute>
+        <TestComp />
+      </PrivateRoute>,
+      {
+        isAuthenticated: true,
+        sessionHasBeenFetched: true,
+        account: {
+          authorities: [AuthoritiesConstants.TRANSPORT], // Updated to use TRANSPORT
+        },
+      },
+    );
+    expect(container.innerHTML).toEqual('<div>Test</div>');
+  });
+
+  it('Should render a route for the component provided when authenticated with PCENTER role', () => {
+    const { container } = wrapper(
+      <PrivateRoute>
+        <TestComp />
+      </PrivateRoute>,
+      {
+        isAuthenticated: true,
+        sessionHasBeenFetched: true,
+        account: {
+          authorities: [AuthoritiesConstants.PCENTER], // Added test case for PCENTER
         },
       },
     );
@@ -93,7 +125,7 @@ describe('private-route component', () => {
         isAuthenticated: false,
         sessionHasBeenFetched: true,
         account: {
-          authorities: ['ADMIN'],
+          authorities: [AuthoritiesConstants.ADMIN],
         },
       },
     );
@@ -103,29 +135,37 @@ describe('private-route component', () => {
 });
 
 describe('hasAnyAuthority', () => {
-  // All tests will go here
   it('Should return false when authorities is invalid', () => {
     expect(hasAnyAuthority(undefined, undefined)).toEqual(false);
     expect(hasAnyAuthority(null, [])).toEqual(false);
     expect(hasAnyAuthority([], [])).toEqual(false);
-    expect(hasAnyAuthority([], [AUTHORITIES.USER])).toEqual(false);
   });
 
-  it('Should return true when authorities is valid and hasAnyAuthorities is empty', () => {
-    expect(hasAnyAuthority([AUTHORITIES.USER], [])).toEqual(true);
+  it('Should return true when authorities are valid and hasAnyAuthorities is empty', () => {
+    expect(hasAnyAuthority([AuthoritiesConstants.TRANSPORT], [])).toEqual(true);
+    expect(hasAnyAuthority([AuthoritiesConstants.PCENTER], [])).toEqual(true);
+    expect(hasAnyAuthority([AuthoritiesConstants.ADMIN], [])).toEqual(true); // Added for ADMIN
   });
 
-  it('Should return true when authorities is valid and hasAnyAuthorities contains an authority', () => {
-    expect(hasAnyAuthority([AUTHORITIES.USER], [AUTHORITIES.USER])).toEqual(true);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], [AUTHORITIES.USER])).toEqual(true);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], [AUTHORITIES.USER, AUTHORITIES.ADMIN])).toEqual(true);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], [AUTHORITIES.USER, 'ROLEADMIN'])).toEqual(true);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], [AUTHORITIES.ADMIN])).toEqual(true);
+  it('Should return true when authorities contain TRANSPORT and checking for TRANSPORT', () => {
+    expect(hasAnyAuthority([AuthoritiesConstants.TRANSPORT], [AuthoritiesConstants.TRANSPORT])).toEqual(true);
   });
 
-  it('Should return false when authorities is valid and hasAnyAuthorities does not contain an authority', () => {
-    expect(hasAnyAuthority([AUTHORITIES.USER], [AUTHORITIES.ADMIN])).toEqual(false);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], ['ROLE_USERSS'])).toEqual(false);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], ['ROLEUSER', 'ROLEADMIN'])).toEqual(false);
+  it('Should return true when authorities contain PCENTER and checking for PCENTER', () => {
+    expect(hasAnyAuthority([AuthoritiesConstants.PCENTER], [AuthoritiesConstants.PCENTER])).toEqual(true);
+  });
+
+  it('Should return true when authorities contain ADMIN and checking for any', () => {
+    // Demonstrates that ADMIN should typically have access to anything
+    expect(hasAnyAuthority([AuthoritiesConstants.ADMIN], [AuthoritiesConstants.TRANSPORT])).toEqual(true);
+    expect(hasAnyAuthority([AuthoritiesConstants.ADMIN], [AuthoritiesConstants.PCENTER])).toEqual(true);
+    expect(hasAnyAuthority([AuthoritiesConstants.ADMIN], [AuthoritiesConstants.ADMIN])).toEqual(true);
+  });
+
+  it('Should return false when authorities do not contain the required authority', () => {
+    expect(hasAnyAuthority([AuthoritiesConstants.TRANSPORT], [AuthoritiesConstants.PCENTER])).toEqual(false);
+    expect(hasAnyAuthority([AuthoritiesConstants.PCENTER], [AuthoritiesConstants.TRANSPORT])).toEqual(false);
+    // Example where neither TRANSPORT nor PCENTER should access ADMIN-specific resources
+    expect(hasAnyAuthority([AuthoritiesConstants.TRANSPORT, AuthoritiesConstants.PCENTER], [AuthoritiesConstants.ADMIN])).toEqual(false);
   });
 });

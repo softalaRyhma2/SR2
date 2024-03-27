@@ -1,12 +1,11 @@
 import dayjs from 'dayjs';
-import { IStock } from 'app/shared/model/stock.model';
+import { IReservedItem } from 'app/shared/model/reserved-item.model';
 
 export interface IReservation {
   id?: number;
-  reservedQuantity?: number | null;
-  reservationDate?: dayjs.Dayjs | null;
-  isPickedUp?: boolean | null;
-  stock?: IStock | null;
+  reservationDate?: dayjs.Dayjs;
+  isPickedUp?: boolean;
+  reservedItems?: IReservedItem[] | null;
 }
 
 export const defaultValue: Readonly<IReservation> = {

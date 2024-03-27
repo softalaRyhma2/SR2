@@ -100,6 +100,32 @@ export const CompanyUpdate = () => {
                 type="text"
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
+                  maxLength: { value: 50, message: translate('entity.validation.maxlength', { max: 50 }) },
+                }}
+              />
+              <ValidatedField
+                label={translate('sr2App.company.companyEmail')}
+                id="company-companyEmail"
+                name="companyEmail"
+                data-cy="companyEmail"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                  maxLength: { value: 60, message: translate('entity.validation.maxlength', { max: 60 }) },
+                  pattern: {
+                    value: /^[^@\s]+@[^@\s]+.[^@\s]+$/,
+                    message: translate('entity.validation.pattern', { pattern: '^[^@\\s]+@[^@\\s]+.[^@\\s]+$' }),
+                  },
+                }}
+              />
+              <ValidatedField
+                label={translate('sr2App.company.companyDetails')}
+                id="company-companyDetails"
+                name="companyDetails"
+                data-cy="companyDetails"
+                type="text"
+                validate={{
+                  maxLength: { value: 500, message: translate('entity.validation.maxlength', { max: 500 }) },
                 }}
               />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/company" replace color="info">

@@ -1,5 +1,6 @@
 package com.softala.sr2.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -26,11 +27,24 @@ public class Company implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "company_name", nullable = false)
+    @Size(max = 50)
+    @Column(name = "company_name", length = 50, nullable = false)
     private String companyName;
 
-    @OneToMany(mappedBy = "company")
-    private Set<User> users = new HashSet<>();
+    @NotNull
+    @Size(max = 60)
+    @Pattern(regexp = "^[^@\\s]+@[^@\\s]+.[^@\\s]+$")
+    @Column(name = "company_email", length = 60, nullable = false)
+    private String companyEmail;
+
+    @Size(max = 500)
+    @Column(name = "company_details", length = 500)
+    private String companyDetails;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "stocks", "company" }, allowSetters = true)
+    private Set<Invoice> invoices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -60,8 +74,64 @@ public class Company implements Serializable {
         this.companyName = companyName;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    public String getCompanyEmail() {
+        return this.companyEmail;
+    }
+
+    public Company companyEmail(String companyEmail) {
+        this.setCompanyEmail(companyEmail);
+        return this;
+    }
+
+    public void setCompanyEmail(String companyEmail) {
+        this.companyEmail = companyEmail;
+    }
+
+    public String getCompanyDetails() {
+        return this.companyDetails;
+    }
+
+    public Company companyDetails(String companyDetails) {
+        this.setCompanyDetails(companyDetails);
+        return this;
+    }
+
+    public void setCompanyDetails(String companyDetails) {
+        this.companyDetails = companyDetails;
+    }
+
+    public Set<Invoice> getInvoices() {
+        return this.invoices;
+    }
+
+    public void setInvoices(Set<Invoice> invoices) {
+        if (this.invoices != null) {
+            this.invoices.forEach(i -> i.setCompany(null));
+        }
+        if (invoices != null) {
+            invoices.forEach(i -> i.setCompany(this));
+        }
+        this.invoices = invoices;
+    }
+
+    public Company invoices(Set<Invoice> invoices) {
+        this.setInvoices(invoices);
+        return this;
+    }
+
+    public Company addInvoice(Invoice invoice) {
+        this.invoices.add(invoice);
+        invoice.setCompany(this);
+        return this;
+    }
+
+    public Company removeInvoice(Invoice invoice) {
+        this.invoices.remove(invoice);
+        invoice.setCompany(null);
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -74,28 +144,9 @@ public class Company implements Serializable {
         return getId() != null && getId().equals(((Company) o).getId());
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public void addUser(User user) {
-        this.users.add(user);
-        user.setCompany(this);
-    }
-
-    public void removeUser(User user) {
-        this.users.remove(user);
-        user.setCompany(null);
-    }
-
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -103,8 +154,10 @@ public class Company implements Serializable {
     @Override
     public String toString() {
         return "Company{" +
-                "id=" + getId() +
-                ", companyName='" + getCompanyName() + "'" +
-                "}";
+            "id=" + getId() +
+            ", companyName='" + getCompanyName() + "'" +
+            ", companyEmail='" + getCompanyEmail() + "'" +
+            ", companyDetails='" + getCompanyDetails() + "'" +
+            "}";
     }
 }

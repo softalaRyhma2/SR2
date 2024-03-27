@@ -1,6 +1,5 @@
 package com.softala.sr2.web.rest;
 
-import static com.softala.sr2.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -10,7 +9,6 @@ import com.softala.sr2.IntegrationTest;
 import com.softala.sr2.domain.Stock;
 import com.softala.sr2.repository.StockRepository;
 import jakarta.persistence.EntityManager;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -33,17 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class StockResourceIT {
 
-    private static final Integer DEFAULT_QUANTITY = 1;
-    private static final Integer UPDATED_QUANTITY = 2;
-
-    private static final Integer DEFAULT_AVAILABLE = 1;
-    private static final Integer UPDATED_AVAILABLE = 2;
-
-    private static final BigDecimal DEFAULT_PRICE = new BigDecimal(1);
-    private static final BigDecimal UPDATED_PRICE = new BigDecimal(2);
-
-    private static final LocalDate DEFAULT_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate DEFAULT_STOCK_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_STOCK_DATE = LocalDate.now(ZoneId.systemDefault());
 
     private static final String ENTITY_API_URL = "/api/stocks";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -69,7 +58,7 @@ class StockResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Stock createEntity(EntityManager em) {
-        Stock stock = new Stock().quantity(DEFAULT_QUANTITY).available(DEFAULT_AVAILABLE).price(DEFAULT_PRICE).date(DEFAULT_DATE);
+        Stock stock = new Stock().stockDate(DEFAULT_STOCK_DATE);
         return stock;
     }
 
@@ -80,7 +69,7 @@ class StockResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Stock createUpdatedEntity(EntityManager em) {
-        Stock stock = new Stock().quantity(UPDATED_QUANTITY).available(UPDATED_AVAILABLE).price(UPDATED_PRICE).date(UPDATED_DATE);
+        Stock stock = new Stock().stockDate(UPDATED_STOCK_DATE);
         return stock;
     }
 
@@ -102,10 +91,7 @@ class StockResourceIT {
         List<Stock> stockList = stockRepository.findAll();
         assertThat(stockList).hasSize(databaseSizeBeforeCreate + 1);
         Stock testStock = stockList.get(stockList.size() - 1);
-        assertThat(testStock.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
-        assertThat(testStock.getAvailable()).isEqualTo(DEFAULT_AVAILABLE);
-        assertThat(testStock.getPrice()).isEqualByComparingTo(DEFAULT_PRICE);
-        assertThat(testStock.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testStock.getStockDate()).isEqualTo(DEFAULT_STOCK_DATE);
     }
 
     @Test
@@ -128,6 +114,23 @@ class StockResourceIT {
 
     @Test
     @Transactional
+    void checkStockDateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = stockRepository.findAll().size();
+        // set the field null
+        stock.setStockDate(null);
+
+        // Create the Stock, which fails.
+
+        restStockMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(stock)))
+            .andExpect(status().isBadRequest());
+
+        List<Stock> stockList = stockRepository.findAll();
+        assertThat(stockList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllStocks() throws Exception {
         // Initialize the database
         stockRepository.saveAndFlush(stock);
@@ -138,10 +141,7 @@ class StockResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(stock.getId().intValue())))
-            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
-            .andExpect(jsonPath("$.[*].available").value(hasItem(DEFAULT_AVAILABLE)))
-            .andExpect(jsonPath("$.[*].price").value(hasItem(sameNumber(DEFAULT_PRICE))))
-            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())));
+            .andExpect(jsonPath("$.[*].stockDate").value(hasItem(DEFAULT_STOCK_DATE.toString())));
     }
 
     @Test
@@ -156,10 +156,7 @@ class StockResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(stock.getId().intValue()))
-            .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
-            .andExpect(jsonPath("$.available").value(DEFAULT_AVAILABLE))
-            .andExpect(jsonPath("$.price").value(sameNumber(DEFAULT_PRICE)))
-            .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()));
+            .andExpect(jsonPath("$.stockDate").value(DEFAULT_STOCK_DATE.toString()));
     }
 
     @Test
@@ -181,7 +178,7 @@ class StockResourceIT {
         Stock updatedStock = stockRepository.findById(stock.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedStock are not directly saved in db
         em.detach(updatedStock);
-        updatedStock.quantity(UPDATED_QUANTITY).available(UPDATED_AVAILABLE).price(UPDATED_PRICE).date(UPDATED_DATE);
+        updatedStock.stockDate(UPDATED_STOCK_DATE);
 
         restStockMockMvc
             .perform(
@@ -195,10 +192,7 @@ class StockResourceIT {
         List<Stock> stockList = stockRepository.findAll();
         assertThat(stockList).hasSize(databaseSizeBeforeUpdate);
         Stock testStock = stockList.get(stockList.size() - 1);
-        assertThat(testStock.getQuantity()).isEqualTo(UPDATED_QUANTITY);
-        assertThat(testStock.getAvailable()).isEqualTo(UPDATED_AVAILABLE);
-        assertThat(testStock.getPrice()).isEqualByComparingTo(UPDATED_PRICE);
-        assertThat(testStock.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testStock.getStockDate()).isEqualTo(UPDATED_STOCK_DATE);
     }
 
     @Test
@@ -269,8 +263,6 @@ class StockResourceIT {
         Stock partialUpdatedStock = new Stock();
         partialUpdatedStock.setId(stock.getId());
 
-        partialUpdatedStock.price(UPDATED_PRICE);
-
         restStockMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedStock.getId())
@@ -283,10 +275,7 @@ class StockResourceIT {
         List<Stock> stockList = stockRepository.findAll();
         assertThat(stockList).hasSize(databaseSizeBeforeUpdate);
         Stock testStock = stockList.get(stockList.size() - 1);
-        assertThat(testStock.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
-        assertThat(testStock.getAvailable()).isEqualTo(DEFAULT_AVAILABLE);
-        assertThat(testStock.getPrice()).isEqualByComparingTo(UPDATED_PRICE);
-        assertThat(testStock.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testStock.getStockDate()).isEqualTo(DEFAULT_STOCK_DATE);
     }
 
     @Test
@@ -301,7 +290,7 @@ class StockResourceIT {
         Stock partialUpdatedStock = new Stock();
         partialUpdatedStock.setId(stock.getId());
 
-        partialUpdatedStock.quantity(UPDATED_QUANTITY).available(UPDATED_AVAILABLE).price(UPDATED_PRICE).date(UPDATED_DATE);
+        partialUpdatedStock.stockDate(UPDATED_STOCK_DATE);
 
         restStockMockMvc
             .perform(
@@ -315,10 +304,7 @@ class StockResourceIT {
         List<Stock> stockList = stockRepository.findAll();
         assertThat(stockList).hasSize(databaseSizeBeforeUpdate);
         Stock testStock = stockList.get(stockList.size() - 1);
-        assertThat(testStock.getQuantity()).isEqualTo(UPDATED_QUANTITY);
-        assertThat(testStock.getAvailable()).isEqualTo(UPDATED_AVAILABLE);
-        assertThat(testStock.getPrice()).isEqualByComparingTo(UPDATED_PRICE);
-        assertThat(testStock.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testStock.getStockDate()).isEqualTo(UPDATED_STOCK_DATE);
     }
 
     @Test

@@ -1,7 +1,13 @@
 package com.softala.sr2.service;
 
+import com.softala.sr2.domain.Company;
 import com.softala.sr2.domain.Invoice;
+import com.softala.sr2.domain.User;
 import com.softala.sr2.repository.InvoiceRepository;
+import com.softala.sr2.repository.UserRepository;
+import com.softala.sr2.security.SecurityUtils;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +27,39 @@ public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
 
-    public InvoiceService(InvoiceRepository invoiceRepository) {
+    private final UserRepository userRepository;
+
+    public InvoiceService(InvoiceRepository invoiceRepository, UserRepository userRepository) {
         this.invoiceRepository = invoiceRepository;
+        this.userRepository = userRepository;
+    }
+
+    public List<Invoice> findAllInvoicesByLoggedInUser() {
+        String currentUserLogin = SecurityUtils
+            .getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException("Current user login not found"));
+
+        User user = userRepository.findOneByLogin(currentUserLogin).orElseThrow(() -> new IllegalStateException("User not found"));
+
+        if (isAdmin(user) || isRecser(user)) {
+            return invoiceRepository.findAll();
+        } else {
+            Company userCompany = user.getCompany();
+            if (userCompany != null) {
+                return invoiceRepository.findByCompany(userCompany);
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    private boolean isRecser(User user) {
+        return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_RECSER"));
+    }
+
+    private boolean isAdmin(User user) {
+        // Voit toteuttaa adminin tarkistuksen tarpeidesi mukaan.
+        // Tässä esimerkissä tarkistetaan, onko käyttäjällä ADMIN-rooli.
+        return user.getAuthorities().stream().anyMatch(authority -> authority.getName().equals("ROLE_ADMIN"));
     }
 
     /**

@@ -1,9 +1,12 @@
 package com.softala.sr2.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -24,17 +27,18 @@ public class Stock implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "quantity")
-    private Integer quantity;
+    @NotNull
+    @Column(name = "stock_date", nullable = false)
+    private LocalDate stockDate;
 
-    @Column(name = "available")
-    private Integer available;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "stock")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "reservedItems", "stock", "stockItemType" }, allowSetters = true)
+    private Set<StockItem> stockItems = new HashSet<>();
 
-    @Column(name = "price", precision = 21, scale = 2)
-    private BigDecimal price;
-
-    @Column(name = "date")
-    private LocalDate date;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "stocks", "company" }, allowSetters = true)
+    private Invoice invoice;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -51,56 +55,61 @@ public class Stock implements Serializable {
         this.id = id;
     }
 
-    public Integer getQuantity() {
-        return this.quantity;
+    public LocalDate getStockDate() {
+        return this.stockDate;
     }
 
-    public Stock quantity(Integer quantity) {
-        this.setQuantity(quantity);
+    public Stock stockDate(LocalDate stockDate) {
+        this.setStockDate(stockDate);
         return this;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setStockDate(LocalDate stockDate) {
+        this.stockDate = stockDate;
     }
 
-    public Integer getAvailable() {
-        return this.available;
+    public Set<StockItem> getStockItems() {
+        return this.stockItems;
     }
 
-    public Stock available(Integer available) {
-        this.setAvailable(available);
+    public void setStockItems(Set<StockItem> stockItems) {
+        if (this.stockItems != null) {
+            this.stockItems.forEach(i -> i.setStock(null));
+        }
+        if (stockItems != null) {
+            stockItems.forEach(i -> i.setStock(this));
+        }
+        this.stockItems = stockItems;
+    }
+
+    public Stock stockItems(Set<StockItem> stockItems) {
+        this.setStockItems(stockItems);
         return this;
     }
 
-    public void setAvailable(Integer available) {
-        this.available = available;
-    }
-
-    public BigDecimal getPrice() {
-        return this.price;
-    }
-
-    public Stock price(BigDecimal price) {
-        this.setPrice(price);
+    public Stock addStockItem(StockItem stockItem) {
+        this.stockItems.add(stockItem);
+        stockItem.setStock(this);
         return this;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public LocalDate getDate() {
-        return this.date;
-    }
-
-    public Stock date(LocalDate date) {
-        this.setDate(date);
+    public Stock removeStockItem(StockItem stockItem) {
+        this.stockItems.remove(stockItem);
+        stockItem.setStock(null);
         return this;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public Invoice getInvoice() {
+        return this.invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
+
+    public Stock invoice(Invoice invoice) {
+        this.setInvoice(invoice);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -127,10 +136,7 @@ public class Stock implements Serializable {
     public String toString() {
         return "Stock{" +
             "id=" + getId() +
-            ", quantity=" + getQuantity() +
-            ", available=" + getAvailable() +
-            ", price=" + getPrice() +
-            ", date='" + getDate() + "'" +
+            ", stockDate='" + getStockDate() + "'" +
             "}";
     }
 }

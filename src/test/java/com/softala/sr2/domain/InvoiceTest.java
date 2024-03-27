@@ -6,6 +6,8 @@ import static com.softala.sr2.domain.StockTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.softala.sr2.web.rest.TestUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class InvoiceTest {
@@ -25,6 +27,28 @@ class InvoiceTest {
     }
 
     @Test
+    void stockTest() throws Exception {
+        Invoice invoice = getInvoiceRandomSampleGenerator();
+        Stock stockBack = getStockRandomSampleGenerator();
+
+        invoice.addStock(stockBack);
+        assertThat(invoice.getStocks()).containsOnly(stockBack);
+        assertThat(stockBack.getInvoice()).isEqualTo(invoice);
+
+        invoice.removeStock(stockBack);
+        assertThat(invoice.getStocks()).doesNotContain(stockBack);
+        assertThat(stockBack.getInvoice()).isNull();
+
+        invoice.stocks(new HashSet<>(Set.of(stockBack)));
+        assertThat(invoice.getStocks()).containsOnly(stockBack);
+        assertThat(stockBack.getInvoice()).isEqualTo(invoice);
+
+        invoice.setStocks(new HashSet<>());
+        assertThat(invoice.getStocks()).doesNotContain(stockBack);
+        assertThat(stockBack.getInvoice()).isNull();
+    }
+
+    @Test
     void companyTest() throws Exception {
         Invoice invoice = getInvoiceRandomSampleGenerator();
         Company companyBack = getCompanyRandomSampleGenerator();
@@ -34,17 +58,5 @@ class InvoiceTest {
 
         invoice.company(null);
         assertThat(invoice.getCompany()).isNull();
-    }
-
-    @Test
-    void stockTest() throws Exception {
-        Invoice invoice = getInvoiceRandomSampleGenerator();
-        Stock stockBack = getStockRandomSampleGenerator();
-
-        invoice.setStock(stockBack);
-        assertThat(invoice.getStock()).isEqualTo(stockBack);
-
-        invoice.stock(null);
-        assertThat(invoice.getStock()).isNull();
     }
 }

@@ -1,0 +1,27 @@
+{
+  "annotations": {
+    "changelogDate": "20240208082556"
+  },
+  "applications": "*",
+  "entityTableName": "stock_item_type",
+  "fields": [
+    {
+      "fieldName": "typeName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "StockItemType",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "stockItem",
+      "otherEntityRelationshipName": "stockItemType",
+      "relationshipName": "stockItem",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

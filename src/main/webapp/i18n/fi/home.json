@@ -1,9 +1,9 @@
 {
   "home": {
-    "title": "Tervetuloa, Java Hipsteri!",
+    "title": "Tervetuloa {{username}}!",
     "subtitle": "Tämä on kotisivusi",
     "logged": {
-      "message": "Olet kirjautnut käyttäjänä \"{{username}}\"."
+      "message": "Olet kirjautunut käyttäjänä \"{{username}}\"."
     },
     "question": "Jos sinulla on kysymyksiä JHipsteristä:",
     "link": {

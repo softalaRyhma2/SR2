@@ -8,12 +8,37 @@
     {
       "fieldName": "companyName",
       "fieldType": "String",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "companyEmail",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength", "pattern"],
+      "fieldValidateRulesMaxlength": "60",
+      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+.[^@\\s]+$"
+    },
+    {
+      "fieldName": "companyDetails",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
     }
   ],
   "name": "Company",
   "pagination": "pagination",
-  "relationships": [],
+  "relationships": [
+    {
+      "options": {
+        "onUpdate": "CASCADE"
+      },
+      "otherEntityName": "invoice",
+      "otherEntityRelationshipName": "company",
+      "relationshipName": "invoice",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
   "searchEngine": "no",
   "service": "serviceClass"
 }

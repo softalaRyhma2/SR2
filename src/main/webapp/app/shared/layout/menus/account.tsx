@@ -2,6 +2,7 @@ import React from 'react';
 import MenuItem from 'app/shared/layout/menus/menu-item';
 import { Translate, translate } from 'react-jhipster';
 import { NavDropdown } from './menu-components';
+import { useAppSelector } from 'app/config/store';
 
 const accountMenuItemsAuthenticated = () => (
   <>
@@ -22,17 +23,26 @@ const accountMenuItems = () => (
     <MenuItem id="login-item" icon="sign-in-alt" to="/login" data-cy="login">
       <Translate contentKey="global.menu.account.login">Sign in</Translate>
     </MenuItem>
-    <MenuItem icon="user-plus" to="/account/register" data-cy="register">
+    {/* <MenuItem icon="user-plus" to="/account/register" data-cy="register">
       <Translate contentKey="global.menu.account.register">Register</Translate>
-    </MenuItem>
+    </MenuItem>*/}
   </>
 );
 
-export const AccountMenu = ({ isAuthenticated = false }) => (
-  <NavDropdown icon="user" name={translate('global.menu.account.main')} id="account-menu" data-cy="accountMenu">
-    {isAuthenticated && accountMenuItemsAuthenticated()}
-    {!isAuthenticated && accountMenuItems()}
-  </NavDropdown>
-);
+export const AccountMenu = ({ isAuthenticated = false }) => {
+  const account = useAppSelector(state => state.authentication.account); // Correctly placed hook call
+
+  return (
+    <NavDropdown
+      icon="user"
+      name={isAuthenticated ? account.login : translate('global.menu.account.main')} // Display login name if authenticated
+      id="account-menu"
+      data-cy="accountMenu"
+    >
+      {isAuthenticated && accountMenuItemsAuthenticated()}
+      {!isAuthenticated && accountMenuItems()}
+    </NavDropdown>
+  );
+};
 
 export default AccountMenu;

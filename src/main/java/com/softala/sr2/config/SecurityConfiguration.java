@@ -4,6 +4,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 import com.softala.sr2.security.*;
+import com.softala.sr2.security.AuthoritiesConstants;
 import com.softala.sr2.web.filter.SpaWebFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -65,26 +66,43 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(authz ->
                 // prettier-ignore
                 authz
-                    .requestMatchers(mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.txt"), mvc.pattern("/*.json"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
-                    .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
-                    .requestMatchers(mvc.pattern("/app/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/content/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
-                    .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate")).permitAll()
-                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/register")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/activate")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers(mvc.pattern("/api/**")).authenticated()
-                    .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers(mvc.pattern("/management/health")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/info")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                        .requestMatchers(mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.txt"),
+                                mvc.pattern("/*.json"), mvc.pattern("/*.map"), mvc.pattern("/*.css"))
+                        .permitAll()
+                        .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"),
+                                mvc.pattern("/*.webapp"))
+                        .permitAll()
+                        .requestMatchers(mvc.pattern("/app/**")).permitAll()
+                        .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
+                        .requestMatchers(mvc.pattern("/content/**")).permitAll()
+                        .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
+                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate")).permitAll()
+                        .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
+                        .requestMatchers(mvc.pattern("/api/register")).hasAuthority(AuthoritiesConstants.ADMIN)
+                        .requestMatchers(mvc.pattern("/api/activate")).permitAll()
+                        // todo change api/companies to other than permitAll, it's like this for testing
+                        // nothing else works.
+                        // .requestMatchers(mvc.pattern("/api/companies")).permitAll()
+                        .requestMatchers(mvc.pattern("/api/companies")).authenticated() // might be unnecessary
+                        .requestMatchers(mvc.pattern("/api/company/new")).hasAnyAuthority(AuthoritiesConstants.ADMIN,
+                                AuthoritiesConstants.RECSER)
+                        // .requestMatchers(mvc.pattern("/api/reservations")).hasAnyAuthority(AuthoritiesConstants.ADMIN,
+                        // AuthoritiesConstants.RECSER, AuthoritiesConstants.TRANSPORT) //one way of not
+                        // allowing pcenter auth to use reservations, currently done via preauth
+                        // reservationresource
+                        .requestMatchers(mvc.pattern("/currentUserCompany")).authenticated()
+                        .requestMatchers(mvc.pattern("/api/companies/currentUserCompany")).authenticated()
+                        .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
+                        .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
+                        .requestMatchers(mvc.pattern("/api/admin/**"))
+                        .hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.RECSER)
+                        .requestMatchers(mvc.pattern("/api/**")).authenticated()
+                        .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                        .requestMatchers(mvc.pattern("/management/health")).permitAll()
+                        .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
+                        .requestMatchers(mvc.pattern("/management/info")).permitAll()
+                        .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
+                        .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling(exceptions ->
