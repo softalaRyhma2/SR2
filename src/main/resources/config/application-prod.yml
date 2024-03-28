@@ -33,7 +33,6 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-
     url: jdbc:postgresql://localhost:5432/sr2
     username: sr2
     password:
