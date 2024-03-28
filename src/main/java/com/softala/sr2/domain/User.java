@@ -86,7 +86,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Column(name = "reset_date")
     private Instant resetDate = null;
 
-    @OneToMany(mappedBy = "")
+    @OneToMany(mappedBy = "user")
     private Set<ReservedItem> reservedItems = new HashSet<>();
 
     @JsonIgnore
