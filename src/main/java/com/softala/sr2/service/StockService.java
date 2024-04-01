@@ -1,7 +1,9 @@
 package com.softala.sr2.service;
 
+import com.softala.sr2.domain.Invoice;
 import com.softala.sr2.domain.Stock;
 import com.softala.sr2.repository.StockRepository;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +23,16 @@ public class StockService {
 
     private final StockRepository stockRepository;
 
-    public StockService(StockRepository stockRepository) {
+    private final InvoiceService invoiceService;
+
+    public StockService(StockRepository stockRepository, InvoiceService invoiceService) {
         this.stockRepository = stockRepository;
+        this.invoiceService = invoiceService;
+    }
+
+    public List<Stock> findStocksForLoggedInUser() {
+        List<Invoice> invoices = invoiceService.findAllInvoicesByLoggedInUser();
+        return stockRepository.findByInvoiceIn(invoices);
     }
 
     /**
