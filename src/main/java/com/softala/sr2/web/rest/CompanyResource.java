@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -61,18 +62,20 @@ public class CompanyResource {
 
     @GetMapping("/currentUserCompany")
     public ResponseEntity<Company> getCurrentUserCompany() {
-        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
-        if (currentUserLogin.isPresent()) {
-            String login = currentUserLogin.get();
-            Optional<User> user = userRepository.findOneByLogin(login);
-            if (user.isPresent()) {
-                Company userCompany = user.get().getCompany();
-                if (userCompany != null) {
-                    return ResponseEntity.ok().body(userCompany);
-                }
-            }
+        String currentUserLogin = SecurityUtils
+            .getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException("Current user login not found"));
+
+        User user = userRepository
+            .findOneByLogin(currentUserLogin)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found with login: " + currentUserLogin));
+
+        Company userCompany = user.getCompany();
+        if (userCompany != null) {
+            return ResponseEntity.ok().body(userCompany);
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
 
     /**
