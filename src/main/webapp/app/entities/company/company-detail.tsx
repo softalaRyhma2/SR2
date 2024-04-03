@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './company.reducer';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
+import { AUTHORITIES } from 'app/config/constants';
 
 export const CompanyDetail = () => {
   const dispatch = useAppDispatch();
@@ -18,6 +20,8 @@ export const CompanyDetail = () => {
   }, []);
 
   const companyEntity = useAppSelector(state => state.company.entity);
+  const authorities = useAppSelector(state => state.authentication.account.authorities);
+  const isAdminOrRecser = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]);
 
   const handleGoBack = () => {
     history.back(); // Palaa edelliselle sivulle
@@ -30,12 +34,16 @@ export const CompanyDetail = () => {
           <Translate contentKey="sr2App.company.detail.title">Company</Translate>
         </h2>
         <dl className="jh-entity-details">
-          <dt>
-            <span id="id">
-              <Translate contentKey="global.field.id">ID</Translate>
-            </span>
-          </dt>
-          <dd>{companyEntity.id}</dd>
+          {isAdminOrRecser && (
+            <>
+              <dt>
+                <span id="id">
+                  <Translate contentKey="global.field.id">ID</Translate>
+                </span>
+              </dt>
+              <dd>{companyEntity.id}</dd>
+            </>
+          )}
           <dt>
             <span id="companyName">
               <Translate contentKey="sr2App.company.companyName">Company Name</Translate>

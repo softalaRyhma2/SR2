@@ -2,6 +2,7 @@ package com.softala.sr2;
 
 import com.softala.sr2.config.ApplicationProperties;
 import com.softala.sr2.config.CRLFLogConverter;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -65,6 +66,8 @@ public class Sr2App {
      * @param args the command line arguments.
      */
     public static void main(String[] args) {
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+
         SpringApplication app = new SpringApplication(Sr2App.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();

@@ -7,6 +7,12 @@ import { combineReducers } from '@reduxjs/toolkit';
 import stockItemReducer, { getStockItemEntitiesForStock, StockItemSlice } from '../stock-item/stock-item.reducer';
 import stockItemTypeReducer, { StockItemTypeSlice } from '../stock-item-type/stock-item-type.reducer';
 import { produce } from 'immer';
+import { getCurrentUserCompany } from '../company/company.reducer';
+import { getEntities as getInvoices } from '../invoice/invoice.reducer';
+
+// Import getEntities async thunk from invoice.reducer
+
+//import { getInvoices } from './invoices'; // Import the getInvoices function
 
 export interface IStockState extends EntityState<IStock> {
   loading: boolean;
@@ -33,6 +39,32 @@ const initialState: IStockState = {
 const apiUrl = 'api/stocks';
 
 // Actions
+
+// Async Thunk to Fetch Company Stocks
+export const fetchUserCompanyStocks = createAsyncThunk('stock/fetch_user_company_stocks', async (_, thunkAPI) => {
+  try {
+    // Step 1: Fetch the user's company
+
+    const company = await thunkAPI.dispatch(getCurrentUserCompany());
+
+    // Step 2: Fetch invoices linked to the user's company
+    const invoicesAction: any = await thunkAPI.dispatch(getInvoices({ page: 1, size: 10, sort: 'asc' }));
+    const invoices = invoicesAction.payload.data; // Access the data property
+
+    // Step 3: Extract invoice IDs
+    const invoiceIds = invoices.map((invoice: any) => invoice.id);
+
+    // Step 4: Fetch stocks linked to invoices
+    const requestUrl = `${apiUrl}?invoiceIds=${invoiceIds.join(',')}`;
+    const response = await axios.get<IStock[]>(requestUrl);
+
+    // Step 5: Return the fetched stocks
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user company stocks:', error);
+    throw error; // Rethrow the error for handling in components or other parts of the app
+  }
+});
 
 export const getCompanyNameByInvoiceId = createAsyncThunk('stock/fetch_company_name', async (invoiceId: string, { dispatch }) => {
   try {
@@ -168,6 +200,19 @@ export const StockSlice = createSlice({
           loading: false,
           entities: data,
         };
+      })
+      .addMatcher(isFulfilled(fetchUserCompanyStocks), (state, action) => {
+        state.loading = false;
+        state.entities = action.payload;
+        state.totalItems = action.payload.length;
+      })
+      .addMatcher(isPending(fetchUserCompanyStocks), state => {
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.loading = true;
+      })
+      .addMatcher(isFulfilled(fetchUserCompanyStocks), state => {
+        state.loading = false;
       });
   },
 });

@@ -10,6 +10,8 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { ICompany } from 'app/shared/model/company.model';
 import { getEntity, updateEntity, createEntity, reset } from './company.reducer';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
+import { AUTHORITIES } from 'app/config/constants';
 
 export const CompanyUpdate = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +25,8 @@ export const CompanyUpdate = () => {
   const loading = useAppSelector(state => state.company.loading);
   const updating = useAppSelector(state => state.company.updating);
   const updateSuccess = useAppSelector(state => state.company.updateSuccess);
+  const authorities = useAppSelector(state => state.authentication.account.authorities);
+  const isAdminOrRecser = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]);
 
   const handleClose = () => {
     navigate('/company' + location.search);
@@ -82,7 +86,7 @@ export const CompanyUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? (
+              {!isNew && isAdminOrRecser ? (
                 <ValidatedField
                   name="id"
                   required

@@ -20,6 +20,13 @@
                                  constraintName="fk_reserved_item__stock_item_id"
                                  referencedColumnNames="id"
                                  referencedTableName="stock_item"
-                                 />
-    </changeSet>
+                                 />    
+        <addForeignKeyConstraint
+                                baseTableName="reserved_item"
+                                baseColumnNames="user_id"
+                                constraintName="fk_reserved_item_user_id"
+                                referencedTableName="jhi_user"
+                                referencedColumnNames="id"/>
+                               
+</changeSet>
 </databaseChangeLog>

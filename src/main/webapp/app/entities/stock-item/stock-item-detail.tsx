@@ -21,6 +21,9 @@ export const StockItemDetail = () => {
 
   const stockItemPricePerDay = stockItemEntity.quantity * stockItemEntity.price;
 
+  const handleGoBack = () => {
+    history.back();
+  };
   return (
     <Row>
       <Col md="8">
@@ -65,7 +68,7 @@ export const StockItemDetail = () => {
           </dt>
           <dd>{stockItemPricePerDay} €</dd>
         </dl>
-        <Button tag={Link} to="/stock-item" replace color="info" data-cy="entityDetailsBackButton">
+        <Button onClick={handleGoBack} replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
           <span className="d-none d-md-inline">
             <Translate contentKey="entity.action.back">Back</Translate>

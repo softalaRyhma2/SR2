@@ -1,5 +1,6 @@
 package com.softala.sr2.web.rest;
 
+import com.softala.sr2.domain.Invoice;
 import com.softala.sr2.domain.Stock;
 import com.softala.sr2.repository.StockRepository;
 import com.softala.sr2.service.StockService;
@@ -45,6 +46,12 @@ public class StockResource {
     public StockResource(StockService stockService, StockRepository stockRepository) {
         this.stockService = stockService;
         this.stockRepository = stockRepository;
+    }
+
+    @GetMapping("/stocks/current")
+    public ResponseEntity<List<Stock>> findAllStocksByLoggedInUser() {
+        List<Stock> stocks = stockService.findStocksForLoggedInUser();
+        return ResponseEntity.ok().body(stocks);
     }
 
     /**
@@ -136,17 +143,16 @@ public class StockResource {
     }
 
     /**
-     * {@code GET  /stocks} : get all the stocks.
+     * {@code GET  /stocks} : get all the stocks by logged in user.
      *
      * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of stocks in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of stocks in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<Stock>> getAllStocks(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Stocks");
-        Page<Stock> page = stockService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    public ResponseEntity<List<Stock>> getAllStocksByLoggedInUser() {
+        List<Stock> stocks = stockService.findStocksForLoggedInUser();
+        return ResponseEntity.ok().body(stocks);
     }
 
     /**

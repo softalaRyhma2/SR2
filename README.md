@@ -41,15 +41,18 @@ tietoa ja keskittyä siihen.
 
 ## Käyttöliittymä
 
-### Käyttöliitymän prototyyppi
+### Käyttöliitymän prototyyppi ja julkaisu
 
-Käyttöliittymän prototyypin toteutus [Figmalla](https://www.figma.com/proto/ro5H0JYtuOTCF1MvtBOJzP/Battery?type=design&node-id=2-3&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=2%3A3).
+#### Prototyyppi:
 
-[Prototyypin esittelyvideo V1](https://youtu.be/tYGiNWlRKU4?si=zZkSN_4aD26bb1Pi)
+- Käyttöliittymän prototyypin toteutus [Figmalla](https://www.figma.com/proto/ro5H0JYtuOTCF1MvtBOJzP/Battery?type=design&node-id=2-3&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=2%3A3).
 
-[Linkki herokussa julkaistuun sovellukseen](https://recser-app-6b6a8f3d45a1.herokuapp.com)
+- [Prototyypin esittelyvideo sprint 1](https://youtu.be/tYGiNWlRKU4?si=zZkSN_4aD26bb1Pi)
+- [Prototyypin esittelyvideo sprint 2](https://www.youtube.com/watch?v=XlYQmIB3Y5k)
 
-[Prototyypin esittelyvideo sprint 1](https://youtu.be/tYGiNWlRKU4?si=zZkSN_4aD26bb1Pi)
+#### Julkaisu:
+
+- [Linkki Herokussa julkaistuun sovellukseen](https://recser-app-6b6a8f3d45a1.herokuapp.com)
 
 <!--
 Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona.
@@ -125,7 +128,8 @@ _Kuljetusliike voi:_
 
 #### Luokkakaavio
 
-![batteryV2-luokkakaavio drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/e891cb36-1515-4cb8-ac70-edafe5854788)
+<!--![batteryV2-luokkakaavio drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/e891cb36-1515-4cb8-ac70-edafe5854788)-->
+![batteryV3-1 4 2024 versio3 drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/eb5158a7-302a-46a7-a40a-07325c8dffc7)
 
 #### Javakaavio
 
@@ -145,7 +149,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 
 > ### _Company_
 >
-> _Company-taulu sisältää järjestelmää käyttävän organisaation tiedot (nimi). Organisaatio voi olla: yritys, käsittelylaitos ja kuljetusliike._
+> _Company-taulu sisältää järjestelmää käyttävän organisaation tiedot (nimi, sähköpostiosoite, lisätiedot). Organisaatio voi olla: yritys, käsittelylaitos ja kuljetusliike._
 >
 > | Kenttä         | Tyyppi       | Kuvaus                                                 |
 > | -------------- | ------------ | ------------------------------------------------------ |
@@ -156,40 +160,71 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 
 > ### _Invoice_
 >
-> _Invoice-taulu sisältää laskutustiedot (laskunumero, laskuttaja, kokonaissumma, päivämäärä)._
+> _Invoice-taulu sisältää laskutustiedot (laskunumero, laskuttaja, kokonaissumma, päivämäärä, tieto onko lasku suljettu)._
 >
-> | Kenttä      | Tyyppi        | Kuvaus                                                             |
-> | ----------- | ------------- | ------------------------------------------------------------------ |
-> | invoiceId   | Long PK       | Laskun id-tunniste.                                                |
-> | companyId   | int FK        | Organisaation id-tunniste, viittaus [_company_](#company)-tauluun. |
-> | totalSum    | decimal(21,2) | Laskun loppusumma.                                                 |
-> | invoiceDate | Date          | Laskun päivämäärä.                                                 |
+> | Kenttä      | Tyyppi        | Kuvaus                                                                         |
+> | ----------- | ------------- | ------------------------------------------------------------------------------ |
+> | invoiceId   | Long PK       | Laskun id-tunniste.                                                            |
+> | totalSum    | decimal(21,2) | Laskun loppusumma.                                                             |
+> | invoiceDate | Date          | Laskun päivämäärä.                                                             |
+> | isClosed    | Boolean       | Tieto, onko lasku avoin. Oletuksena kentän arvo on False.                      |
+> | companyId   | int FK        | Laskuttavan organisaation id-tunniste, viittaus [_Company_](#company)-tauluun. |
 
 > ### _Stock_
 >
 > _Stock-taulu sisältää varastotiedot. Yhteen varastoriviin kuuluu vain yhden organisaation (käsittelylaitos/kuljetusliike) varastotiedot tiettynä päivänä._
 >
-> | Kenttä    | Tyyppi        | Kuvaus                                             |
-> | --------- | ------------- | -------------------------------------------------- |
-> | stockId   | Long PK       | Varastotietojen rivin id-tunniste.                 |
-> | invoiceId | int FK        | Laskun id, viittaus [_invoice_](#invoice)-tauluun. |
-> | quantity  | int           | Varaston kokonaislavamäärä.                        |
-> | available | int           | Varaston varattavissa oleva lavamäärä.             |
-> | price     | decimal(21,2) | Varastointihinta per päivä.                        |
-> | date      | Date          | Varastoinnin päivämäärä.                           |
+> | Kenttä    | Tyyppi  | Kuvaus                                                                                   |
+> | --------- | ------- | ---------------------------------------------------------------------------------------- |
+> | stockId   | Long PK | Varastotietojen rivin id-tunniste.                                                       |
+> | stockDate | Date    | Varastorivin päivämäärä.                                                                 |
+> | invoiceId | int FK  | Laskun id-kenttä johon varastotietoja kirjataan, viittaus [_Invoice_](#invoice)-tauluun. |
+
+> ### _StockItem_
+>
+> _StockItem-taulu sisältää tuotetiedot, kuten varaston kokonais- sekä varattavissa oleva lavamäärä, päivän säilytyshinta, lavatyyppi. Yhteen tuotetietoriviin kuuluu vain yhden tyypin lavat. Yksi tuotetietorivi voi kuulua yhteen varastoon ja yhdessä varastossa voi olla useampi erityyppinen tuote._
+>
+> | Kenttä          | Tyyppi        | Kuvaus                                                                                      |
+> | --------------- | ------------- | ------------------------------------------------------------------------------------------- |
+> | stockItemId     | Long PK       | Tuotetietojen rivin id-tunniste.                                                            |
+> | quantity        | int           | Varastossa oleva yhden tyypin kokonaislavamäärä.                                            |
+> | available       | int           | Varattavissa oleva yhden tyypin lavamäärä.                                                  |
+> | price           | decimal(21,2) | Yhden lavatyypin varastointihinta per päivä.                                                |
+> | stockItemTypeId | int FK        | Lavatyypin id-kenttä, viittaus [_StockItemType_](#stockitemtype)-tauluun.                   |
+> | stockId         | int FK        | Varaston id-kenttä, johon kuuluu tietyntyyppiset lavat, viittaus [_Stock_](#stock)-tauluun. |
+
+> ### _StockItemType_
+>
+> _StockItemType-taulu sisältää eri lavatyyppejä._
+>
+> | Kenttä   | Tyyppi  | Kuvaus                  |
+> | -------- | ------- | ----------------------- |
+> | id       | Long PK | Lavatyypin id-tunniste. |
+> | typeName | String  | Lavatyyppin nimi.       |
 
 > ### _Reservation_
 >
-> _Reservation-taulu sisältää tietyn käyttäjän käsittelylaitokselta tekemän varauksen tietoja, kuten varattu lavamäärä, varauspäivämäärä, onko varaus noudettu. Kun varaus on noudettu käsittelylaitokselta, lavamäärä siirtyy kuljetusliikkeen varastoon._
+> _Reservation-taulu sisältää käsittelylaitoksen varastolta tekemän varauksen tietoja, kuten varauspäivämäärä ja onko varaus noudettu. Yhteen varaukseen voi kuulua useampi varausrivi. Kun varaus on noudettu käsittelylaitokselta, lavamäärä siirtyy kuljetusliikkeen varastoon._
 >
-> | Kenttä           | Tyyppi  | Kuvaus                                                                                 |
-> | ---------------- | ------- | -------------------------------------------------------------------------------------- |
-> | reservationId    | Long PK | Varauksen id-tunniste.                                                                 |
-> | stockId          | int FK  | Varastorivin id-tunniste, viittaus [_stock_](#stock)-tauluun.                          |
-> | companyId        | int FK  | Varausta tehneen kuljetusliikkeen id-tunniste, viittaus [_company_](#company)-tauluun. |
-> | reservedQuantity | int     | Varattu lavamäärä.                                                                     |
-> | reservationDate  | Date    | Varauksen päivämäärä.                                                                  |
-> | isPickedUp       | Boolean | Tieto, onko varaus noudettu, oletuksena kentän arvo on False.                          |
+> | Kenttä          | Tyyppi  | Kuvaus                                                        |
+> | --------------- | ------- | ------------------------------------------------------------- |
+> | reservationId   | Long PK | Varauksen id-tunniste.                                        |
+> | reservationDate | Date    | Varauksen päivämäärä.                                         |
+> | isPickedUp      | Boolean | Tieto, onko varaus noudettu. Oletuksena kentän arvo on False. |
+
+<!-- > | companyId        | int FK  | Varausta tehneen kuljetusliikkeen id-tunniste, viittaus [_Company_](#company)-tauluun. |-->
+
+> ### _ReservedItem_
+>
+> _ReservedItem-taulu sisältää yhden tuotteen varaustietoja. Varausrivi sisältää tietoa mihin varaukseen se kuuluu, minkätyyppinen tuote ja määrä on varattu, kuka käyttäjä on luonut varausrivin. Yksi varausrivi kuuluu vain yhteen varaukseen._
+>
+> | Kenttä         | Tyyppi  | Kuvaus                                                                                              |
+> | -------------- | ------- | --------------------------------------------------------------------------------------------------- |
+> | reservedItemId | Long PK | Varausrivin id-tunniste.                                                                            |
+> | stockItemId    | int FK  | Varatun tuotteen id-tunniste, viittaus [_StockItem_](#stockitem)-tauluun.                           |
+> | quantity       | int     | Varattu lavamäärä.                                                                                  |
+> | reservationId  | int FK  | Varauksen id-tunniste, johon varattu tuote liittyy. Viittaus [_Reservation_](#reservation)-tauluun. |
+> | userId         | int FK  | Käyttäjän id-tunniste, joka on varannut tuotteen. Viittaus [_User_](#user)-tauluun.                 |
 
 #### JHipster automaattisesti generoidut taulut:
 
@@ -200,7 +235,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > | Kenttä       | Tyyppi       | Kuvaus                                                                                                                                                                                                                            |
 > | ------------ | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | id           | Long PK      | Käyttäjän id-tunniste.                                                                                                                                                                                                            |
-> | companyId    | int FK       | Organisaation, johon käyttäjä kuluu id-tunniste. Viittaus [_company_](#company)-tauluun.                                                                                                                                          |
+> | companyId    | int FK       | Organisaation, johon käyttäjä kuluu id-tunniste. Viittaus [_Company_](#company)-tauluun.                                                                                                                                          |
 > | login        | varchar(50)  | Käyttäjänimi.                                                                                                                                                                                                                     |
 > | passwordHash | varchar(60)  | Käyttäjän salasana.                                                                                                                                                                                                               |
 > | firstName    | varchar(50)  | Käyttäjän etunimi.                                                                                                                                                                                                                |
