@@ -37,6 +37,10 @@ export const StockItemUpdate = () => {
     navigate('/stock-item' + location.search);
   };
 
+  const handleGoBack = () => {
+    history.back();
+  };
+
   useEffect(() => {
     if (isNew) {
       dispatch(reset());
@@ -188,7 +192,7 @@ export const StockItemUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/stock-item" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" onClick={handleGoBack} replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
