@@ -74,6 +74,7 @@
         <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
         <spotless-maven-plugin.version>2.41.1</spotless-maven-plugin.version>
         <validation-api.version>3.0.2</validation-api.version>
+        <h2.version>2.2.224</h2.version>
     </properties>
 
     <dependencyManagement>
@@ -279,7 +280,11 @@
             <artifactId>postgresql</artifactId>
             <version>42.3.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -819,6 +824,10 @@
                             <artifactId>postgresql</artifactId>
                             <version>42.2.14</version> <!-- Use the latest version -->
                         </dependency>
+                        <dependency>
+                            <groupId>com.h2database</groupId>
+                            <artifactId>h2</artifactId>
+                        </dependency>
                     </dependencies>
                 </plugin>
                 <plugin>
@@ -846,11 +855,11 @@
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}</spring.profiles.active>
                 <profile.test>testdev</profile.test>
-                <liquibase-plugin.hibernate-dialect>org.hibernate.dialect.PostgreSQLDialect</liquibase-plugin.hibernate-dialect>
-                <liquibase-plugin.driver>org.postgresql.Driver</liquibase-plugin.driver>
-                <liquibase-plugin.url>${env.DATABASE_URL}</liquibase-plugin.url>
-                <liquibase-plugin.username>${env.DATABASE_USERNAME}</liquibase-plugin.username>
-                <liquibase-plugin.password>${env.DATABASE_PASSWORD}</liquibase-plugin.password>
+                <liquibase-plugin.hibernate-dialect>org.hibernate.dialect.H2Dialect</liquibase-plugin.hibernate-dialect>
+                <liquibase-plugin.driver>org.h2.Driver</liquibase-plugin.driver>
+                <liquibase-plugin.url>jdbc:h2:tcp://localhost:18080/mem:sr2</liquibase-plugin.url>
+                <liquibase-plugin.username>sr2</liquibase-plugin.username>
+                <liquibase-plugin.password/>
             </properties>
             <dependencies>
                 <dependency>
