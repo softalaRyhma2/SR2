@@ -34,7 +34,11 @@ export const StockItemUpdate = () => {
   const updateSuccess = useAppSelector(state => state.stockItem.updateSuccess);
 
   const handleClose = () => {
-    navigate('/stock-item' + location.search);
+    if (stockId) {
+      navigate(`/stock/${stockId}`);
+    } else {
+      navigate('/stock-item' + location.search);
+    }
   };
 
   const handleGoBack = () => {
