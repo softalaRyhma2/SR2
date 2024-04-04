@@ -197,6 +197,9 @@ export const StockItemUpdate = () => {
                 data-cy="stockItemType"
                 label={translate('sr2App.stockItem.stockItemType')}
                 type="select"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
               >
                 <option value="" key="0" />
                 {stockItemTypes
