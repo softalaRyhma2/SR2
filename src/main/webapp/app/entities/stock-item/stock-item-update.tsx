@@ -1,6 +1,6 @@
 // stock-item-update.tsx
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Button, Row, Col, FormText } from 'reactstrap';
 import { isNumber, Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -104,6 +104,16 @@ export const StockItemUpdate = () => {
           stock: stockItemEntity?.stock?.id,
           stockItemType: stockItemEntity?.stockItemType?.id,
         };
+  //code below for fetching stockid when coming from stock-detail.tsx
+  const location = useLocation();
+  const [stockId, setStockId] = useState(null);
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const stockid = params.get('stockId');
+    if (stockid) {
+      setStockId(stockid);
+    }
+  }, [location.search]);
 
   return (
     <div>
@@ -166,16 +176,21 @@ export const StockItemUpdate = () => {
                   disabled={!isAdminOrRecser}
                 />
               )}
-              <ValidatedField id="stock-item-stock" name="stock" data-cy="stock" label={translate('sr2App.stockItem.stock')} type="select">
-                <option value="" key="0" />
-                {stocks
-                  ? stocks.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
+              {/* Jos stockId on saatavilla, näytä se */}
+              {stockId && (
+                <ValidatedField id="stock-item-stock" name="stock" data-cy="stock" label="Stock ID" type="text" value={stockId} />
+              )}
+              {/* Jos stockId ei ole saatavilla, näytä varaston valintakenttä */}
+              {!stockId && (
+                <ValidatedField id="stock-item-stock" name="stock" data-cy="stock" label="Select Stock" type="select">
+                  <option value="">Select a stock</option>
+                  {stocks.map(otherEntity => (
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.id}
+                    </option>
+                  ))}
+                </ValidatedField>
+              )}
               <ValidatedField
                 id="stock-item-stockItemType"
                 name="stockItemType"
