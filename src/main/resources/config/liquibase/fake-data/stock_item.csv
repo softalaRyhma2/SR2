@@ -1,5 +1,5 @@
 id;quantity;available;price;stock_item_type_id;stock_id
 1;25;25;16;1;2
 2;18;18;18;4;2
-3;56;56;16;;
-4;99;99;8;;
+3;56;56;16;3;
+4;99;99;8;2;
