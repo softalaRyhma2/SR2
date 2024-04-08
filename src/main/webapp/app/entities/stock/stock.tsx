@@ -173,6 +173,7 @@ export const Stock = () => {
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
+                      {/* 
                       <Button
                         tag={Link}
                         to={`/stock/${stock.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
@@ -185,6 +186,7 @@ export const Stock = () => {
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
                       </Button>
+                      */}
                       {isAdminOrRecser && (
                         <Button
                           onClick={() =>
