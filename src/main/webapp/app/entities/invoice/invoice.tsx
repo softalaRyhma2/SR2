@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities } from './invoice.reducer';
 import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
+import { getEntities as getStocks } from '../stock/stock.reducer';
 
 export const Invoice = () => {
   const dispatch = useAppDispatch();
@@ -24,17 +25,29 @@ export const Invoice = () => {
   const loading = useAppSelector(state => state.invoice.loading);
   const totalItems = useAppSelector(state => state.invoice.totalItems);
 
+  const stockList = useAppSelector(state => state.stock.entities);
+
   // CSV configuration
   const csvConfig = mkConfig({ useKeysAsHeaders: true, fieldSeparator: ';' });
   const invoiceCsv = useAppSelector(state =>
-    state.invoice.entities.map(invoice => ({
-      id: invoice.id,
-      totalSum: invoice.totalSum,
-      invoiceDate: invoice.invoiceDate,
-      companyName: invoice.company ? invoice.company.companyName : '',
-      companyEmail: invoice.company ? invoice.company.companyEmail : '',
-    })),
+    state.invoice.entities.flatMap(invoice => {
+      const stocksForInvoice = stockList.filter(stock => stock.invoice?.id === invoice.id);
+      return stocksForInvoice.map(stock => ({
+        id: invoice.id,
+        totalSum: invoice.totalSum,
+        invoiceDate: invoice.invoiceDate,
+        companyName: invoice.company ? invoice.company.companyName : '',
+        companyEmail: invoice.company ? invoice.company.companyEmail : '',
+        stockDate: stock.stockDate || '', // Use stockDate for verification
+      }));
+    }),
   );
+
+  console.log(stockList);
+  useEffect(() => {
+    // Dispatch an action to fetch stocks with the same arguments as getInvoices
+    dispatch(getStocks({ page: 1, size: 10, sort: 'asc' }));
+  }, [dispatch]);
 
   const getAllEntities = () => {
     dispatch(
