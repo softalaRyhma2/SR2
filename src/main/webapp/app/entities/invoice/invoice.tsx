@@ -4,16 +4,15 @@ import { Button, Table } from 'reactstrap';
 import { Translate, TextFormat, getPaginationState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-
 import { getEntities } from './invoice.reducer';
+import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { mkConfig, generateCsv, download } from 'export-to-csv';
 
 export const Invoice = () => {
   const dispatch = useAppDispatch();
-
   const pageLocation = useLocation();
   const navigate = useNavigate();
 
@@ -25,6 +24,18 @@ export const Invoice = () => {
   const loading = useAppSelector(state => state.invoice.loading);
   const totalItems = useAppSelector(state => state.invoice.totalItems);
 
+  // CSV configuration
+  const csvConfig = mkConfig({ useKeysAsHeaders: true, fieldSeparator: ';' });
+  const invoiceCsv = useAppSelector(state =>
+    state.invoice.entities.map(invoice => ({
+      id: invoice.id,
+      totalSum: invoice.totalSum,
+      invoiceDate: invoice.invoiceDate,
+      companyName: invoice.company ? invoice.company.companyName : '',
+      companyEmail: invoice.company ? invoice.company.companyEmail : '',
+    })),
+  );
+
   const getAllEntities = () => {
     dispatch(
       getEntities({
@@ -35,6 +46,7 @@ export const Invoice = () => {
     );
   };
 
+  // Sort entities
   const sortEntities = () => {
     getAllEntities();
     const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
@@ -90,6 +102,12 @@ export const Invoice = () => {
     }
   };
 
+  // Function to handle CSV export
+  const handleExportToCSV = () => {
+    const csvData = generateCsv(csvConfig)(invoiceCsv);
+    download(csvConfig)(csvData);
+  };
+
   return (
     <div>
       <h2 id="invoice-heading" data-cy="InvoiceHeading">
@@ -104,6 +122,8 @@ export const Invoice = () => {
             &nbsp;
             <Translate contentKey="sr2App.invoice.home.createLabel">Create new Invoice</Translate>
           </Link>
+          {/* Add CSV Export Button */}
+          <Button onClick={handleExportToCSV}>Export to CSV</Button>
         </div>
       </h2>
       <div className="table-responsive">
