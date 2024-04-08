@@ -57,6 +57,7 @@ public class StockItemResource {
      *         the stockItem has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN', 'ROLE_PCENTER')")
     @PostMapping("")
     public ResponseEntity<StockItem> createStockItem(@Valid @RequestBody StockItem stockItem) throws URISyntaxException {
         log.debug("REST request to save StockItem : {}", stockItem);
@@ -83,6 +84,7 @@ public class StockItemResource {
      *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN', 'ROLE_PCENTER')")
     @PutMapping("/{id}")
     public ResponseEntity<StockItem> updateStockItem(
         @PathVariable(value = "id", required = false) final Long id,
@@ -122,6 +124,7 @@ public class StockItemResource {
      *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN', 'ROLE_PCENTER')")
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<StockItem> partialUpdateStockItem(
         @PathVariable(value = "id", required = false) final Long id,
@@ -154,6 +157,7 @@ public class StockItemResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
      *         of stockItems in body.
      */
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN', 'ROLE_PCENTER')")
     @GetMapping("")
     public ResponseEntity<List<StockItem>> getAllStockItems(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of StockItems");
@@ -169,6 +173,7 @@ public class StockItemResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
      *         the stockItem, or with status {@code 404 (Not Found)}.
      */
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN', 'ROLE_PCENTER')")
     @GetMapping("/{id}")
     public ResponseEntity<StockItem> getStockItem(@PathVariable("id") Long id) {
         log.debug("REST request to get StockItem : {}", id);
@@ -176,6 +181,7 @@ public class StockItemResource {
         return ResponseUtil.wrapOrNotFound(stockItem);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN', 'ROLE_PCENTER')")
     @GetMapping("/stock/{id}")
     public ResponseEntity<List<StockItem>> getAllStockItemsForStock(@PathVariable Long id) {
         log.debug("REST request to get all StockItems for Stock : {}", id);
@@ -189,8 +195,9 @@ public class StockItemResource {
      * @param id the id of the stockItem to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/{id}")
+
     @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStockItem(@PathVariable("id") Long id) {
         log.debug("REST request to delete StockItem : {}", id);
         stockItemService.delete(id);

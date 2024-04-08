@@ -11,6 +11,10 @@ const EntitiesMenu = () => {
     return currentUserAuthorities?.some(authority => authority === 'ROLE_PCENTER');
   };
 
+  const hasTransportAuthority = () => {
+    return currentUserAuthorities?.some(authority => authority === 'ROLE_TRANSPORT');
+  };
+
   return (
     <>
       {/* prettier-ignore */}
@@ -28,9 +32,11 @@ const EntitiesMenu = () => {
       <MenuItem icon="asterisk" to="/invoice">
         <Translate contentKey="global.menu.entities.invoice" />
       </MenuItem>
-      <MenuItem icon="asterisk" to="/stock-item">
-        <Translate contentKey="global.menu.entities.stockItem" />
-      </MenuItem>
+      {!hasTransportAuthority() && (
+        <MenuItem icon="asterisk" to="/stock-item">
+          <Translate contentKey="global.menu.entities.stockItem" />
+        </MenuItem>
+      )}
       <MenuItem icon="asterisk" to="/stock-item-type">
         <Translate contentKey="global.menu.entities.stockItemType" />
       </MenuItem>
