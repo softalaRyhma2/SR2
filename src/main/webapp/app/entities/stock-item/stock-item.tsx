@@ -7,6 +7,8 @@ import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons'
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { AUTHORITIES } from 'app/config/constants';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
 import { getEntities } from './stock-item.reducer';
 
@@ -23,6 +25,8 @@ export const StockItem = () => {
   const stockItemList = useAppSelector(state => state.stockItem.entities);
   const loading = useAppSelector(state => state.stockItem.loading);
   const totalItems = useAppSelector(state => state.stockItem.totalItems);
+  const authorities = useAppSelector(state => state.authentication.account.authorities);
+  const isAdminOrRecser = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]);
 
   const getAllEntities = () => {
     dispatch(
@@ -173,19 +177,21 @@ export const StockItem = () => {
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
                       </Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/stock-item/${stockItem.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.delete">Delete</Translate>
-                        </span>
-                      </Button>
+                      {isAdminOrRecser && (
+                        <Button
+                          onClick={() =>
+                            (window.location.href = `/stock-item/${stockItem.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                          }
+                          color="danger"
+                          size="sm"
+                          data-cy="entityDeleteButton"
+                        >
+                          <FontAwesomeIcon icon="trash" />{' '}
+                          <span className="d-none d-md-inline">
+                            <Translate contentKey="entity.action.delete">Delete</Translate>
+                          </span>
+                        </Button>
+                      )}
                     </div>
                   </td>
                 </tr>
