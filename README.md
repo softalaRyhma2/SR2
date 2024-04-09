@@ -133,7 +133,8 @@ _Kuljetusliike voi:_
 
 #### Javakaavio
 
-![javachart_battery-v2 drawio(1)](https://github.com/softalaRyhma2/SR2/assets/77851668/d7458bec-b2ba-4343-99cc-91eca5657210)
+![javachart_battery-v3 drawio](https://github.com/softalaRyhma2/SR2/assets/77851668/92e1971a-f4b4-46cc-8832-25952cb2a530)
+
 
 <!--
 Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
