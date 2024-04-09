@@ -129,11 +129,12 @@ _Kuljetusliike voi:_
 #### Luokkakaavio
 
 <!--![batteryV2-luokkakaavio drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/e891cb36-1515-4cb8-ac70-edafe5854788)-->
+
 ![batteryV3-1 4 2024 versio3 drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/eb5158a7-302a-46a7-a40a-07325c8dffc7)
 
 #### Javakaavio
 
-![javachart_battery-v2 drawio(1)](https://github.com/softalaRyhma2/SR2/assets/77851668/d7458bec-b2ba-4343-99cc-91eca5657210)
+![javachart_battery-v3 drawio](https://github.com/softalaRyhma2/SR2/assets/77851668/92e1971a-f4b4-46cc-8832-25952cb2a530)
 
 <!--
 Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet

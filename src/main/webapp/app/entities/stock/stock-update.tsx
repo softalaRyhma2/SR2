@@ -117,7 +117,7 @@ export const StockUpdate = () => {
                   {invoices
                     ? invoices.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
+                          {otherEntity.id} - {otherEntity.company.companyName}
                         </option>
                       ))
                     : null}
