@@ -149,8 +149,9 @@ export const StockItem = () => {
                   <td>{stockItem.quantity}</td>
                   <td>{stockItem.available}</td>
                   <td>{stockItem.price}</td>
-                  <td>{stockItem.stock ? <Link to={`/stock/${stockItem.stock.id}`}>{stockItem.stock.id}</Link> : ''}</td>
+                  <td>{stockItem.stock ? <span>{stockItem.stock.id}</span> : ''}</td>
                   <td>{stockItem.stockItemType ? <span>{stockItem.stockItemType.typeName}</span> : ''}</td>
+
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/stock-item/${stockItem.id}`} color="info" size="sm" data-cy="entityDetailsButton">
