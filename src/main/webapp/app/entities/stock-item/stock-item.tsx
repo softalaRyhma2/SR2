@@ -7,6 +7,8 @@ import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons'
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { AUTHORITIES } from 'app/config/constants';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
 import { getEntities } from './stock-item.reducer';
 
@@ -23,6 +25,8 @@ export const StockItem = () => {
   const stockItemList = useAppSelector(state => state.stockItem.entities);
   const loading = useAppSelector(state => state.stockItem.loading);
   const totalItems = useAppSelector(state => state.stockItem.totalItems);
+  const authorities = useAppSelector(state => state.authentication.account.authorities);
+  const isAdminOrRecser = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]);
 
   const getAllEntities = () => {
     dispatch(
@@ -145,14 +149,9 @@ export const StockItem = () => {
                   <td>{stockItem.quantity}</td>
                   <td>{stockItem.available}</td>
                   <td>{stockItem.price}</td>
-                  <td>{stockItem.stock ? <Link to={`/stock/${stockItem.stock.id}`}>{stockItem.stock.id}</Link> : ''}</td>
-                  <td>
-                    {stockItem.stockItemType ? (
-                      <Link to={`/stock-item-type/${stockItem.stockItemType.id}`}>{stockItem.stockItemType.typeName}</Link>
-                    ) : (
-                      ''
-                    )}
-                  </td>
+                  <td>{stockItem.stock ? <span>{stockItem.stock.id}</span> : ''}</td>
+                  <td>{stockItem.stockItemType ? <span>{stockItem.stockItemType.typeName}</span> : ''}</td>
+
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/stock-item/${stockItem.id}`} color="info" size="sm" data-cy="entityDetailsButton">
@@ -173,19 +172,21 @@ export const StockItem = () => {
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
                       </Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/stock-item/${stockItem.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.delete">Delete</Translate>
-                        </span>
-                      </Button>
+                      {isAdminOrRecser && (
+                        <Button
+                          onClick={() =>
+                            (window.location.href = `/stock-item/${stockItem.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                          }
+                          color="danger"
+                          size="sm"
+                          data-cy="entityDeleteButton"
+                        >
+                          <FontAwesomeIcon icon="trash" />{' '}
+                          <span className="d-none d-md-inline">
+                            <Translate contentKey="entity.action.delete">Delete</Translate>
+                          </span>
+                        </Button>
+                      )}
                     </div>
                   </td>
                 </tr>

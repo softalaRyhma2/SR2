@@ -90,6 +90,16 @@ export const StockDetail = () => {
       </Col>
       <Col md="8" className="jh-entity-details">
         <h2>Stock Items</h2>
+        <Link
+          to={{ pathname: '/stock-item/new', search: `?stockId=${stockEntity.id}` }}
+          className="btn btn-primary jh-create-entity"
+          id="jh-create-entity"
+          data-cy="entityCreateButton"
+        >
+          <FontAwesomeIcon icon="plus" />
+          &nbsp;
+          <Translate contentKey="sr2App.stockItem.home.createLabel">Create new Stock Item</Translate>
+        </Link>
         <Table>
           <thead>
             <tr>

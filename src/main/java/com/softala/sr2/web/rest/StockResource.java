@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -58,7 +59,9 @@ public class StockResource {
      * {@code POST  /stocks} : Create a new stock.
      *
      * @param stock the stock to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new stock, or with status {@code 400 (Bad Request)} if the stock has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new stock, or with status {@code 400 (Bad Request)} if the
+     *         stock has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -77,11 +80,13 @@ public class StockResource {
     /**
      * {@code PUT  /stocks/:id} : Updates an existing stock.
      *
-     * @param id the id of the stock to save.
+     * @param id    the id of the stock to save.
      * @param stock the stock to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated stock,
-     * or with status {@code 400 (Bad Request)} if the stock is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the stock couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated stock,
+     *         or with status {@code 400 (Bad Request)} if the stock is not valid,
+     *         or with status {@code 500 (Internal Server Error)} if the stock
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
@@ -107,14 +112,17 @@ public class StockResource {
     }
 
     /**
-     * {@code PATCH  /stocks/:id} : Partial updates given fields of an existing stock, field will ignore if it is null
+     * {@code PATCH  /stocks/:id} : Partial updates given fields of an existing
+     * stock, field will ignore if it is null
      *
-     * @param id the id of the stock to save.
+     * @param id    the id of the stock to save.
      * @param stock the stock to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated stock,
-     * or with status {@code 400 (Bad Request)} if the stock is not valid,
-     * or with status {@code 404 (Not Found)} if the stock is not found,
-     * or with status {@code 500 (Internal Server Error)} if the stock couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated stock,
+     *         or with status {@code 400 (Bad Request)} if the stock is not valid,
+     *         or with status {@code 404 (Not Found)} if the stock is not found,
+     *         or with status {@code 500 (Internal Server Error)} if the stock
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -159,7 +167,8 @@ public class StockResource {
      * {@code GET  /stocks/:id} : get the "id" stock.
      *
      * @param id the id of the stock to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the stock, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the stock, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<Stock> getStock(@PathVariable("id") Long id) {
@@ -175,6 +184,7 @@ public class StockResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN')")
     public ResponseEntity<Void> deleteStock(@PathVariable("id") Long id) {
         log.debug("REST request to delete Stock : {}", id);
         stockService.delete(id);
