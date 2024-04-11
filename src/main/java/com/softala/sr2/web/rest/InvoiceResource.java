@@ -2,16 +2,21 @@ package com.softala.sr2.web.rest;
 
 import com.softala.sr2.domain.Company;
 import com.softala.sr2.domain.Invoice;
+import com.softala.sr2.domain.Stock;
 import com.softala.sr2.repository.InvoiceRepository;
+import com.softala.sr2.repository.StockRepository;
 import com.softala.sr2.service.InvoiceService;
+import com.softala.sr2.service.StockService;
 import com.softala.sr2.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,10 +47,20 @@ public class InvoiceResource {
     private final InvoiceService invoiceService;
 
     private final InvoiceRepository invoiceRepository;
+    //TESTI STOCKIT INVOICEEN
+    private final StockRepository stockRepository;
+    private final StockService stockService;
 
-    public InvoiceResource(InvoiceService invoiceService, InvoiceRepository invoiceRepository) {
+    public InvoiceResource(
+        InvoiceService invoiceService,
+        InvoiceRepository invoiceRepository,
+        StockRepository stockRepository,
+        StockService stockService
+    ) {
         this.invoiceService = invoiceService;
         this.invoiceRepository = invoiceRepository;
+        this.stockRepository = stockRepository;
+        this.stockService = stockService;
     }
 
     @GetMapping("/invoices/current")
@@ -175,6 +190,12 @@ public class InvoiceResource {
     public ResponseEntity<Invoice> getInvoice(@PathVariable("id") Long id) {
         log.debug("REST request to get Invoice : {}", id);
         Optional<Invoice> invoice = invoiceService.findOne(id);
+        if (invoice.isPresent()) {
+            Invoice fetchedInvoice = invoice.get();
+            List<Stock> stocks = invoiceService.getStocksByInvoiceId(fetchedInvoice);
+            Set<Stock> stockSet = new HashSet<>(stocks);
+            fetchedInvoice.setStocks(stockSet);
+        }
         return ResponseUtil.wrapOrNotFound(invoice);
     }
 

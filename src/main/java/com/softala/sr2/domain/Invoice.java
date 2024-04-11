@@ -38,7 +38,7 @@ public class Invoice implements Serializable {
     @Column(name = "is_closed", nullable = false)
     private Boolean isClosed;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "invoice")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "invoice")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "stockItems", "invoice" }, allowSetters = true)
     private Set<Stock> stocks = new HashSet<>();
