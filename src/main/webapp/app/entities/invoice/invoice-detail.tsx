@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Row, Col } from 'reactstrap';
+import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -19,6 +19,7 @@ export const InvoiceDetail = () => {
   }, []);
 
   const invoiceEntity = useAppSelector(state => state.invoice.entity);
+
   return (
     <Row>
       <Col md="8">
@@ -70,6 +71,29 @@ export const InvoiceDetail = () => {
             <Translate contentKey="entity.action.edit">Edit</Translate>
           </span>
         </Button>
+        <Col>
+          <h3>Stocks</h3>
+          <Table responsive>
+            <thead>
+              <tr>
+                <th>stock id</th>
+                <th>stock date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(invoiceEntity.stocks) && invoiceEntity.stocks.length > 0 ? (
+                invoiceEntity.stocks.map(stock => (
+                  <tr key={stock.id}>
+                    <td>{stock.id}</td>
+                    <td>{stock.stockDate}</td>
+                  </tr>
+                ))
+              ) : (
+                <p>No stocks in this invoice</p>
+              )}
+            </tbody>
+          </Table>
+        </Col>
       </Col>
     </Row>
   );
