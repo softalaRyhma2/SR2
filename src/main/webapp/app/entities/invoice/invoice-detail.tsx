@@ -89,7 +89,9 @@ export const InvoiceDetail = () => {
                   </tr>
                 ))
               ) : (
-                <p>No stocks in this invoice</p>
+                <tr>
+                  <td>No stocks in this invoice</td>
+                </tr>
               )}
             </tbody>
           </Table>
