@@ -1,5 +1,6 @@
 package com.softala.sr2.repository;
 
+import com.softala.sr2.domain.Stock;
 import com.softala.sr2.domain.StockItem;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
@@ -12,4 +13,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StockItemRepository extends JpaRepository<StockItem, Long> {
     List<StockItem> findByStockId(Long id);
+    List<StockItem> findByStock(Stock stock);
 }

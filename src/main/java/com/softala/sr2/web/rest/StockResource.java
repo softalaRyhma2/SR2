@@ -2,6 +2,8 @@ package com.softala.sr2.web.rest;
 
 import com.softala.sr2.domain.Invoice;
 import com.softala.sr2.domain.Stock;
+import com.softala.sr2.domain.StockItem;
+import com.softala.sr2.repository.StockItemRepository;
 import com.softala.sr2.repository.StockRepository;
 import com.softala.sr2.service.StockService;
 import com.softala.sr2.web.rest.errors.BadRequestAlertException;
@@ -9,9 +11,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -174,6 +178,12 @@ public class StockResource {
     public ResponseEntity<Stock> getStock(@PathVariable("id") Long id) {
         log.debug("REST request to get Stock : {}", id);
         Optional<Stock> stock = stockService.findOne(id);
+        if (stock.isPresent()) {
+            Stock fetchedStock = stock.get();
+            List<StockItem> stockItems = stockService.getStockItemsByStockId(fetchedStock);
+            Set<StockItem> stockItemSet = new HashSet<>(stockItems);
+            fetchedStock.setStockItems(stockItemSet);
+        }
         return ResponseUtil.wrapOrNotFound(stock);
     }
 
