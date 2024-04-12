@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntity } from './invoice.reducer';
+import { getEntity /*, getEntityWithStock*/ } from './invoice.reducer';
 
 export const InvoiceDetail = () => {
   const dispatch = useAppDispatch();
@@ -18,6 +18,12 @@ export const InvoiceDetail = () => {
     dispatch(getEntity(id));
   }, []);
 
+  /*  useEffect(() => {
+    dispatch(getEntityWithStock(id));
+  }, []);
+
+  const invoiceEntity = useAppSelector(state => state.invoice.getEntityWithStock);
+  */
   const invoiceEntity = useAppSelector(state => state.invoice.entity);
 
   return (
@@ -78,6 +84,7 @@ export const InvoiceDetail = () => {
               <tr>
                 <th>stock id</th>
                 <th>stock date</th>
+                <th>items</th>
               </tr>
             </thead>
             <tbody>
@@ -86,12 +93,21 @@ export const InvoiceDetail = () => {
                   <tr key={stock.id}>
                     <td>{stock.id}</td>
                     <td>{stock.stockDate}</td>
+                    <td>
+                      {Array.isArray(stock.stockItems) && stock.stockItems.length > 0 ? (
+                        <ul>
+                          {stock.stockItems.map(item => (
+                            <li key={item.id}>{item.id}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <td>No stock items in stock</td>
+                      )}
+                    </td>
                   </tr>
                 ))
               ) : (
-                <tr>
-                  <td>No stocks in this invoice</td>
-                </tr>
+                <td>No stocks in this invoice</td>
               )}
             </tbody>
           </Table>
