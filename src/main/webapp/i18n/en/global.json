@@ -150,5 +150,11 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "<a href=\"https://www.paristokierratys.fi/en\" target=\"_blank\">Visit Paristokierrätys</a>"
+  "footer": "<a href=\"https://www.paristokierratys.fi/en\" target=\"_blank\">Visit Paristokierrätys</a>",
+  "authentication": {
+    "logoutSuccess": "Logged out successfully!",
+    "redirectMessage": "You will be redirected to the main page in ",
+    "seconds": "seconds",
+    "redirectButton": "Or press the button"
+  }
 }

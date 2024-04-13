@@ -150,5 +150,11 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "<a href=\"https://www.paristokierratys.fi/en\" target=\"_blank\"> Vieraile Paristokierrätyksen sivuilla</a>"
+  "footer": "<a href=\"https://www.paristokierratys.fi/en\" target=\"_blank\"> Vieraile Paristokierrätyksen sivuilla</a>",
+  "authentication": {
+    "logoutSuccess": "Uloskirjautuminen onnistui!",
+    "redirectMessage": "Sinut siirretään etusivulle ",
+    "seconds": "sekunnissa",
+    "redirectButton": "Tai paina "
+  }
 }
