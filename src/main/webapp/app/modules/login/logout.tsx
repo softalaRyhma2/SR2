@@ -1,9 +1,9 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { logout } from 'app/shared/reducers/authentication';
 import { Button } from 'reactstrap';
-import { Translate, log } from 'react-jhipster';
+import { Translate } from 'react-jhipster';
 
 export const Logout = () => {
   const logoutUrl = useAppSelector(state => state.authentication.logoutUrl);
@@ -12,6 +12,15 @@ export const Logout = () => {
   const [loggedOut, setLoggedOut] = useState(false);
   const [secondsRemaining, setSecondsRemaining] = useState(10);
   const [loading, setLoading] = useState(true);
+  const [timeoutID, setTimeoutID] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (timeoutID) {
+      return () => {
+        clearTimeout(timeoutID);
+      };
+    }
+  }, [timeoutID]);
 
   useLayoutEffect(() => {
     dispatch(logout());
@@ -22,16 +31,20 @@ export const Logout = () => {
         setSecondsRemaining(prevSeconds => prevSeconds - 1);
       }, 1000);
 
-      setTimeout(() => {
+      const id = setTimeout(() => {
         setLoggedOut(true);
         setLoading(false);
         navigate('/');
-        clearInterval(interval);
       }, secondsRemaining * 1000);
 
+      setTimeoutID(id);
       return () => clearInterval(interval);
     }
   }, [dispatch, navigate, logoutUrl]);
+
+  const handleHomeButtonClick = () => {
+    navigate('/');
+  };
 
   const centerStyle = {
     display: 'flex', // Enables Flexbox
@@ -63,11 +76,9 @@ export const Logout = () => {
             <h4>
               <Translate contentKey="authentication.redirectButton">Or press the button</Translate>
             </h4>
-            <Link to="/">
-              <Button color="primary" size="lg" className="home-button">
-                <Translate contentKey="global.menu.home">Home</Translate>
-              </Button>
-            </Link>
+            <Button color="primary" size="lg" className="home-button" onClick={handleHomeButtonClick}>
+              <Translate contentKey="global.menu.home">Home</Translate>
+            </Button>
           </div>
         )}
       </div>
