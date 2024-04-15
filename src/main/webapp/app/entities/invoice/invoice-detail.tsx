@@ -94,9 +94,9 @@ export const InvoiceDetail = () => {
                     <td>{stock.id}</td>
                     <td>{stock.stockDate}</td>
                     <td>
-                      {Array.isArray(stock.stockItems) && stock.stockItems.length > 0 ? (
+                      {Array.isArray(invoiceEntity.stocksit) && invoiceEntity.stocksit.length > 0 ? (
                         <ul>
-                          {stock.stockItems.map(item => (
+                          {invoiceEntity.stocksit.map(item => (
                             <li key={item.id}>{item.id}</li>
                           ))}
                         </ul>
