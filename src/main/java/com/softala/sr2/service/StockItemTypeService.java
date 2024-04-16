@@ -2,13 +2,11 @@ package com.softala.sr2.service;
 
 import com.softala.sr2.domain.StockItemType;
 import com.softala.sr2.repository.StockItemTypeRepository;
-import com.softala.sr2.security.SecurityUtils;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,12 +33,6 @@ public class StockItemTypeService {
      */
     public StockItemType save(StockItemType stockItemType) {
         log.debug("Request to save StockItemType : {}", stockItemType);
-
-        // Perform authorization check
-        if (!SecurityUtils.isCurrentUserAdminOrRecser()) {
-            throw new AccessDeniedException("You do not have permission to save a new stock item type");
-        }
-
         return stockItemTypeRepository.save(stockItemType);
     }
 
@@ -52,12 +44,6 @@ public class StockItemTypeService {
      */
     public StockItemType update(StockItemType stockItemType) {
         log.debug("Request to update StockItemType : {}", stockItemType);
-
-        // Perform authorization check
-        if (!SecurityUtils.isCurrentUserAdminOrRecser()) {
-            throw new AccessDeniedException("You do not have permission to update stock item type");
-        }
-
         return stockItemTypeRepository.save(stockItemType);
     }
 
@@ -113,11 +99,6 @@ public class StockItemTypeService {
      */
     public void delete(Long id) {
         log.debug("Request to delete StockItemType : {}", id);
-
-        if (!SecurityUtils.isCurrentUserAdminOrRecser()) {
-            throw new AccessDeniedException("You do not have permission to delete a stock item type");
-        }
-
         stockItemTypeRepository.deleteById(id);
     }
 }

@@ -1,0 +1,32 @@
+{
+  "annotations": {
+    "changelogDate": "20240208082456"
+  },
+  "applications": "*",
+  "entityTableName": "stock_item_type_company",
+  "fields": [
+    {
+      "fieldName": "typePrice",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "StockItemTypeCompany",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "stockItemType",
+      "relationshipName": "stockItemType",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "company",
+      "relationshipName": "company",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

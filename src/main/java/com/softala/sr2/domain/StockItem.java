@@ -48,8 +48,7 @@ public class StockItem implements Serializable {
     @JsonIgnoreProperties(value = { "stockItems", "invoice" }, allowSetters = true)
     private Stock stock;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "stockItems" }, allowSetters = true)
     private StockItemType stockItemType;
 

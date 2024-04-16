@@ -18,12 +18,14 @@
     <include file="config/liquibase/changelog/20240208082456_added_entity_StockItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240208082556_added_entity_StockItemType.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240208082656_added_entity_ReservedItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240208082456_added_entity_StockItemTypeCompany.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20240208082656_added_entity_constraints_Reservation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240208082756_added_entity_constraints_Invoice.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240208082556_added_entity_constraints_Stock.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240208082456_added_entity_constraints_StockItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240208082656_added_entity_constraints_ReservedItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240208082456_added_entity_constraints_StockItemTypeCompany.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
     <include file="classpath:config/liquibase/changelog/20240208_add_company_id_to_user.xml" relativeToChangelogFile="false"/>
