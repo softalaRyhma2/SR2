@@ -101,13 +101,15 @@ export const InvoiceDetail = () => {
                           ))}
                         </ul>
                       ) : (
-                        <td>No stock items in stock</td>
+                        <ul>No stock items in stock</ul>
                       )}
                     </td>
                   </tr>
                 ))
               ) : (
-                <td>No stocks in this invoice</td>
+                <tr>
+                  <td>No stocks in this invoice</td>
+                </tr>
               )}
             </tbody>
           </Table>
