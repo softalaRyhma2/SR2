@@ -35,16 +35,12 @@ public class Reservation implements Serializable {
     @Column(name = "is_picked_up", nullable = false)
     private Boolean isPickedUp;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reservation")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "reservation")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "reservation", "stockItem" }, allowSetters = true)
     private Set<ReservedItem> reservedItems = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     public Long getId() {
         return this.id;
@@ -117,14 +113,6 @@ public class Reservation implements Serializable {
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     @Override
     public boolean equals(Object o) {
