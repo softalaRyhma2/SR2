@@ -29,6 +29,7 @@ export const Company = () => {
 
   const [showIdColumn, setShowIdColumn] = useState(false);
   const authorities = useAppSelector(state => state.authentication.account.authorities);
+  const isAdminOrRecser = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]);
 
   useEffect(() => {
     setShowIdColumn(hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]));
@@ -172,19 +173,22 @@ export const Company = () => {
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
                       </Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/company/${company.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.delete">Delete</Translate>
-                        </span>
-                      </Button>
+
+                      {isAdminOrRecser && (
+                        <Button
+                          onClick={() =>
+                            (window.location.href = `/company/${company.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                          }
+                          color="danger"
+                          size="sm"
+                          data-cy="entityDeleteButton"
+                        >
+                          <FontAwesomeIcon icon="trash" />{' '}
+                          <span className="d-none d-md-inline">
+                            <Translate contentKey="entity.action.delete">Delete</Translate>
+                          </span>
+                        </Button>
+                      )}
                     </div>
                   </td>
                 </tr>
