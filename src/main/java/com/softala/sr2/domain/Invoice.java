@@ -40,7 +40,7 @@ public class Invoice implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "invoice")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "stockItems", "invoice" }, allowSetters = true)
+    //   @JsonIgnoreProperties(value = { "stockItems", "invoice" }, allowSetters = true)
     private Set<Stock> stocks = new HashSet<>();
 
     @ManyToOne(optional = false)
