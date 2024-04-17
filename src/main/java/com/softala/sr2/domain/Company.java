@@ -41,7 +41,7 @@ public class Company implements Serializable {
     @Column(name = "company_details", length = 500)
     private String companyDetails;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "company")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "stocks", "company" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
@@ -131,7 +131,8 @@ public class Company implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -146,7 +147,8 @@ public class Company implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -154,10 +156,10 @@ public class Company implements Serializable {
     @Override
     public String toString() {
         return "Company{" +
-            "id=" + getId() +
-            ", companyName='" + getCompanyName() + "'" +
-            ", companyEmail='" + getCompanyEmail() + "'" +
-            ", companyDetails='" + getCompanyDetails() + "'" +
-            "}";
+                "id=" + getId() +
+                ", companyName='" + getCompanyName() + "'" +
+                ", companyEmail='" + getCompanyEmail() + "'" +
+                ", companyDetails='" + getCompanyDetails() + "'" +
+                "}";
     }
 }
