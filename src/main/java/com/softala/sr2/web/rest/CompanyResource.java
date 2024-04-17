@@ -1,19 +1,23 @@
 package com.softala.sr2.web.rest;
 
 import com.softala.sr2.domain.Company;
+import com.softala.sr2.domain.Invoice;
 import com.softala.sr2.domain.User;
 import com.softala.sr2.repository.CompanyRepository;
 import com.softala.sr2.repository.UserRepository;
 import com.softala.sr2.security.SecurityUtils;
 import com.softala.sr2.service.CompanyService;
+import com.softala.sr2.service.InvoiceService;
 import com.softala.sr2.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -48,10 +53,18 @@ public class CompanyResource {
 
     private final UserRepository userRepository;
 
-    public CompanyResource(CompanyService companyService, CompanyRepository companyRepository, UserRepository userRepository) {
+    private final InvoiceService invoiceService;
+
+    public CompanyResource(
+        CompanyService companyService,
+        CompanyRepository companyRepository,
+        UserRepository userRepository,
+        InvoiceService invoiceService
+    ) {
         this.companyService = companyService;
         this.companyRepository = companyRepository;
         this.userRepository = userRepository;
+        this.invoiceService = invoiceService;
     }
 
     @GetMapping("/companies/current")
@@ -200,6 +213,12 @@ public class CompanyResource {
         log.debug("REST request to get Company : {}", id);
         List<Company> companies = companyService.findAllCompaniesByLoggedInUser();
         Optional<Company> requestedCompany = companies.stream().filter(company -> company.getId().equals(id)).findFirst();
+        if (requestedCompany.isPresent()) {
+            Company fetchedCompany = requestedCompany.get();
+            List<Invoice> invoices = invoiceService.getInvoicesByCompanyId(fetchedCompany);
+            Set<Invoice> invoiceSet = new HashSet<>(invoices);
+            fetchedCompany.setInvoices(invoiceSet);
+        }
 
         return requestedCompany.map(company -> ResponseEntity.ok().body(company)).orElse(ResponseEntity.notFound().build());
     }
@@ -210,6 +229,7 @@ public class CompanyResource {
      * @param id the id of the company to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
+    @PreAuthorize("hasAnyAuthority('ROLE_RECSER', 'ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCompany(@PathVariable("id") Long id) {
         log.debug("REST request to delete Company : {}", id);

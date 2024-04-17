@@ -39,7 +39,7 @@ public class StockItem implements Serializable {
     @Column(name = "price", precision = 21, scale = 2, nullable = false)
     private BigDecimal price;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "stockItem")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "stockItem")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "reservation", "stockItem" }, allowSetters = true)
     private Set<ReservedItem> reservedItems = new HashSet<>();
@@ -164,7 +164,8 @@ public class StockItem implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -179,7 +180,8 @@ public class StockItem implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -187,10 +189,10 @@ public class StockItem implements Serializable {
     @Override
     public String toString() {
         return "StockItem{" +
-            "id=" + getId() +
-            ", quantity=" + getQuantity() +
-            ", available=" + getAvailable() +
-            ", price=" + getPrice() +
-            "}";
+                "id=" + getId() +
+                ", quantity=" + getQuantity() +
+                ", available=" + getAvailable() +
+                ", price=" + getPrice() +
+                "}";
     }
 }

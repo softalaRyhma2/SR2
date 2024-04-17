@@ -124,6 +124,12 @@ public class InvoiceService {
         return invoiceRepository.findAll(pageable);
     }
 
+    @Transactional(readOnly = true)
+    public List<Invoice> getInvoicesByCompanyId(Company company) {
+        log.debug(("Request get all invoices for company"));
+        return invoiceRepository.findByCompany(company);
+    }
+
     /**
      * Get one invoice by id.
      *
@@ -136,7 +142,7 @@ public class InvoiceService {
         return invoiceRepository.findById(id);
     }
 
-    //TESTI stockit invoiceen
+    // TESTI stockit invoiceen
     @Transactional(readOnly = true)
     public List<Stock> getStocksByInvoiceId(Invoice invoice) {
         log.debug("Request to get all Stocks for one Invoice");
