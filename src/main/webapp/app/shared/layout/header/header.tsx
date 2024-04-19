@@ -1,6 +1,6 @@
 import './header.scss';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Translate, Storage } from 'react-jhipster';
 import { Navbar, Nav, NavbarToggler, Collapse } from 'reactstrap';
 import LoadingBar from 'react-redux-loading-bar';
@@ -9,6 +9,7 @@ import { Home, Brand } from './header-components';
 import { AdminMenu, EntitiesMenu, AccountMenu, LocaleMenu } from '../menus';
 import { useAppDispatch } from 'app/config/store';
 import { setLocale } from 'app/shared/reducers/locale';
+import { useLocation } from 'react-router';
 
 export interface IHeaderProps {
   isAuthenticated: boolean;
@@ -23,13 +24,14 @@ export interface IHeaderProps {
 const Header = (props: IHeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
-
   const dispatch = useAppDispatch();
+  const location = useLocation();
 
   const handleLocaleChange = event => {
     const langKey = event.target.value;
     Storage.session.set('locale', langKey);
     dispatch(setLocale(langKey));
+    setIsOpen(false);
   };
 
   const renderDevRibbon = () =>
@@ -41,6 +43,23 @@ const Header = (props: IHeaderProps) => {
       </div>
     ) : null;
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const navMenu = document.getElementById('navbarResponsive');
+      if (navMenu && !navMenu.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
   /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
 
   return (
@@ -50,7 +69,7 @@ const Header = (props: IHeaderProps) => {
       <Navbar data-cy="navbar" dark expand="md" fixed="top" className="jh-navbar">
         <Brand />
         <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
+        <Collapse isOpen={isOpen} navbar id="navbarResponsive">
           <Nav id="header-tabs" className="ms-auto" navbar>
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
