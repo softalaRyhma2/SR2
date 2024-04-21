@@ -25,34 +25,32 @@ export const getEntities = createAsyncThunk('invoice/fetch_entity_list', async (
 });
 
 export const getEntity = createAsyncThunk(
-  /*'invoice/fetch_entity',
-  async (id: string | number) => {
-    const requestUrl = `${apiUrl}/${id}`;
-    return axios.get<IInvoice>(requestUrl);
-  },
-  { serializeError: serializeAxiosError },
-);
-
-/*export const getEntityWithStock = createAsyncThunk(
-  */ 'invoice/fetch_entity',
+  'invoice/fetch_entity',
   async (id: string | number) => {
     const invoiceRequestUrl = `${apiUrl}/${id}`;
     const invoiceResponse = await axios.get<IInvoice>(invoiceRequestUrl);
-    console.log('I-REDUCER: Invoice response:', invoiceResponse.data);
+    //console.log('I-REDUCER: Invoice response:', invoiceResponse.data);
 
-    const stockDataPromises = invoiceResponse.data.stocks.map(async stock => {
-      const stockRequestUrl = `api/stocks/${stock.id}`;
-      console.log('I-REDUCER: Stock request URL:', stockRequestUrl);
+    await Promise.all(
+      invoiceResponse.data.stocks.map(async stock => {
+        const stockRequestUrl = `api/stocks/${stock.id}`;
+        //console.log('I-REDUCER: Stock request URL:', stockRequestUrl);
 
-      const stockResponse = await axios.get<IStock>(stockRequestUrl);
-      console.log('I-REDUCER: Stock response:', stockResponse.data);
+        const stockResponse = await axios.get<IStock>(stockRequestUrl);
+        //console.log('I-REDUCER: Stock response:', stockResponse.data);
 
-      return stockResponse.data;
-    });
-    const stockData = await Promise.all(stockDataPromises);
-    console.log('I-REDUCER: Stock data:', stockData);
+        // check if invoice stock-data matches stock response data
+        const matchingStockIndex = invoiceResponse.data.stocks.findIndex(item => item.id === stockResponse.data.id);
+        if (matchingStockIndex !== -1) {
+          //update stock data changes to invoice
+          invoiceResponse.data.stocks[matchingStockIndex] = stockResponse.data;
+        }
+      }),
+    );
 
-    return { invoice: invoiceResponse.data, stocksit: stockData };
+    //console.log('I-REDUCER: Updated Invoice data:', invoiceResponse.data);
+
+    return invoiceResponse.data;
   },
   { serializeError: serializeAxiosError },
 );
@@ -107,15 +105,7 @@ export const InvoiceSlice = createEntitySlice({
     builder
       .addCase(getEntity.fulfilled, (state, action) => {
         state.loading = false;
-        /* state.entity = action.payload.data;
-      })
-      .addCase(getEntityWithStock.fulfilled, (state, action) => {
-        state.loading = false;*/
-        state.entity = action.payload.invoice;
-        state.entities = [];
-        if (action.payload.stocksit && action.payload.stocksit.length > 0) {
-          state.entities = action.payload.stocksit;
-        }
+        state.entity = action.payload;
       })
       .addCase(deleteEntity.fulfilled, state => {
         state.updating = false;

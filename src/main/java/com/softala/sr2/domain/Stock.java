@@ -33,7 +33,7 @@ public class Stock implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "stock")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "reservedItems", "stock", "stockItemType" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "reservedItems" /*"stock", "stockItemType" */ }, allowSetters = true)
     private Set<StockItem> stockItems = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntity /*, getEntityWithStock*/ } from './invoice.reducer';
+import { getEntity } from './invoice.reducer';
 
 export const InvoiceDetail = () => {
   const dispatch = useAppDispatch();
@@ -18,12 +18,6 @@ export const InvoiceDetail = () => {
     dispatch(getEntity(id));
   }, []);
 
-  /*  useEffect(() => {
-    dispatch(getEntityWithStock(id));
-  }, []);
-
-  const invoiceEntity = useAppSelector(state => state.invoice.getEntityWithStock);
-  */
   const invoiceEntity = useAppSelector(state => state.invoice.entity);
 
   return (
@@ -78,13 +72,15 @@ export const InvoiceDetail = () => {
           </span>
         </Button>
         <Col>
-          <h3>Stocks</h3>
+          <h3 id="stock-heading" data-cy="StockHeading">
+            <Translate contentKey="sr2App.stock.home.title">Stocks</Translate>
+          </h3>
           <Table responsive>
             <thead>
               <tr>
                 <th>stock id</th>
                 <th>stock date</th>
-                <th>items</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -95,15 +91,28 @@ export const InvoiceDetail = () => {
                     <td>{stock.stockDate}</td>
                     <td>
                       {Array.isArray(stock.stockItems) && stock.stockItems.length > 0 ? (
-                        <ul>
-                          {stock.stockItems.map(item => (
-                            <li key={item.id}>
-                              stockItem ID: {item.id}, Quantity: {item.quantity}, Price: {item.price}€, Type: ???
-                            </li>
-                          ))}
-                        </ul>
+                        <Table>
+                          <thead>
+                            <tr>
+                              <th>Item id</th>
+                              <th>Type</th>
+                              <th>Quantity</th>
+                              <th>Price</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {stock.stockItems.map(item => (
+                              <tr key={item.id}>
+                                <td>{item.id}</td>
+                                <td>{item.stockItemType.typeName}</td>
+                                <td>{item.quantity}</td>
+                                <td>{item.price}€</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </Table>
                       ) : (
-                        <ul>No stock items in stock</ul>
+                        <p>No stock items in stock</p>
                       )}
                     </td>
                   </tr>
