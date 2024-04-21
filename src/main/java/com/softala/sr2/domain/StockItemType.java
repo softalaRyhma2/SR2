@@ -30,7 +30,7 @@ public class StockItemType implements Serializable {
     @Column(name = "type_name", nullable = false)
     private String typeName;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "stockItemType")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "stockItemType")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "reservedItems", "stock", "stockItemType" }, allowSetters = true)
     private Set<StockItem> stockItems = new HashSet<>();
