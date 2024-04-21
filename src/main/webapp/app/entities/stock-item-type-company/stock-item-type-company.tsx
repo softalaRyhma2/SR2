@@ -8,9 +8,9 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.cons
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntities } from './stock-item-type.reducer';
+import { getEntities } from './stock-item-type-company.reducer';
 
-export const StockItemType = () => {
+export const StockItemTypeCompany = () => {
   const dispatch = useAppDispatch();
 
   const pageLocation = useLocation();
@@ -20,9 +20,9 @@ export const StockItemType = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
-  const stockItemTypeList = useAppSelector(state => state.stockItemType.entities);
-  const loading = useAppSelector(state => state.stockItemType.loading);
-  const totalItems = useAppSelector(state => state.stockItemType.totalItems);
+  const stockItemTypeCompanyList = useAppSelector(state => state.stockItemTypeCompany.entities);
+  const loading = useAppSelector(state => state.stockItemTypeCompany.loading);
+  const totalItems = useAppSelector(state => state.stockItemTypeCompany.totalItems);
 
   const getAllEntities = () => {
     dispatch(
@@ -91,47 +91,80 @@ export const StockItemType = () => {
 
   return (
     <div>
-      <h2 id="stock-item-type-heading" data-cy="StockItemTypeHeading">
-        <Translate contentKey="sr2App.stockItemType.home.title">Stock Item Types</Translate>
+      <h2 id="stock-item-type-company-heading" data-cy="StockItemTypeCompanyHeading">
+        <Translate contentKey="sr2App.stockItemTypeCompany.home.title">Stock Item Type Companies</Translate>
         <div className="d-flex justify-content-end">
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
-            <Translate contentKey="sr2App.stockItemType.home.refreshListLabel">Refresh List</Translate>
+            <Translate contentKey="sr2App.stockItemTypeCompany.home.refreshListLabel">Refresh List</Translate>
           </Button>
-          <Link to="/stock-item-type/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+          <Link
+            to="/stock-item-type-company/new"
+            className="btn btn-primary jh-create-entity"
+            id="jh-create-entity"
+            data-cy="entityCreateButton"
+          >
             <FontAwesomeIcon icon="plus" />
             &nbsp;
-            <Translate contentKey="sr2App.stockItemType.home.createLabel">Create new Stock Item Type</Translate>
+            <Translate contentKey="sr2App.stockItemTypeCompany.home.createLabel">Create new Stock Item Type Company</Translate>
           </Link>
         </div>
       </h2>
       <div className="table-responsive">
-        {stockItemTypeList && stockItemTypeList.length > 0 ? (
+        {stockItemTypeCompanyList && stockItemTypeCompanyList.length > 0 ? (
           <Table responsive>
             <thead>
               <tr>
                 <th className="hand" onClick={sort('id')}>
-                  <Translate contentKey="sr2App.stockItemType.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                  <Translate contentKey="sr2App.stockItemTypeCompany.id">ID</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
-                <th className="hand" onClick={sort('typeName')}>
-                  <Translate contentKey="sr2App.stockItemType.typeName">Type Name</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('typeName')} />
+                <th className="hand" onClick={sort('typePrice')}>
+                  <Translate contentKey="sr2App.stockItemTypeCompany.typePrice">Type Price</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('typePrice')} />
+                </th>
+                <th>
+                  <Translate contentKey="sr2App.stockItemTypeCompany.stockItemType">Stock Item Type</Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
+                </th>
+                <th>
+                  <Translate contentKey="sr2App.stockItemTypeCompany.company">Company</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
             </thead>
             <tbody>
-              {stockItemTypeList.map((stockItemType, i) => (
+              {stockItemTypeCompanyList.map((stockItemTypeCompany, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
-                    <Button tag={Link} to={`/stock-item-type/${stockItemType.id}`} color="link" size="sm">
-                      {stockItemType.id}
+                    <Button tag={Link} to={`/stock-item-type-company/${stockItemTypeCompany.id}`} color="link" size="sm">
+                      {stockItemTypeCompany.id}
                     </Button>
                   </td>
-                  <td>{stockItemType.typeName}</td>
+                  <td>{stockItemTypeCompany.typePrice}</td>
+                  <td>
+                    {stockItemTypeCompany.stockItemType ? (
+                      <Link to={`/stock-item-type/${stockItemTypeCompany.stockItemType.id}`}>{stockItemTypeCompany.stockItemType.id}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
+                  <td>
+                    {stockItemTypeCompany.company ? (
+                      <Link to={`/company/${stockItemTypeCompany.company.id}`}>{stockItemTypeCompany.company.id}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`/stock-item-type/${stockItemType.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                      <Button
+                        tag={Link}
+                        to={`/stock-item-type-company/${stockItemTypeCompany.id}`}
+                        color="info"
+                        size="sm"
+                        data-cy="entityDetailsButton"
+                      >
                         <FontAwesomeIcon icon="eye" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.view">View</Translate>
@@ -139,7 +172,7 @@ export const StockItemType = () => {
                       </Button>
                       <Button
                         tag={Link}
-                        to={`/stock-item-type/${stockItemType.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                        to={`/stock-item-type-company/${stockItemTypeCompany.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
                         color="primary"
                         size="sm"
                         data-cy="entityEditButton"
@@ -151,7 +184,7 @@ export const StockItemType = () => {
                       </Button>
                       <Button
                         onClick={() =>
-                          (window.location.href = `/stock-item-type/${stockItemType.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                          (window.location.href = `/stock-item-type-company/${stockItemTypeCompany.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
                         }
                         color="danger"
                         size="sm"
@@ -171,13 +204,13 @@ export const StockItemType = () => {
         ) : (
           !loading && (
             <div className="alert alert-warning">
-              <Translate contentKey="sr2App.stockItemType.home.notFound">No Stock Item Types found</Translate>
+              <Translate contentKey="sr2App.stockItemTypeCompany.home.notFound">No Stock Item Type Companies found</Translate>
             </div>
           )
         )}
       </div>
       {totalItems ? (
-        <div className={stockItemTypeList && stockItemTypeList.length > 0 ? '' : 'd-none'}>
+        <div className={stockItemTypeCompanyList && stockItemTypeCompanyList.length > 0 ? '' : 'd-none'}>
           <div className="justify-content-center d-flex">
             <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
           </div>
@@ -198,4 +231,4 @@ export const StockItemType = () => {
   );
 };
 
-export default StockItemType;
+export default StockItemTypeCompany;

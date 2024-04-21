@@ -1,0 +1,26 @@
+{
+  "sr2App": {
+    "stockItemTypeCompany": {
+      "home": {
+        "title": "Stock Item Type Companies",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Stock Item Type Company",
+        "createOrEditLabel": "Create or edit a Stock Item Type Company",
+        "notFound": "No Stock Item Type Companies found"
+      },
+      "created": "A new Stock Item Type Company is created with identifier {{ param }}",
+      "updated": "A Stock Item Type Company is updated with identifier {{ param }}",
+      "deleted": "A Stock Item Type Company is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Stock Item Type Company {{ id }}?"
+      },
+      "detail": {
+        "title": "Stock Item Type Company"
+      },
+      "id": "ID",
+      "typePrice": "Type Price",
+      "stockItemType": "Stock Item Type",
+      "company": "Company"
+    }
+  }
+}
