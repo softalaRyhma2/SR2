@@ -14,7 +14,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="stock_item_type"
                                  />
-
+        
         <addForeignKeyConstraint baseColumnNames="company_id"
                                  baseTableName="stock_item_type_company"
                                  constraintName="fk_stock_item_type_company__company_id"

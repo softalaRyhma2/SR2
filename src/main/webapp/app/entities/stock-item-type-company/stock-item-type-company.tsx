@@ -20,7 +20,7 @@ export const StockItemTypeCompany = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
-  const stockItemTypeCompanyList = useAppSelector(state => state.stockItemTypeCompany.entities);
+  const entities = useAppSelector(state => state.stockItemTypeCompany.entities);
   const loading = useAppSelector(state => state.stockItemTypeCompany.loading);
   const totalItems = useAppSelector(state => state.stockItemTypeCompany.totalItems);
 
@@ -111,7 +111,7 @@ export const StockItemTypeCompany = () => {
         </div>
       </h2>
       <div className="table-responsive">
-        {stockItemTypeCompanyList && stockItemTypeCompanyList.length > 0 ? (
+        {entities && entities.length > 0 ? (
           <Table responsive>
             <thead>
               <tr>
@@ -134,7 +134,7 @@ export const StockItemTypeCompany = () => {
               </tr>
             </thead>
             <tbody>
-              {stockItemTypeCompanyList.map((stockItemTypeCompany, i) => (
+              {entities.map((stockItemTypeCompany, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
                     <Button tag={Link} to={`/stock-item-type-company/${stockItemTypeCompany.id}`} color="link" size="sm">
@@ -210,7 +210,7 @@ export const StockItemTypeCompany = () => {
         )}
       </div>
       {totalItems ? (
-        <div className={stockItemTypeCompanyList && stockItemTypeCompanyList.length > 0 ? '' : 'd-none'}>
+        <div className={entities && entities.length > 0 ? '' : 'd-none'}>
           <div className="justify-content-center d-flex">
             <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
           </div>

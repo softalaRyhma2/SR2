@@ -30,12 +30,26 @@ public class StockItemType implements Serializable {
     @Column(name = "type_name", nullable = false)
     private String typeName;
 
+    /*
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "stockItemType")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "reservedItems", "stock", "stockItemType" }, allowSetters = true)
     private Set<StockItem> stockItems = new HashSet<>();
+ */
+    @OneToMany(mappedBy = "stockItemType")
+    //@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "stockItemType" }, allowSetters = true)
+    private Set<StockItemTypeCompany> stockItemTypeCompanies = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public Set<StockItemTypeCompany> getStockItemTypeCompanies() {
+        return stockItemTypeCompanies;
+    }
+
+    public void setStockItemTypeCompanies(Set<StockItemTypeCompany> stockItemTypeCompanies) {
+        this.stockItemTypeCompanies = stockItemTypeCompanies;
+    }
 
     public Long getId() {
         return this.id;
@@ -63,6 +77,7 @@ public class StockItemType implements Serializable {
         this.typeName = typeName;
     }
 
+    /*
     public Set<StockItem> getStockItems() {
         return this.stockItems;
     }
@@ -93,7 +108,7 @@ public class StockItemType implements Serializable {
         stockItem.setStockItemType(null);
         return this;
     }
-
+ */
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override

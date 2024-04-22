@@ -136,7 +136,8 @@ export const StockItem = () => {
                   <Translate contentKey="sr2App.stockItem.stock">Stock</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  <Translate contentKey="sr2App.stockItem.stockItemType">Stock Item Type</Translate> <FontAwesomeIcon icon="sort" />
+                  {/*<Translate contentKey="sr2App.stockItem.stockItemType">Stock Item Type</Translate> <FontAwesomeIcon icon="sort" />*/}
+                  StockItemTypeCompany id
                 </th>
                 <th />
               </tr>
@@ -153,7 +154,7 @@ export const StockItem = () => {
                   {!isTransport && <td>{stockItem.available}</td>}
                   <td>{stockItem.price}</td>
                   <td>{stockItem.stock ? <span>{stockItem.stock.id}</span> : ''}</td>
-                  <td>{stockItem.stockItemType ? <span>{stockItem.stockItemType.typeName}</span> : ''}</td>
+                  <td>{stockItem.stockItemTypeCompany ? <span>{stockItem.stockItemTypeCompany.id}</span> : ''}</td>
 
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">

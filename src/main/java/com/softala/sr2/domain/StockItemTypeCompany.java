@@ -29,11 +29,13 @@ public class StockItemTypeCompany implements Serializable {
     @Column(name = "type_price", precision = 21, scale = 2, nullable = false)
     private BigDecimal typePrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "stock_item_type_id")
     @JsonIgnoreProperties(value = { "stockItems" }, allowSetters = true)
     private StockItemType stockItemType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "company_id")
     @JsonIgnoreProperties(value = { "invoices" }, allowSetters = true)
     private Company company;
 
@@ -113,9 +115,14 @@ public class StockItemTypeCompany implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
+        return "StockItemTypeCompany [id=" + id + ", typePrice=" + typePrice + ", stockItemType=" + stockItemType
+                + ", company=" + company + "]";
+    }
+    /*    @Override
+    public String toString() {
         return "StockItemTypeCompany{" +
             "id=" + getId() +
             ", typePrice=" + getTypePrice() +
             "}";
-    }
+     } */
 }

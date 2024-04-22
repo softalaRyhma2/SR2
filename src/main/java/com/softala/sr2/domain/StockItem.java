@@ -48,12 +48,24 @@ public class StockItem implements Serializable {
     @JsonIgnoreProperties(value = { "stockItems", "invoice" }, allowSetters = true)
     private Stock stock;
 
+    /*
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "stockItems" }, allowSetters = true)
     private StockItemType stockItemType;
+*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    private StockItemTypeCompany stockItemTypeCompany;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public StockItemTypeCompany getStockItemTypeCompany() {
+        return stockItemTypeCompany;
+    }
+
+    public void setStockItemTypeCompany(StockItemTypeCompany stockItemTypeCompany) {
+        this.stockItemTypeCompany = stockItemTypeCompany;
+    }
 
     public Long getId() {
         return this.id;
@@ -151,7 +163,7 @@ public class StockItem implements Serializable {
         return this;
     }
 
-    public StockItemType getStockItemType() {
+    /*    public StockItemType getStockItemType() {
         return this.stockItemType;
     }
 
@@ -163,7 +175,7 @@ public class StockItem implements Serializable {
         this.setStockItemType(stockItemType);
         return this;
     }
-
+ */
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
     // setters here
 
