@@ -118,13 +118,15 @@ export const Stock = () => {
       <h2 id="stock-heading" data-cy="StockHeading">
         <Translate contentKey="sr2App.stock.home.title">Stocks</Translate>
         <div className="d-flex justify-content-end">
-          <Input
-            type="text"
-            placeholder="Filter by company name"
-            value={filterValue}
-            onChange={e => setFilterValue(e.target.value)}
-            style={{ width: '300px', marginRight: '250px' }}
-          />
+          {isAdminOrRecser && (
+            <Input
+              type="text"
+              placeholder="Filter by company name"
+              value={filterValue}
+              onChange={e => setFilterValue(e.target.value)}
+              style={{ width: '300px', marginRight: '250px' }}
+            />
+          )}
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="sr2App.stock.home.refreshListLabel">Refresh List</Translate>
