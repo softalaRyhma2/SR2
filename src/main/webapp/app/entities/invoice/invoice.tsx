@@ -11,7 +11,11 @@ import { getEntities } from './invoice.reducer';
 import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { getEntities as getStocks } from '../stock/stock.reducer';
-import { DatePicker, Space } from 'antd';
+import { DatePicker, Space, Checkbox } from 'antd';
+import { getEntities as getCompanies } from '../company/company.reducer';
+import { AUTHORITIES } from 'app/config/constants';
+
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
 export const Invoice = () => {
   const dispatch = useAppDispatch();
@@ -23,12 +27,20 @@ export const Invoice = () => {
   );
 
   const [selectedTimeframe, setSelectedTimeframe] = useState(null);
+  const [showFilters, setShowFilters] = useState(false); // State to toggle visibility of filters
+  const [selectedCompanies, setSelectedCompanies] = useState([]);
 
   const invoiceList = useAppSelector(state => state.invoice.entities);
   const loading = useAppSelector(state => state.invoice.loading);
   const totalItems = useAppSelector(state => state.invoice.totalItems);
 
+  const companyList = useAppSelector(state => state.company.entities);
+
   const stockList = useAppSelector(state => state.stock.entities);
+
+  const canSelectCompanies = useAppSelector(state =>
+    hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]),
+  );
 
   // CSV configuration
   const csvConfig = mkConfig({ useKeysAsHeaders: true, fieldSeparator: ';' });
@@ -46,9 +58,19 @@ export const Invoice = () => {
     }),
   );
 
+  const handleCompanyChange = (e, company) => {
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      setSelectedCompanies([...selectedCompanies, company]); // Add company to selected companies
+    } else {
+      setSelectedCompanies(selectedCompanies.filter(selectedCompany => selectedCompany.id !== company.id)); // Remove company from selected companies
+    }
+  };
+
   useEffect(() => {
     // Dispatch an action to fetch stocks with the same arguments as getInvoices
     dispatch(getStocks({ page: 1, size: 10, sort: 'asc' }));
+    dispatch(getCompanies({ page: 1, size: 10, sort: 'asc' }));
   }, [dispatch]);
 
   const getAllEntities = () => {
@@ -125,18 +147,28 @@ export const Invoice = () => {
 
   // Function to filter invoices based on selected timeframe
   const filteredInvoices = invoiceList.filter(invoice => {
-    if (!selectedTimeframe) {
-      return true; // No timeframe selected, so include all invoices
+    if (!selectedTimeframe && !selectedCompanies.length) {
+      return true; // No timeframe or companies selected, so include all invoices
     } else {
-      // Convert invoice dates to Date objects
+      // Check timeframe
       const invoiceDate = new Date(invoice.invoiceDate);
-      const startDate = new Date(selectedTimeframe[0]);
-      const endDate = new Date(selectedTimeframe[1]);
+      const startDate = selectedTimeframe ? new Date(selectedTimeframe[0]) : null;
+      const endDate = selectedTimeframe ? new Date(selectedTimeframe[1]) : null;
+      const withinTimeframe = !selectedTimeframe || (invoiceDate >= startDate && invoiceDate <= endDate);
 
-      // Check if invoiceDate falls within the selected timeframe
-      return invoiceDate >= startDate && invoiceDate <= endDate;
+      // Check companies
+      const selectedCompanyIds = selectedCompanies.map(company => company.id);
+      const belongsToSelectedCompanies = selectedCompanies.length === 0 || selectedCompanyIds.includes(invoice.company?.id);
+
+      return withinTimeframe && belongsToSelectedCompanies;
     }
   });
+
+  // Function to toggle visibility of filters
+  const toggleFilters = () => {
+    console.log(companyList);
+    setShowFilters(!showFilters);
+  };
 
   return (
     <div>
@@ -154,11 +186,29 @@ export const Invoice = () => {
           </Link>
           {/* Add CSV Export Button */}
           <Button onClick={handleExportToCSV}>Export to CSV</Button>
-          {/* RangePicker for timeframe filtering */}
-          <Space direction="vertical" size={12}>
-            <DatePicker.RangePicker onChange={(dates, dateStrings) => setSelectedTimeframe(dates)} />
-          </Space>
+          {/* Filter Button */}
+          <Button onClick={toggleFilters} className="mx-2">
+            {showFilters ? 'Hide Filters' : 'Show Filters'}
+          </Button>
         </div>
+        {/* RangePicker for timeframe filtering */}
+        {showFilters && (
+          <div className="mt-2">
+            <Space direction="vertical" size={12}>
+              <DatePicker.RangePicker onChange={(dates, dateStrings) => setSelectedTimeframe(dates)} />
+            </Space>
+          </div>
+        )}
+        {/* Company Dropdown Menu */}
+        {showFilters && canSelectCompanies && (
+          <div className="mt-2">
+            {companyList.map(company => (
+              <Checkbox key={company.id} onChange={e => handleCompanyChange(e, company)}>
+                {company.companyName}
+              </Checkbox>
+            ))}
+          </div>
+        )}
       </h2>
       <div className="table-responsive">
         {filteredInvoices && filteredInvoices.length > 0 ? (
