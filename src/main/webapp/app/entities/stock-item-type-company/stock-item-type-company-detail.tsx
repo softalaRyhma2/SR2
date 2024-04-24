@@ -40,11 +40,11 @@ export const StockItemTypeCompanyDetail = () => {
           <dt>
             <Translate contentKey="sr2App.stockItemTypeCompany.stockItemType">Stock Item Type</Translate>
           </dt>
-          <dd>{stockItemTypeCompanyEntity.stockItemType ? stockItemTypeCompanyEntity.stockItemType.id : ''}</dd>
+          <dd>{stockItemTypeCompanyEntity.stockItemType ? stockItemTypeCompanyEntity.stockItemType.typeName : ''}</dd>
           <dt>
             <Translate contentKey="sr2App.stockItemTypeCompany.company">Company</Translate>
           </dt>
-          <dd>{stockItemTypeCompanyEntity.company ? stockItemTypeCompanyEntity.company.id : ''}</dd>
+          <dd>{stockItemTypeCompanyEntity.company ? stockItemTypeCompanyEntity.company.companyName : ''}</dd>
         </dl>
         <Button tag={Link} to="/stock-item-type-company" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

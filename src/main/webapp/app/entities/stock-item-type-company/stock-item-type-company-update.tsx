@@ -130,7 +130,7 @@ export const StockItemTypeCompanyUpdate = () => {
                 {stockItemTypes
                   ? stockItemTypes.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.typeName}
                       </option>
                     ))
                   : null}
@@ -146,7 +146,7 @@ export const StockItemTypeCompanyUpdate = () => {
                 {companies
                   ? companies.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.companyName}
                       </option>
                     ))
                   : null}

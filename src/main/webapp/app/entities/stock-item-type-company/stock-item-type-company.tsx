@@ -124,7 +124,8 @@ export const StockItemTypeCompany = () => {
                   <FontAwesomeIcon icon={getSortIconByFieldName('typePrice')} />
                 </th>
                 <th>
-                  <Translate contentKey="sr2App.stockItemTypeCompany.stockItemType">Stock Item Type</Translate>{' '}
+                  {/*<Translate contentKey="sr2App.stockItemTypeCompany.stockItemType">Stock Item Type</Translate>{' '}*/}
+                  Stock Item Type(from stockItemTypeCompany)
                   <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
@@ -142,20 +143,8 @@ export const StockItemTypeCompany = () => {
                     </Button>
                   </td>
                   <td>{stockItemTypeCompany.typePrice}</td>
-                  <td>
-                    {stockItemTypeCompany.stockItemType ? (
-                      <Link to={`/stock-item-type/${stockItemTypeCompany.stockItemType.id}`}>{stockItemTypeCompany.stockItemType.id}</Link>
-                    ) : (
-                      ''
-                    )}
-                  </td>
-                  <td>
-                    {stockItemTypeCompany.company ? (
-                      <Link to={`/company/${stockItemTypeCompany.company.id}`}>{stockItemTypeCompany.company.id}</Link>
-                    ) : (
-                      ''
-                    )}
-                  </td>
+                  <td>{stockItemTypeCompany.stockItemType ? stockItemTypeCompany.stockItemType.typeName : ''}</td>
+                  <td>{stockItemTypeCompany.company ? stockItemTypeCompany.company.companyName : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button
