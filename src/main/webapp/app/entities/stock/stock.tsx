@@ -110,7 +110,9 @@ export const Stock = () => {
   };
 
   const filteredStockList = stockList.filter(stock =>
-    getCompanyNameForInvoiceId(stock.invoice.id).toLowerCase().includes(filterValue.toLowerCase()),
+    getCompanyNameForInvoiceId(stock.invoice?.id)
+      .toLowerCase()
+      .includes(filterValue.toLowerCase()),
   );
 
   return (
