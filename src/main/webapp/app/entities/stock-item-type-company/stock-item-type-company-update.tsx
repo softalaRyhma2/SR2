@@ -126,7 +126,7 @@ export const StockItemTypeCompanyUpdate = () => {
                 label={translate('sr2App.stockItemTypeCompany.stockItemType')}
                 type="select"
               >
-                <option value="" key="0" />
+                <option value="">Select a type</option>
                 {stockItemTypes
                   ? stockItemTypes.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
@@ -142,7 +142,7 @@ export const StockItemTypeCompanyUpdate = () => {
                 label={translate('sr2App.stockItemTypeCompany.company')}
                 type="select"
               >
-                <option value="" key="0" />
+                <option value="">Select a company</option>
                 {companies
                   ? companies.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
