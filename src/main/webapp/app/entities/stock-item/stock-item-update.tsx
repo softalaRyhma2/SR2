@@ -33,16 +33,8 @@ export const StockItemUpdate = () => {
   const updating = useAppSelector(state => state.stockItem.updating);
   const updateSuccess = useAppSelector(state => state.stockItem.updateSuccess);
 
-  const handleClose = () => {
-    if (stockId) {
-      navigate(`/stock/${stockId}`);
-    } else {
-      navigate('/stock-item' + location.search);
-    }
-  };
-
   const handleGoBack = () => {
-    history.back();
+    navigate(-1);
   };
 
   useEffect(() => {
@@ -58,9 +50,9 @@ export const StockItemUpdate = () => {
 
   useEffect(() => {
     if (updateSuccess) {
-      handleClose();
+      handleGoBack;
     }
-  }, [updateSuccess]);
+  }, [updateSuccess, navigate]);
 
   // eslint-disable-next-line complexity
   // eslint-disable-next-line complexity
@@ -214,7 +206,7 @@ export const StockItemUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" onClick={handleGoBack} replace color="info">
+              <Button onClick={handleGoBack} id="cancel-save" data-cy="entityCreateCancelButton" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
@@ -222,7 +214,14 @@ export const StockItemUpdate = () => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+              <Button
+                onClick={handleGoBack}
+                updateSuccesscolor="primary"
+                id="save-entity"
+                data-cy="entityCreateSaveButton"
+                type="submit"
+                disabled={updating}
+              >
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
