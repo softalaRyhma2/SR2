@@ -31,12 +31,12 @@ public class StockItemTypeCompany implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "stock_item_type_id")
-    @JsonIgnoreProperties(value = { "stockItems" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "stockItemTypeCompanies" }, allowSetters = true)
     private StockItemType stockItemType;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
-    @JsonIgnoreProperties(value = { "invoices" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "stockItemTypeCompanies" }, allowSetters = true)
     private Company company;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

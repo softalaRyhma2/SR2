@@ -46,7 +46,7 @@ public class Company implements Serializable {
     @JsonIgnoreProperties(value = { "stocks", "company" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "company")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
     private Set<StockItemTypeCompany> stockItemTypeCompanies = new HashSet<>();

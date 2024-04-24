@@ -38,7 +38,7 @@ public class StockItemType implements Serializable {
  */
     @OneToMany(mappedBy = "stockItemType")
     //@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "stockItemType" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "stockItemType", "stockItem" }, allowSetters = true)
     private Set<StockItemTypeCompany> stockItemTypeCompanies = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
