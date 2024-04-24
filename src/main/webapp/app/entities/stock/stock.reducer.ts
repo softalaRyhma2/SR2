@@ -70,9 +70,9 @@ export const getCompanyNameByInvoiceId = createAsyncThunk('stock/fetch_company_n
   try {
     const requestUrl = `api/invoices/${invoiceId}`;
     const response = await axios.get<{ company: { companyName: string } }>(requestUrl);
-    console.log(response);
+
     const companyName = response.data.company.companyName;
-    console.log('Company name:', companyName);
+
     dispatch(setCompanyName({ invoiceId, companyName }));
     return companyName;
   } catch (error) {
