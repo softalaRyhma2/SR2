@@ -11,6 +11,7 @@ import { getEntities } from './invoice.reducer';
 import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { getEntities as getStocks } from '../stock/stock.reducer';
+import { DatePicker, Space } from 'antd';
 
 export const Invoice = () => {
   const dispatch = useAppDispatch();
@@ -20,6 +21,8 @@ export const Invoice = () => {
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
+
+  const [selectedTimeframe, setSelectedTimeframe] = useState(null);
 
   const invoiceList = useAppSelector(state => state.invoice.entities);
   const loading = useAppSelector(state => state.invoice.loading);
@@ -43,7 +46,6 @@ export const Invoice = () => {
     }),
   );
 
-  console.log(stockList);
   useEffect(() => {
     // Dispatch an action to fetch stocks with the same arguments as getInvoices
     dispatch(getStocks({ page: 1, size: 10, sort: 'asc' }));
@@ -121,6 +123,21 @@ export const Invoice = () => {
     download(csvConfig)(csvData);
   };
 
+  // Function to filter invoices based on selected timeframe
+  const filteredInvoices = invoiceList.filter(invoice => {
+    if (!selectedTimeframe) {
+      return true; // No timeframe selected, so include all invoices
+    } else {
+      // Convert invoice dates to Date objects
+      const invoiceDate = new Date(invoice.invoiceDate);
+      const startDate = new Date(selectedTimeframe[0]);
+      const endDate = new Date(selectedTimeframe[1]);
+
+      // Check if invoiceDate falls within the selected timeframe
+      return invoiceDate >= startDate && invoiceDate <= endDate;
+    }
+  });
+
   return (
     <div>
       <h2 id="invoice-heading" data-cy="InvoiceHeading">
@@ -137,10 +154,14 @@ export const Invoice = () => {
           </Link>
           {/* Add CSV Export Button */}
           <Button onClick={handleExportToCSV}>Export to CSV</Button>
+          {/* RangePicker for timeframe filtering */}
+          <Space direction="vertical" size={12}>
+            <DatePicker.RangePicker onChange={(dates, dateStrings) => setSelectedTimeframe(dates)} />
+          </Space>
         </div>
       </h2>
       <div className="table-responsive">
-        {invoiceList && invoiceList.length > 0 ? (
+        {filteredInvoices && filteredInvoices.length > 0 ? (
           <Table responsive>
             <thead>
               <tr>
@@ -162,7 +183,7 @@ export const Invoice = () => {
               </tr>
             </thead>
             <tbody>
-              {invoiceList.map((invoice, i) => (
+              {filteredInvoices.map((invoice, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
                     <Button tag={Link} to={`/invoice/${invoice.id}`} color="link" size="sm">
@@ -222,7 +243,7 @@ export const Invoice = () => {
         )}
       </div>
       {totalItems ? (
-        <div className={invoiceList && invoiceList.length > 0 ? '' : 'd-none'}>
+        <div className={filteredInvoices && filteredInvoices.length > 0 ? '' : 'd-none'}>
           <div className="justify-content-center d-flex">
             <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
           </div>
