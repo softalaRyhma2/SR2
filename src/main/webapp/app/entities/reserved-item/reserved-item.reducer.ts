@@ -2,13 +2,13 @@ import axios from 'axios';
 import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
-import { IReservedItem, defaultValue } from 'app/shared/model/reserved-item.model';
+import { IReservedItem, defaultValue as defaultReservedItem } from 'app/shared/model/reserved-item.model';
 
 const initialState: EntityState<IReservedItem> = {
   loading: false,
   errorMessage: null,
   entities: [],
-  entity: defaultValue,
+  entity: defaultReservedItem,
   updating: false,
   totalItems: 0,
   updateSuccess: false,
@@ -23,6 +23,16 @@ export const getEntities = createAsyncThunk('reservedItem/fetch_entity_list', as
   return axios.get<IReservedItem[]>(requestUrl);
 });
 
+// OK:
+export const getReservedItemEntitiesForReservation = createAsyncThunk(
+  'reservedItem/fetch_entity_list_for_reservation',
+  async (id: string | number) => {
+    const requestUrl = `${apiUrl}/reservation/${id}`;
+    return axios.get<IReservedItem[]>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
+
 export const getEntity = createAsyncThunk(
   'reservedItem/fetch_entity',
   async (id: string | number) => {
@@ -32,6 +42,7 @@ export const getEntity = createAsyncThunk(
   { serializeError: serializeAxiosError },
 );
 
+// Add error handling if same type already exists here:
 export const createEntity = createAsyncThunk(
   'reservedItem/create_entity',
   async (entity: IReservedItem, thunkAPI) => {

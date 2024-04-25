@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Row, Col } from 'reactstrap';
+import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -8,6 +8,7 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './reservation.reducer';
+import { getReservedItemEntitiesForReservation } from '../reserved-item/reserved-item.reducer';
 
 export const ReservationDetail = () => {
   const dispatch = useAppDispatch();
@@ -16,9 +17,13 @@ export const ReservationDetail = () => {
 
   useEffect(() => {
     dispatch(getEntity(id));
-  }, []);
+    dispatch(getReservedItemEntitiesForReservation(id));
+  }, [id]);
 
   const reservationEntity = useAppSelector(state => state.reservation.entity);
+  const reservedItemList = useAppSelector(state => state.reservedItem.entities);
+  console.log('RESERVEDITEMLIST: ' + JSON.stringify(reservedItemList));
+
   return (
     <Row>
       <Col md="8">
@@ -62,6 +67,51 @@ export const ReservationDetail = () => {
             <Translate contentKey="entity.action.edit">Edit</Translate>
           </span>
         </Button>
+      </Col>
+      <Col md="8" className="jh-entity-details">
+        <h2>Reserved Items</h2>
+        <Link
+          to={{ pathname: '/reserved-item/new', search: `?reservationId=${reservationEntity.id}` }}
+          className="btn btn-primary jh-create-entity"
+          id="jh-create-entity"
+          data-cy="entityCreateButton"
+        >
+          <FontAwesomeIcon icon="plus" />
+          &nbsp;
+          <Translate contentKey="sr2App.reservedItem.home.createLabel">Create new Reserved Item</Translate>
+        </Link>
+        <Table>
+          <thead>
+            <tr>
+              <th>
+                <Translate contentKey="global.field.id">ID</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sr2App.reservedItem.quantity">Quantity</Translate>
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {reservedItemList.length === 0 ? (
+              <tr>
+                <td colSpan={8}>Reserved items not found</td>
+              </tr>
+            ) : (
+              reservedItemList.map(reservedItemEntity => (
+                <tr key={reservedItemEntity.id}>
+                  <td>{reservedItemEntity.id}</td>
+                  <td>{reservedItemEntity.quantity}</td>
+                  <td>
+                    <Button tag={Link} to={`/reserved-item/${reservedItemEntity.id}`} color="primary">
+                      <FontAwesomeIcon icon="eye" /> View
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </Table>
       </Col>
     </Row>
   );
