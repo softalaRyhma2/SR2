@@ -110,6 +110,11 @@ export const ReservedItemSlice = createEntitySlice({
           totalItems: parseInt(headers['x-total-count'], 10),
         };
       })
+      .addMatcher(isFulfilled(getReservedItemEntitiesForReservation), (state, action) => {
+        const { data } = action.payload;
+        state.loading = false;
+        state.entities = data;
+      })
       .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {
         state.updating = false;
         state.loading = false;
