@@ -29,6 +29,7 @@ export const Invoice = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState(null);
   const [showFilters, setShowFilters] = useState(false); // State to toggle visibility of filters
   const [selectedCompanies, setSelectedCompanies] = useState([]);
+  const [selectedInvoices, setSelectedInvoices] = useState([]);
 
   const invoiceList = useAppSelector(state => state.invoice.entities);
   const loading = useAppSelector(state => state.invoice.loading);
@@ -44,20 +45,6 @@ export const Invoice = () => {
 
   // CSV configuration
   const csvConfig = mkConfig({ useKeysAsHeaders: true, fieldSeparator: ';' });
-  const invoiceCsv = useAppSelector(state =>
-    state.invoice.entities.flatMap(invoice => {
-      const stocksForInvoice = stockList.filter(stock => stock.invoice?.id === invoice.id);
-      return stocksForInvoice.map(stock => ({
-        id: invoice.id,
-        totalSum: invoice.totalSum,
-        invoiceDate: invoice.invoiceDate,
-        companyName: invoice.company ? invoice.company.companyName : '',
-        companyEmail: invoice.company ? invoice.company.companyEmail : '',
-        stockDate: stock.stockDate || '', // Use stockDate for verification
-      }));
-    }),
-  );
-
   const handleCompanyChange = (e, company) => {
     const isChecked = e.target.checked;
     if (isChecked) {
@@ -139,10 +126,56 @@ export const Invoice = () => {
     }
   };
 
+  const handleSelectAll = e => {
+    if (e.target.checked) {
+      setSelectedInvoices(filteredInvoices);
+    } else {
+      setSelectedInvoices([]);
+    }
+  };
+
+  const handleSelectInvoice = invoice => {
+    const isSelected = selectedInvoices.some(selectedInvoice => selectedInvoice.id === invoice.id);
+    if (isSelected) {
+      setSelectedInvoices(selectedInvoices.filter(inv => inv.id !== invoice.id));
+    } else {
+      setSelectedInvoices([...selectedInvoices, invoice]);
+    }
+  };
+
   // Function to handle CSV export
   const handleExportToCSV = () => {
-    const csvData = generateCsv(csvConfig)(invoiceCsv);
-    download(csvConfig)(csvData);
+    const selectedInvoiceCsv = generateCsv(csvConfig)(
+      selectedInvoices.flatMap(invoice => {
+        const stocksForInvoice = stockList.filter(stock => stock.invoice?.id === invoice.id);
+        return stocksForInvoice.flatMap(stock => {
+          const stockItemsWithTypes = stock.stockItems.map(stockItem => ({
+            id: invoice.id,
+            totalSum: invoice.totalSum,
+            invoiceDate: invoice.invoiceDate,
+            companyName: invoice.company ? invoice.company.companyName : '',
+            companyEmail: invoice.company ? invoice.company.companyEmail : '',
+            stockDate: stock.stockDate || '',
+            stockItemType: stockItem.stockItemType ? stockItem.stockItemType.typeName : '',
+          }));
+          // If there are no stock items for the current invoice, include the invoice details
+          return stockItemsWithTypes.length > 0
+            ? stockItemsWithTypes
+            : [
+                {
+                  id: invoice.id,
+                  totalSum: invoice.totalSum,
+                  invoiceDate: invoice.invoiceDate,
+                  companyName: invoice.company ? invoice.company.companyName : '',
+                  companyEmail: invoice.company ? invoice.company.companyEmail : '',
+                  stockDate: stock.stockDate || '', // Use stockDate for verification
+                  stockItemType: '',
+                },
+              ];
+        });
+      }),
+    );
+    download(csvConfig)(selectedInvoiceCsv);
   };
 
   // Function to filter invoices based on selected timeframe
@@ -167,6 +200,7 @@ export const Invoice = () => {
   // Function to toggle visibility of filters
   const toggleFilters = () => {
     console.log(companyList);
+    console.log(stockList);
     setShowFilters(!showFilters);
   };
 
@@ -202,11 +236,13 @@ export const Invoice = () => {
         {/* Company Dropdown Menu */}
         {showFilters && canSelectCompanies && (
           <div className="mt-2">
-            {companyList.map(company => (
-              <Checkbox key={company.id} onChange={e => handleCompanyChange(e, company)}>
-                {company.companyName}
-              </Checkbox>
-            ))}
+            {companyList
+              .filter(company => company.companyName !== 'Recser') // Filter out the "Recser" company
+              .map(company => (
+                <Checkbox key={company.id} onChange={e => handleCompanyChange(e, company)}>
+                  {company.companyName}
+                </Checkbox>
+              ))}
           </div>
         )}
       </h2>
@@ -215,6 +251,9 @@ export const Invoice = () => {
           <Table responsive>
             <thead>
               <tr>
+                <th>
+                  <Checkbox onChange={handleSelectAll} />
+                </th>
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="sr2App.invoice.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
@@ -235,6 +274,12 @@ export const Invoice = () => {
             <tbody>
               {filteredInvoices.map((invoice, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
+                  <td>
+                    <Checkbox
+                      onChange={() => handleSelectInvoice(invoice)}
+                      checked={selectedInvoices.some(selectedInvoice => selectedInvoice.id === invoice.id)}
+                    />
+                  </td>
                   <td>
                     <Button tag={Link} to={`/invoice/${invoice.id}`} color="link" size="sm">
                       {invoice.id}
