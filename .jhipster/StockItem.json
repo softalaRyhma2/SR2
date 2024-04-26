@@ -3,7 +3,6 @@
     "changelogDate": "20240208082456"
   },
   "applications": "*",
-  "entityTableName": "stock_item",
   "fields": [
     {
       "fieldName": "quantity",

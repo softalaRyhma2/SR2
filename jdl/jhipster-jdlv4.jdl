@@ -6,7 +6,8 @@ entity Company {
 
 entity Invoice {
       totalSum BigDecimal,
-      invoiceDate LocalDate,
+      invoiceStartDate LocalDate required,
+      invoiceEndDate LocalDate required,
       isClosed Boolean required
 }
 

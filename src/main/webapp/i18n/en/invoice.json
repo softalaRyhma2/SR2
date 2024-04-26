@@ -19,7 +19,8 @@
       },
       "id": "ID",
       "totalSum": "Total Sum",
-      "invoiceDate": "Invoice Date",
+      "invoiceStartDate": "Invoice Start Date",
+      "invoiceEndDate": "Invoice End Date",
       "isClosed": "Is Closed",
       "stock": "Stock",
       "company": "Company"

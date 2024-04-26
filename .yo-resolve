@@ -1,0 +1,9 @@
+src/main/resources/config/liquibase/changelog/20240208082656_added_entity_constraints_ReservedItem.xml skip
+src/main/resources/config/liquibase/fake-data/invoice.csv skip
+src/main/webapp/app/entities/invoice/invoice-detail.tsx skip
+src/main/webapp/app/entities/invoice/invoice.tsx skip
+src/main/webapp/app/entities/invoice/invoice-update.tsx skip
+src/test/java/com/softala/sr2/web/rest/InvoiceResourceIT.java skip
+src/main/java/com/softala/sr2/service/InvoiceService.java skip
+src/main/webapp/app/shared/model/invoice.model.ts skip
+src/main/webapp/app/entities/invoice/invoice-reducer.spec.ts skip

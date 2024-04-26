@@ -3,15 +3,20 @@
     "changelogDate": "20240208082756"
   },
   "applications": "*",
-  "entityTableName": "invoice",
   "fields": [
     {
       "fieldName": "totalSum",
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "invoiceDate",
-      "fieldType": "LocalDate"
+      "fieldName": "invoiceStartDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "invoiceEndDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "isClosed",

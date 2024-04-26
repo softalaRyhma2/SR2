@@ -31,16 +31,21 @@ public class Invoice implements Serializable {
     @Column(name = "total_sum", precision = 21, scale = 2)
     private BigDecimal totalSum;
 
-    @Column(name = "invoice_date")
-    private LocalDate invoiceDate;
+    @NotNull
+    @Column(name = "invoice_start_date", nullable = false)
+    private LocalDate invoiceStartDate;
+
+    @NotNull
+    @Column(name = "invoice_end_date", nullable = false)
+    private LocalDate invoiceEndDate;
 
     @NotNull
     @Column(name = "is_closed", nullable = false)
     private Boolean isClosed;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "invoice")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "invoice")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    //   @JsonIgnoreProperties(value = { "stockItems", "invoice" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "stockItems", "invoice" }, allowSetters = true)
     private Set<Stock> stocks = new HashSet<>();
 
     @ManyToOne(optional = false)
@@ -76,17 +81,30 @@ public class Invoice implements Serializable {
         this.totalSum = totalSum;
     }
 
-    public LocalDate getInvoiceDate() {
-        return this.invoiceDate;
+    public LocalDate getInvoiceStartDate() {
+        return this.invoiceStartDate;
     }
 
-    public Invoice invoiceDate(LocalDate invoiceDate) {
-        this.setInvoiceDate(invoiceDate);
+    public Invoice invoiceStartDate(LocalDate invoiceStartDate) {
+        this.setInvoiceStartDate(invoiceStartDate);
         return this;
     }
 
-    public void setInvoiceDate(LocalDate invoiceDate) {
-        this.invoiceDate = invoiceDate;
+    public void setInvoiceStartDate(LocalDate invoiceStartDate) {
+        this.invoiceStartDate = invoiceStartDate;
+    }
+
+    public LocalDate getInvoiceEndDate() {
+        return this.invoiceEndDate;
+    }
+
+    public Invoice invoiceEndDate(LocalDate invoiceEndDate) {
+        this.setInvoiceEndDate(invoiceEndDate);
+        return this;
+    }
+
+    public void setInvoiceEndDate(LocalDate invoiceEndDate) {
+        this.invoiceEndDate = invoiceEndDate;
     }
 
     public Boolean getIsClosed() {
@@ -171,7 +189,8 @@ public class Invoice implements Serializable {
         return "Invoice{" +
             "id=" + getId() +
             ", totalSum=" + getTotalSum() +
-            ", invoiceDate='" + getInvoiceDate() + "'" +
+            ", invoiceStartDate='" + getInvoiceStartDate() + "'" +
+            ", invoiceEndDate='" + getInvoiceEndDate() + "'" +
             ", isClosed='" + getIsClosed() + "'" +
             "}";
     }

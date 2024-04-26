@@ -19,7 +19,7 @@
     "entities": ["StockItem", "Company", "StockItemType", "Stock", "ReservedItem", "Reservation", "Invoice"],
     "feignClient": false,
     "gradleEnterpriseHost": null,
-    "jhipsterVersion": "8.1.0",
+    "jhipsterVersion": "8.3.0",
     "jwtSecretKey": "MDY1YmUzZjllNWM0MGE2ZTkwOGRkMmQ4NTBmY2VlNDNiNjA2OGRhNWEzZmRhY2FjN2JlOTY0ZWIyYjhkZjgyODYxYmIwNDgwN2ZkZmU1MDI1MDIyZTljYzFhNTUwMTYzZGY5MDhmNDhjNDRjYWFjZGMzZmZlOTEwMmFmYWNlMDk=",
     "languages": ["en", "fi"],
     "lastLiquibaseTimestamp": 1707380876000,

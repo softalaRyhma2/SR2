@@ -17,8 +17,11 @@
             <column name="total_sum" type="decimal(21,2)">
                 <constraints nullable="true" />
             </column>
-            <column name="invoice_date" type="date">
-                <constraints nullable="true" />
+            <column name="invoice_start_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="invoice_end_date" type="date">
+                <constraints nullable="false" />
             </column>
             <column name="is_closed" type="boolean">
                 <constraints nullable="false" />
@@ -48,7 +51,8 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="total_sum" type="numeric"/>
-            <column name="invoice_date" type="date"/>
+            <column name="invoice_start_date" type="date"/>
+            <column name="invoice_end_date" type="date"/>
             <column name="is_closed" type="boolean"/>
             <column name="company_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->

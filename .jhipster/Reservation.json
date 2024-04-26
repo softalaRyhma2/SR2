@@ -3,7 +3,6 @@
     "changelogDate": "20240208082656"
   },
   "applications": "*",
-  "entityTableName": "reservation",
   "fields": [
     {
       "fieldName": "reservationDate",

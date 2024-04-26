@@ -3,7 +3,6 @@
     "changelogDate": "20240208082656"
   },
   "applications": "*",
-  "entityTableName": "reserved_item",
   "fields": [
     {
       "fieldName": "quantity",
