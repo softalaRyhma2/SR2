@@ -54,7 +54,7 @@ public class StockItem implements Serializable {
     @JsonIgnoreProperties(value = { "stockItems" }, allowSetters = true)
     private StockItemType stockItemType;
 */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private StockItemTypeCompany stockItemTypeCompany;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
