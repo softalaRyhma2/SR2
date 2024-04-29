@@ -87,7 +87,7 @@ export const StockItemUpdate = () => {
       ...values,
       stock: stocks.find(it => it.id.toString() === values.stock.toString()),
       //stockItemType: stockItemTypes.find(it => it.id.toString() === values.stockItemType.toString()),
-      stockItemType: selectedStockItemType,
+      stockItemTypeCompany: selectedStockItemType,
     };
 
     // Set default price if user is not admin or recser

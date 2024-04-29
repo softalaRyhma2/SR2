@@ -94,8 +94,8 @@ export const InvoiceDetail = () => {
                         <Table>
                           <thead>
                             <tr>
-                              <th>Item id</th>
-                              <th>ID from stockitemtypecompany</th>
+                              <th>Item id, company</th>
+                              <th>Type</th>
                               <th>Quantity</th>
                               <th>Price</th>
                             </tr>
@@ -103,8 +103,15 @@ export const InvoiceDetail = () => {
                           <tbody>
                             {stock.stockItems.map(item => (
                               <tr key={item.id}>
-                                <td>{item.id}</td>
-                                <td>{item.stockItemTypeCompany?.companyName ? item.company.companyName : ''}</td>
+                                <td>
+                                  {item.id},{' '}
+                                  {item.stockItemTypeCompany?.company.companyName ? item.stockItemTypeCompany.company.companyName : ''}
+                                </td>
+                                <td>
+                                  {item.stockItemTypeCompany?.stockItemType.typeName
+                                    ? item.stockItemTypeCompany.stockItemType.typeName
+                                    : ''}
+                                </td>
                                 <td>{item.quantity}</td>
                                 <td>{item.price}€</td>
                               </tr>

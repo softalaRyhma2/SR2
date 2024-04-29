@@ -132,13 +132,15 @@ export const StockItem = () => {
                   <Translate contentKey="sr2App.stockItem.price">Price</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('price')} />
                 </th>
+                <th>Type</th>
                 <th>
                   <Translate contentKey="sr2App.stockItem.stock">Stock</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   {/*<Translate contentKey="sr2App.stockItem.stockItemType">Stock Item Type</Translate> <FontAwesomeIcon icon="sort" />*/}
-                  StockItemTypeCompany id
+                  StockItemTypeCompany id, company
                 </th>
+
                 <th />
               </tr>
             </thead>
@@ -153,8 +155,12 @@ export const StockItem = () => {
                   <td>{stockItem.quantity}</td>
                   {!isTransport && <td>{stockItem.available}</td>}
                   <td>{stockItem.price}</td>
+                  <td>{stockItem.stockItemTypeCompany ? stockItem.stockItemTypeCompany.stockItemType.typeName : ''}</td>
                   <td>{stockItem.stock ? <span>{stockItem.stock.id}</span> : ''}</td>
-                  <td>{stockItem.stockItemTypeCompany ? <span>{stockItem.stockItemTypeCompany.id}</span> : ''}</td>
+                  <td>
+                    {stockItem.stockItemTypeCompany ? stockItem.stockItemTypeCompany.company.id : ''},{' '}
+                    {stockItem.stockItemTypeCompany ? stockItem.stockItemTypeCompany.company.companyName : ''}
+                  </td>
 
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
