@@ -62,7 +62,7 @@ export const StockItemDetail = () => {
           <dt>
             <Translate contentKey="sr2App.stockItem.stockItemType">Stock Item Type</Translate>
           </dt>
-          <dd>{stockItemEntity.stockItemType ? stockItemEntity.stockItemType.typeName : ''}</dd>
+          <dd>{stockItemEntity.stockItemTypeCompany ? stockItemEntity.stockItemTypeCompany.stockItemType.typeName : ''}</dd>
           <dt>
             <Translate contentKey="sr2App.stockItem.total">Total</Translate>
           </dt>
