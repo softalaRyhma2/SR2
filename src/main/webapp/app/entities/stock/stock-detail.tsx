@@ -22,9 +22,8 @@ export const StockDetail = () => {
 
   const stockEntity = useAppSelector(state => state.stock.entity);
   const stockItemList = useAppSelector(state => state.stockItem.entities);
-  console.log('STOCKITEMLIST: ' + JSON.stringify(stockItemList));
-  //const stockItemTypeList = useAppSelector(state => state.stockItemType.entities);
-  //console.log('STOCKITEMTYPELIST: ' + JSON.stringify(stockItemTypeList));
+  //console.log('STOCKITEMLIST: ' + JSON.stringify(stockItemList));
+
   const [companyName, setCompanyName] = useState('');
   const stockTotal = useAppSelector(state => state.stock.stockTotal);
 
@@ -91,7 +90,10 @@ export const StockDetail = () => {
       <Col md="8" className="jh-entity-details">
         <h2>Stock Items</h2>
         <Link
-          to={{ pathname: '/stock-item/new', search: `?stockId=${stockEntity.id}` }}
+          to={{
+            pathname: '/stock-item/new',
+            search: `?stockId=${stockEntity.id}&companyNameForStock=${companyName}`,
+          }}
           className="btn btn-primary jh-create-entity"
           id="jh-create-entity"
           data-cy="entityCreateButton"
