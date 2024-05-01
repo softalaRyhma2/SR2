@@ -28,7 +28,8 @@ export const StockDetail = () => {
   const stockTotal = useAppSelector(state => state.stock.stockTotal);
 
   const calculateTotal = (quantity: number, price: number) => {
-    return quantity * price;
+    const total = quantity * price;
+    return total.toFixed(2);
   };
 
   useEffect(() => {
