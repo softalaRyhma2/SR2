@@ -157,6 +157,8 @@ export const Invoice = () => {
             companyEmail: invoice.company ? invoice.company.companyEmail : '',
             stockDate: stock.stockDate || '',
             stockItemType: stockItem.stockItemType ? stockItem.stockItemType.typeName : '',
+            stockItemTypePrice: stockItem.stockItemType ? stockItem.price : '',
+            stockItemQuantity: stockItem.quantity ? stockItem.quantity : '',
           }));
           // If there are no stock items for the current invoice, include the invoice details
           return stockItemsWithTypes.length > 0
@@ -170,6 +172,8 @@ export const Invoice = () => {
                   companyEmail: invoice.company ? invoice.company.companyEmail : '',
                   stockDate: stock.stockDate || '', // Use stockDate for verification
                   stockItemType: '',
+                  stockItemTypePrice: '',
+                  stockItemQuantity: '',
                 },
               ];
         });
