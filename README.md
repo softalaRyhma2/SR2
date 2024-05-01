@@ -146,6 +146,10 @@ tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elem
 attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
 -->
 
+## REST-Dokumentaatio
+
+[REST-documentation-SR2.pdf](https://github.com/softalaRyhma2/SR2/src\main\resources\REST-documentation-SR2.pdf)
+
 ## Tietohakemisto
 
 > ### _Company_
