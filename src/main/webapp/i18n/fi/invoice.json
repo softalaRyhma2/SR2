@@ -3,10 +3,13 @@
     "invoice": {
       "home": {
         "title": "Invoices",
-        "refreshListLabel": "Refresh list",
+        "refreshListLabel": "Päivitä lista",
         "createLabel": "Luo Invoice",
         "createOrEditLabel": "Luo tai muokkaa Invoice",
-        "notFound": "Invoice ei löytynyt"
+        "notFound": "Invoice ei löytynyt",
+        "exportToCSV": "Tallenna CSV-tiedostona",
+        "hideFilters": "Piilota suodattimet",
+        "showFilters": "Näytä suodattimet"
       },
       "created": "Uusi Invoice on luotu, id: {{ param }}",
       "updated": "Invoice on päivitetty, id: {{ param }}",
@@ -18,7 +21,7 @@
         "title": "Invoice"
       },
       "id": "ID",
-      "totalSum": "Total Sum",
+      "totalSum": "Kokonaissumma",
       "invoiceDate": "Invoice Date",
       "isClosed": "Is Closed",
       "stock": "Stock",

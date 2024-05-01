@@ -223,10 +223,14 @@ export const Invoice = () => {
             <Translate contentKey="sr2App.invoice.home.createLabel">Create new Invoice</Translate>
           </Link>
           {/* Add CSV Export Button */}
-          <Button onClick={handleExportToCSV}>Export to CSV</Button>
+          <Button onClick={handleExportToCSV}>
+            <Translate contentKey="sr2App.invoice.home.exportToCSV">Export to CSV</Translate>
+          </Button>
           {/* Filter Button */}
           <Button onClick={toggleFilters} className="mx-2">
-            {showFilters ? 'Hide Filters' : 'Show Filters'}
+            <Translate contentKey={showFilters ? 'sr2App.invoice.home.hideFilters' : 'sr2App.invoice.home.showFilters'}>
+              {showFilters ? 'Hide Filters' : 'Show Filters'}
+            </Translate>
           </Button>
         </div>
         {/* RangePicker for timeframe filtering */}
