@@ -148,7 +148,8 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 
 ## REST-Dokumentaatio
 
-[REST-documentation-SR2.pdf](https://github.com/softalaRyhma2/SR2/src\main\resources\REST-documentation-SR2.pdf)
+[RESTdocumentation-SR2.pdf](https://github.com/softalaRyhma2/SR2/files/15179523/RESTdocumentation-SR2.pdf)
+
 
 ## Tietohakemisto
 
