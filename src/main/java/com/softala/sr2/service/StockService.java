@@ -2,6 +2,8 @@ package com.softala.sr2.service;
 
 import com.softala.sr2.domain.Invoice;
 import com.softala.sr2.domain.Stock;
+import com.softala.sr2.domain.StockItem;
+import com.softala.sr2.repository.StockItemRepository;
 import com.softala.sr2.repository.StockRepository;
 import java.util.List;
 import java.util.Optional;
@@ -24,10 +26,12 @@ public class StockService {
     private final StockRepository stockRepository;
 
     private final InvoiceService invoiceService;
+    private final StockItemRepository stockItemRepository;
 
-    public StockService(StockRepository stockRepository, InvoiceService invoiceService) {
+    public StockService(StockRepository stockRepository, InvoiceService invoiceService, StockItemRepository stockItemRepository) {
         this.stockRepository = stockRepository;
         this.invoiceService = invoiceService;
+        this.stockItemRepository = stockItemRepository;
     }
 
     public List<Stock> findStocksForLoggedInUser() {
@@ -100,6 +104,12 @@ public class StockService {
     public Optional<Stock> findOne(Long id) {
         log.debug("Request to get Stock : {}", id);
         return stockRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<StockItem> getStockItemsByStockId(Stock stock) {
+        log.debug("Request to get Stock Items for one Stock");
+        return stockItemRepository.findByStock(stock);
     }
 
     /**

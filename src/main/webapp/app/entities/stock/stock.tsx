@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Table } from 'reactstrap';
+import { Button, Input, Table } from 'reactstrap';
 import { Translate, TextFormat, getPaginationState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
@@ -30,6 +30,7 @@ export const Stock = () => {
   const companyNames = useAppSelector(state => state.stock.companyNames);
   const authorities = useAppSelector(state => state.authentication.account.authorities);
   const isAdminOrRecser = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]);
+  const [filterValue, setFilterValue] = useState('');
 
   const getAllEntities = () => {
     dispatch(
@@ -108,11 +109,26 @@ export const Stock = () => {
     return companyNames[invoiceId] || '';
   };
 
+  const filteredStockList = stockList.filter(stock =>
+    getCompanyNameForInvoiceId(stock.invoice?.id)
+      .toLowerCase()
+      .includes(filterValue.toLowerCase()),
+  );
+
   return (
     <div>
       <h2 id="stock-heading" data-cy="StockHeading">
         <Translate contentKey="sr2App.stock.home.title">Stocks</Translate>
         <div className="d-flex justify-content-end">
+          {isAdminOrRecser && (
+            <Input
+              type="text"
+              placeholder="Filter by company name"
+              value={filterValue}
+              onChange={e => setFilterValue(e.target.value)}
+              style={{ width: '300px', marginRight: '250px' }}
+            />
+          )}
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="sr2App.stock.home.refreshListLabel">Refresh List</Translate>
@@ -125,7 +141,7 @@ export const Stock = () => {
         </div>
       </h2>
       <div className="table-responsive">
-        {stockList && stockList.length > 0 ? (
+        {!loading && filteredStockList && filteredStockList.length > 0 && (
           <Table responsive>
             <thead>
               <tr>
@@ -146,7 +162,7 @@ export const Stock = () => {
               </tr>
             </thead>
             <tbody>
-              {stockList.map((stock, i) => (
+              {filteredStockList.map((stock, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   <td>
                     {
@@ -208,12 +224,11 @@ export const Stock = () => {
               ))}
             </tbody>
           </Table>
-        ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="sr2App.stock.home.notFound">No Stocks found</Translate>
-            </div>
-          )
+        )}
+        {!loading && !(filteredStockList && filteredStockList.length > 0) && (
+          <div className="alert alert-warning">
+            <Translate contentKey="sr2App.stock.home.notFound">No Stocks found</Translate>
+          </div>
         )}
       </div>
       {totalItems ? (

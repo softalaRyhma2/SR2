@@ -2,26 +2,26 @@
   "sr2App": {
     "company": {
       "home": {
-        "title": "Companies",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Luo Company",
-        "createOrEditLabel": "Luo tai muokkaa Company",
-        "notFound": "Company ei löytynyt"
+        "title": "Yritykset",
+        "refreshListLabel": "Päivitä lista",
+        "createLabel": "Luo yritys",
+        "createOrEditLabel": "Luo yritys",
+        "notFound": "Yritystä ei löytynyt"
       },
       "created": "Uusi Company on luotu, id: {{ param }}",
-      "updated": "Company on päivitetty, id: {{ param }}",
-      "deleted": "Company on päivitetty, id: {{ param }}",
+      "updated": "Yritys on päivitetty, id: {{ param }}",
+      "deleted": "Yritys on päivitetty, id: {{ param }}",
       "delete": {
-        "question": "Haluatko varmasti poistaa Company {{ id }}?"
+        "question": "Haluatko varmasti poistaa yrityksen {{ id }}?"
       },
       "detail": {
-        "title": "Company"
+        "title": "Yritys"
       },
       "id": "ID",
-      "companyName": "Company Name",
-      "companyEmail": "Company Email",
-      "companyDetails": "Company Details",
-      "invoice": "Invoice"
+      "companyName": "Yrityksen nimi",
+      "companyEmail": "Yrityksen sähköposti",
+      "companyDetails": "Yrityksen tiedot",
+      "invoice": "Lasku"
     }
   }
 }

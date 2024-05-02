@@ -135,13 +135,7 @@ export const ReservedItemUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <ValidatedField
-                id="reserved-item-stockItem"
-                name="stockItem"
-                data-cy="stockItem"
-                label={translate('sr2App.reservedItem.stockItem')}
-                type="select"
-              >
+              <ValidatedField id="reserved-item-stockItem" name="stockItem" data-cy="stockItem" label="Stock Item" type="select">
                 <option value="" key="0" />
                 {stockItems
                   ? stockItems.map(otherEntity => (

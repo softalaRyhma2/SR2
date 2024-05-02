@@ -16,4 +16,6 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     List<Stock> findByInvoiceCompany(Company company);
 
     List<Stock> findByInvoiceIn(List<Invoice> invoices);
+    //TESTI stockit invoiceen
+    List<Stock> findByInvoice(Invoice invoice);
 }

@@ -67,6 +67,14 @@ public class ReservedItemResource {
         if (reservedItem.getId() != null) {
             throw new BadRequestAlertException("A new reservedItem cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        // Check if a reserved item with same type already exists
+        /* Optional<ReservedItem> existingReservedItem = reservedItemRepository
+            .findByReservation(reservedItem.getReservation())
+            .stream()
+            .filter(item -> item.getStockItemType().equals(reservedItem.getStockItemType()))
+            .findFirst(); */
+
         // Fetch the currently authenticated user and set it on the reservation
         SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(reservedItem::setUser);
 
@@ -174,6 +182,13 @@ public class ReservedItemResource {
         log.debug("REST request to get ReservedItem : {}", id);
         Optional<ReservedItem> reservedItem = reservedItemService.findOne(id);
         return ResponseUtil.wrapOrNotFound(reservedItem);
+    }
+
+    @GetMapping("/reservation/{id}")
+    public ResponseEntity<List<ReservedItem>> getAllReservedItemsForReservation(@PathVariable Long id) {
+        log.debug("REST request to get all ReservedItems for Reservation : {}", id);
+        List<ReservedItem> reservedItem = reservedItemRepository.findByReservationId(id);
+        return ResponseEntity.ok().body(reservedItem);
     }
 
     /**

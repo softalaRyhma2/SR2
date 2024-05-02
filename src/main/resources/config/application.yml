@@ -17,6 +17,9 @@
 ---
 # Conditionally disable springdoc on missing api-docs profile
 spring:
+  jackson:
+    date-format: 'dd.MM.yyyy HH:mm:ss'
+    time-zone: Europe/Helsinki
   config:
     activate:
       on-profile: '!api-docs'

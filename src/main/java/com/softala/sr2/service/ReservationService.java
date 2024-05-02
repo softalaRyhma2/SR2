@@ -1,7 +1,10 @@
 package com.softala.sr2.service;
 
 import com.softala.sr2.domain.Reservation;
+import com.softala.sr2.domain.ReservedItem;
 import com.softala.sr2.repository.ReservationRepository;
+import com.softala.sr2.repository.ReservedItemRepository;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +24,11 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
 
-    public ReservationService(ReservationRepository reservationRepository) {
+    private final ReservedItemRepository reservedItemRepository;
+
+    public ReservationService(ReservationRepository reservationRepository, ReservedItemRepository reservedItemRepository) {
         this.reservationRepository = reservationRepository;
+        this.reservedItemRepository = reservedItemRepository;
     }
 
     /**
@@ -93,6 +99,12 @@ public class ReservationService {
     public Optional<Reservation> findOne(Long id) {
         log.debug("Request to get Reservation : {}", id);
         return reservationRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReservedItem> getReservedItemsByReservationId(Reservation reservation) {
+        log.debug("Request to get ReservedItems for one Reservation");
+        return reservedItemRepository.findByReservation(reservation);
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.softala.sr2.repository;
 
+import com.softala.sr2.domain.Reservation;
 import com.softala.sr2.domain.ReservedItem;
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +11,7 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ReservedItemRepository extends JpaRepository<ReservedItem, Long> {}
+public interface ReservedItemRepository extends JpaRepository<ReservedItem, Long> {
+    List<ReservedItem> findByReservationId(Long id);
+    List<ReservedItem> findByReservation(Reservation reservation);
+}

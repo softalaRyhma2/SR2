@@ -6,7 +6,10 @@
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Invoice",
         "createOrEditLabel": "Create or edit a Invoice",
-        "notFound": "No Invoices found"
+        "notFound": "No Invoices found",
+        "exportToCSV": "Export to CSV",
+        "hideFilters": "Hide filters",
+        "showFilters": "Show filters"
       },
       "created": "A new Invoice is created with identifier {{ param }}",
       "updated": "A Invoice is updated with identifier {{ param }}",

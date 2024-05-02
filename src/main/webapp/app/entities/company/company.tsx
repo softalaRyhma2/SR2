@@ -22,13 +22,16 @@ export const Company = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
-  const canCreateCompany = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN]));
+  const canCreateCompany = useAppSelector(state =>
+    hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]),
+  );
   const companyList = useAppSelector(state => state.company.entities);
   const loading = useAppSelector(state => state.company.loading);
   const totalItems = useAppSelector(state => state.company.totalItems);
 
   const [showIdColumn, setShowIdColumn] = useState(false);
   const authorities = useAppSelector(state => state.authentication.account.authorities);
+  const isAdminOrRecser = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]);
 
   useEffect(() => {
     setShowIdColumn(hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]));
@@ -118,7 +121,7 @@ export const Company = () => {
         </div>
       </h2>
       <div className="table-responsive">
-        {companyList && companyList.length > 0 ? (
+        {!loading && companyList && companyList.length > 0 && (
           <Table responsive>
             <thead>
               <tr>
@@ -172,31 +175,33 @@ export const Company = () => {
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
                       </Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/company/${company.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.delete">Delete</Translate>
-                        </span>
-                      </Button>
+
+                      {isAdminOrRecser && (
+                        <Button
+                          onClick={() =>
+                            (window.location.href = `/company/${company.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                          }
+                          color="danger"
+                          size="sm"
+                          data-cy="entityDeleteButton"
+                        >
+                          <FontAwesomeIcon icon="trash" />{' '}
+                          <span className="d-none d-md-inline">
+                            <Translate contentKey="entity.action.delete">Delete</Translate>
+                          </span>
+                        </Button>
+                      )}
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </Table>
-        ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="sr2App.company.home.notFound">No Companies found</Translate>
-            </div>
-          )
+        )}
+        {!loading && !(companyList && companyList.length > 0) && (
+          <div className="alert alert-warning">
+            <Translate contentKey="sr2App.company.home.notFound">No Companies found</Translate>
+          </div>
         )}
       </div>
       {totalItems ? (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Row, Button } from 'reactstrap';
 import { Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { handlePasswordResetFinish, reset } from '../password-reset.reducer';
@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 export const PasswordResetFinishPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
   const key = searchParams.get('key');
@@ -23,7 +24,17 @@ export const PasswordResetFinishPage = () => {
     [],
   );
 
-  const handleValidSubmit = ({ newPassword }) => dispatch(handlePasswordResetFinish({ key, newPassword }));
+  const handleValidSubmit = ({ newPassword }) => {
+    dispatch(handlePasswordResetFinish({ key, newPassword }))
+      .then(() => {
+        toast.success('Password reset succesfully.');
+        navigate('/');
+      })
+      .catch(error => {
+        toast.error('Failed to reset password. Please try again.');
+        console.error('Error resetting password:', error);
+      });
+  };
 
   const updatePassword = event => setPassword(event.target.value);
 

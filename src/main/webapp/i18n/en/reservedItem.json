@@ -20,7 +20,7 @@
       "id": "ID",
       "quantity": "Quantity",
       "reservation": "Reservation",
-      "stockItem": "Stock Item",
+      "stockItemTypeName": "Stock Item Type Name",
       "user": "User"
     }
   }

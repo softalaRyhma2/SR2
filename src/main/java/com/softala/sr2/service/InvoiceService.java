@@ -2,8 +2,10 @@ package com.softala.sr2.service;
 
 import com.softala.sr2.domain.Company;
 import com.softala.sr2.domain.Invoice;
+import com.softala.sr2.domain.Stock;
 import com.softala.sr2.domain.User;
 import com.softala.sr2.repository.InvoiceRepository;
+import com.softala.sr2.repository.StockRepository;
 import com.softala.sr2.repository.UserRepository;
 import com.softala.sr2.security.SecurityUtils;
 import java.util.Collections;
@@ -28,10 +30,12 @@ public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
 
     private final UserRepository userRepository;
+    private final StockRepository stockRepository;
 
-    public InvoiceService(InvoiceRepository invoiceRepository, UserRepository userRepository) {
+    public InvoiceService(InvoiceRepository invoiceRepository, UserRepository userRepository, StockRepository stockRepository) {
         this.invoiceRepository = invoiceRepository;
         this.userRepository = userRepository;
+        this.stockRepository = stockRepository;
     }
 
     public List<Invoice> findAllInvoicesByLoggedInUser() {
@@ -120,6 +124,12 @@ public class InvoiceService {
         return invoiceRepository.findAll(pageable);
     }
 
+    @Transactional(readOnly = true)
+    public List<Invoice> getInvoicesByCompanyId(Company company) {
+        log.debug(("Request get all invoices for company"));
+        return invoiceRepository.findByCompany(company);
+    }
+
     /**
      * Get one invoice by id.
      *
@@ -130,6 +140,13 @@ public class InvoiceService {
     public Optional<Invoice> findOne(Long id) {
         log.debug("Request to get Invoice : {}", id);
         return invoiceRepository.findById(id);
+    }
+
+    // TESTI stockit invoiceen
+    @Transactional(readOnly = true)
+    public List<Stock> getStocksByInvoiceId(Invoice invoice) {
+        log.debug("Request to get all Stocks for one Invoice");
+        return stockRepository.findByInvoice(invoice);
     }
 
     /**

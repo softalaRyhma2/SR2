@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Row, Col } from 'reactstrap';
+import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -19,6 +19,7 @@ export const InvoiceDetail = () => {
   }, []);
 
   const invoiceEntity = useAppSelector(state => state.invoice.entity);
+
   return (
     <Row>
       <Col md="8">
@@ -70,6 +71,60 @@ export const InvoiceDetail = () => {
             <Translate contentKey="entity.action.edit">Edit</Translate>
           </span>
         </Button>
+        <Col>
+          <h3 id="stock-heading" data-cy="StockHeading">
+            <Translate contentKey="sr2App.stock.home.title">Stocks</Translate>
+          </h3>
+          <Table responsive>
+            <thead>
+              <tr>
+                <th>stock id</th>
+                <th>stock date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(invoiceEntity.stocks) && invoiceEntity.stocks.length > 0 ? (
+                invoiceEntity.stocks.map(stock => (
+                  <tr key={stock.id}>
+                    <td>{stock.id}</td>
+                    <td>{stock.stockDate}</td>
+                    <td>
+                      {Array.isArray(stock.stockItems) && stock.stockItems.length > 0 ? (
+                        <Table>
+                          <thead>
+                            <tr>
+                              <th>Item id</th>
+                              <th>Type</th>
+                              <th>Quantity</th>
+                              <th>Price</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {stock.stockItems.map(item => (
+                              <tr key={item.id}>
+                                <td>{item.id}</td>
+                                <td>{item.stockItemType.typeName}</td>
+                                <td>{item.quantity}</td>
+                                <td>{item.price}€</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </Table>
+                      ) : (
+                        <p>No stock items in stock</p>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td>No stocks in this invoice</td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+        </Col>
       </Col>
     </Row>
   );

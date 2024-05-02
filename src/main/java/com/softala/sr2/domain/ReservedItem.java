@@ -32,12 +32,13 @@ public class ReservedItem implements Serializable {
     @JsonIgnoreProperties(value = { "reservedItems" }, allowSetters = true)
     private Reservation reservation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "reservedItems", "stock", "stockItemType" }, allowSetters = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = { "reservedItems", "stock" }, allowSetters = true)
     private StockItem stockItem;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties(value = { "reservedItems" })
     private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -102,7 +103,8 @@ public class ReservedItem implements Serializable {
         this.user = user;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -117,7 +119,8 @@ public class ReservedItem implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -125,8 +128,8 @@ public class ReservedItem implements Serializable {
     @Override
     public String toString() {
         return "ReservedItem{" +
-            "id=" + getId() +
-            ", quantity=" + getQuantity() +
-            "}";
+                "id=" + getId() +
+                ", quantity=" + getQuantity() +
+                "}";
     }
 }

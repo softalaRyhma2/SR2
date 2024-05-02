@@ -135,11 +135,13 @@ export const InvoiceUpdate = () => {
                 >
                   <option value="" key="0" />
                   {companies
-                    ? companies.map(company => (
-                        <option value={company.id} key={company.id}>
-                          {company.companyName}
-                        </option>
-                      ))
+                    ? companies
+                        .filter(company => company.companyName !== 'Recser')
+                        .map(company => (
+                          <option value={company.id} key={company.id}>
+                            {company.companyName}
+                          </option>
+                        ))
                     : null}
                 </ValidatedField>
               ) : (

@@ -27,6 +27,7 @@ export const StockItem = () => {
   const totalItems = useAppSelector(state => state.stockItem.totalItems);
   const authorities = useAppSelector(state => state.authentication.account.authorities);
   const isAdminOrRecser = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]);
+  const isTransport = hasAnyAuthority(authorities, [AUTHORITIES.TRANSPORT]);
 
   const getAllEntities = () => {
     dispatch(
@@ -121,10 +122,12 @@ export const StockItem = () => {
                   <Translate contentKey="sr2App.stockItem.quantity">Quantity</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('quantity')} />
                 </th>
-                <th className="hand" onClick={sort('available')}>
-                  <Translate contentKey="sr2App.stockItem.available">Available</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('available')} />
-                </th>
+                {!isTransport && (
+                  <th className="hand" onClick={sort('available')}>
+                    <Translate contentKey="sr2App.stockItem.available">Available</Translate>{' '}
+                    <FontAwesomeIcon icon={getSortIconByFieldName('available')} />
+                  </th>
+                )}
                 <th className="hand" onClick={sort('price')}>
                   <Translate contentKey="sr2App.stockItem.price">Price</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('price')} />
@@ -147,7 +150,7 @@ export const StockItem = () => {
                     </Button>
                   </td>
                   <td>{stockItem.quantity}</td>
-                  <td>{stockItem.available}</td>
+                  {!isTransport && <td>{stockItem.available}</td>}
                   <td>{stockItem.price}</td>
                   <td>{stockItem.stock ? <span>{stockItem.stock.id}</span> : ''}</td>
                   <td>{stockItem.stockItemType ? <span>{stockItem.stockItemType.typeName}</span> : ''}</td>

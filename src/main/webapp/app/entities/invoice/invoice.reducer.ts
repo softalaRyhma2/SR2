@@ -3,6 +3,7 @@ import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IInvoice, defaultValue } from 'app/shared/model/invoice.model';
+import { IStock } from 'app/shared/model/stock.model';
 
 const initialState: EntityState<IInvoice> = {
   loading: false,
@@ -26,8 +27,30 @@ export const getEntities = createAsyncThunk('invoice/fetch_entity_list', async (
 export const getEntity = createAsyncThunk(
   'invoice/fetch_entity',
   async (id: string | number) => {
-    const requestUrl = `${apiUrl}/${id}`;
-    return axios.get<IInvoice>(requestUrl);
+    const invoiceRequestUrl = `${apiUrl}/${id}`;
+    const invoiceResponse = await axios.get<IInvoice>(invoiceRequestUrl);
+    //console.log('I-REDUCER: Invoice response:', invoiceResponse.data);
+
+    await Promise.all(
+      invoiceResponse.data.stocks.map(async stock => {
+        const stockRequestUrl = `api/stocks/${stock.id}`;
+        //console.log('I-REDUCER: Stock request URL:', stockRequestUrl);
+
+        const stockResponse = await axios.get<IStock>(stockRequestUrl);
+        //console.log('I-REDUCER: Stock response:', stockResponse.data);
+
+        // check if invoice stock-data matches stock response data
+        const matchingStockIndex = invoiceResponse.data.stocks.findIndex(item => item.id === stockResponse.data.id);
+        if (matchingStockIndex !== -1) {
+          //update stock data changes to invoice
+          invoiceResponse.data.stocks[matchingStockIndex] = stockResponse.data;
+        }
+      }),
+    );
+
+    //console.log('I-REDUCER: Updated Invoice data:', invoiceResponse.data);
+
+    return invoiceResponse.data;
   },
   { serializeError: serializeAxiosError },
 );
@@ -82,7 +105,7 @@ export const InvoiceSlice = createEntitySlice({
     builder
       .addCase(getEntity.fulfilled, (state, action) => {
         state.loading = false;
-        state.entity = action.payload.data;
+        state.entity = action.payload;
       })
       .addCase(deleteEntity.fulfilled, state => {
         state.updating = false;
