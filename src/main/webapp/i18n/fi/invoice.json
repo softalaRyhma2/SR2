@@ -22,7 +22,7 @@
       },
       "id": "ID",
       "totalSum": "Kokonaissumma",
-      "invoiceDate": "Invoice Date",
+      "invoiceDate": "Laskun päivä",
       "isClosed": "Is Closed",
       "stock": "Varasto",
       "company": "Yritys"
