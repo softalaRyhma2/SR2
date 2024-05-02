@@ -15,11 +15,11 @@
                                  referencedTableName="stock"
                                  />
 
-        <addForeignKeyConstraint baseColumnNames="stock_item_type_id"
+        <addForeignKeyConstraint baseColumnNames="stock_item_type_company_id"
                                  baseTableName="stock_item"
-                                 constraintName="fk_stock_item__stock_item_type_id"
+                                 constraintName="fk_stock_item__stock_item_type_company_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="stock_item_type"
+                                 referencedTableName="stock_item_type_company"
                                  />
     </changeSet>
 </databaseChangeLog>

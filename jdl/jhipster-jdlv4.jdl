@@ -21,7 +21,9 @@ entity StockItem {
 entity StockItemType {
     typeName String required
 }
-
+entity StockItemTypeCompany {
+    typePrice BigDecimal required
+}
 entity Reservation {
 //    reservedQuantity Integer required,
     reservationDate LocalDate required,
@@ -43,9 +45,13 @@ relationship OneToMany {
 	Reservation{reservedItem} to ReservedItem{reservation},
 	/* Reservation(1)<----->(*)ReservedItem : one Reservation has many reservedItems, many reservedItems have one Reservation*/
 	StockItem{reservedItem} to ReservedItem{stockItem}
-    /* stockItem(1)<----->(*)ReservedItem : one stockItem has many reservedItems, many reservedItems have one stockItem*/
+    /* stockItem(1)<----->(*)ReservedItem : one stockItem has many reservedItems, many reservedItems have one stockItem*/ 
+}
+relationship ManyToOne {
+    StockItemTypeCompany{stockItemType} to StockItemType,
+    StockItemTypeCompany{company} to Company
 }
 
 
-paginate Company, StockItemType, Stock, StockItem, Reservation, Invoice, ReservedItem with pagination
-service Company, StockItemType, Stock, StockItem, Reservation, Invoice, ReservedItem with serviceClass
+paginate Company, StockItemType, Stock, StockItem, StockItemTypeCompany, Reservation, Invoice, ReservedItem with pagination
+service Company, StockItemType, Stock, StockItem, StockItemTypeCompany, Reservation, Invoice, ReservedItem with serviceClass

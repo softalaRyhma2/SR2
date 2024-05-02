@@ -7,26 +7,20 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <!--
-        Added the entity StockItem.
+        Added the entity StockItemTypeCompany.
     -->
     <changeSet id="20240208082456-1" author="jhipster">
-        <createTable tableName="stock_item">
+        <createTable tableName="stock_item_type_company">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="quantity" type="integer">
+            <column name="type_price" type="decimal(21,2)">
                 <constraints nullable="false" />
             </column>
-            <column name="available" type="integer">
-                <constraints nullable="false" />
-            </column>
-            <column name="price" type="decimal(21,2)">
-                <constraints nullable="false" />
-            </column>
-            <column name="stock_id" type="bigint">
+            <column name="stock_item_type_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="stock_item_type_company_id" type="bigint">
+            <column name="company_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -45,14 +39,12 @@
     -->
     <changeSet id="20240208082456-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/stock_item.csv"
+                  file="config/liquibase/fake-data/stock_item_type_company.csv"
                   separator=";"
-                  tableName="stock_item"
+                  tableName="stock_item_type_company"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="quantity" type="numeric"/>
-            <column name="available" type="numeric"/>
-            <column name="price" type="numeric"/>
+            <column name="type_price" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
