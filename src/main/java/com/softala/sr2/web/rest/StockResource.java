@@ -177,14 +177,19 @@ public class StockResource {
     @GetMapping("/{id}")
     public ResponseEntity<Stock> getStock(@PathVariable("id") Long id) {
         log.debug("REST request to get Stock : {}", id);
-        Optional<Stock> stock = stockService.findOne(id);
-        if (stock.isPresent()) {
-            Stock fetchedStock = stock.get();
-            List<StockItem> stockItems = stockService.getStockItemsByStockId(fetchedStock);
+
+        // Retrieve the stock by its id
+        Optional<Stock> stockOptional = stockService.findOne(id);
+
+        // If the stock is present, fetch its stock items and set them
+        stockOptional.ifPresent(stock -> {
+            List<StockItem> stockItems = stockService.getStockItemsByStockId(stock);
             Set<StockItem> stockItemSet = new HashSet<>(stockItems);
-            fetchedStock.setStockItems(stockItemSet);
-        }
-        return ResponseUtil.wrapOrNotFound(stock);
+            stock.setStockItems(stockItemSet);
+        });
+
+        // Return either the stock if present, or a not found response
+        return stockOptional.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     /**

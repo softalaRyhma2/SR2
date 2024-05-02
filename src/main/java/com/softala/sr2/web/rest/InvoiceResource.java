@@ -177,15 +177,16 @@ public class InvoiceResource {
     @GetMapping("/{id}")
     public ResponseEntity<Invoice> getInvoice(@PathVariable("id") Long id) {
         log.debug("REST request to get Invoice : {}", id);
-        Optional<Invoice> invoice = invoiceService.findOne(id);
-        //fetching all stockIds related to invoice Id:
-        if (invoice.isPresent()) {
-            Invoice fetchedInvoice = invoice.get();
-            List<Stock> stocks = invoiceService.getStocksByInvoiceId(fetchedInvoice);
-            Set<Stock> stockSet = new HashSet<>(stocks);
-            fetchedInvoice.setStocks(stockSet);
-        }
-        return ResponseUtil.wrapOrNotFound(invoice);
+        Optional<Invoice> invoiceOptional = invoiceService.findOne(id);
+
+        return invoiceOptional
+            .map(invoice -> {
+                List<Stock> stocks = invoiceService.getStocksByInvoiceId(invoice);
+                Set<Stock> stockSet = new HashSet<>(stocks);
+                invoice.setStocks(stockSet);
+                return ResponseEntity.ok(invoice);
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 
     /**
