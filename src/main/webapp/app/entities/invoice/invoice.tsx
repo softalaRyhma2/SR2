@@ -156,8 +156,8 @@ export const Invoice = () => {
             companyName: invoice.company ? invoice.company.companyName : '',
             companyEmail: invoice.company ? invoice.company.companyEmail : '',
             stockDate: stock.stockDate || '',
-            stockItemType: stockItem.stockItemType ? stockItem.stockItemType.typeName : '',
-            stockItemTypePrice: stockItem.stockItemType ? stockItem.price : '',
+            stockItemType: stockItem.stockItemTypeCompany ? stockItem.stockItemTypeCompany.stockItemType.typeName : '',
+            stockItemTypePrice: stockItem.stockItemTypeCompany ? stockItem.stockItemTypeCompany.typePrice : '',
             stockItemQuantity: stockItem.quantity ? stockItem.quantity : '',
           }));
           // If there are no stock items for the current invoice, include the invoice details
