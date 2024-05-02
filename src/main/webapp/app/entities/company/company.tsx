@@ -121,7 +121,7 @@ export const Company = () => {
         </div>
       </h2>
       <div className="table-responsive">
-        {companyList && companyList.length > 0 ? (
+        {!loading && companyList && companyList.length > 0 && (
           <Table responsive>
             <thead>
               <tr>
@@ -197,12 +197,11 @@ export const Company = () => {
               ))}
             </tbody>
           </Table>
-        ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="sr2App.company.home.notFound">No Companies found</Translate>
-            </div>
-          )
+        )}
+        {!loading && !(companyList && companyList.length > 0) && (
+          <div className="alert alert-warning">
+            <Translate contentKey="sr2App.company.home.notFound">No Companies found</Translate>
+          </div>
         )}
       </div>
       {totalItems ? (
