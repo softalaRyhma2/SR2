@@ -139,7 +139,7 @@ export const ReservedItemUpdate = () => {
                 id="reserved-item-stockItem"
                 name="stockItem"
                 data-cy="stockItem"
-                label={translate('sr2App.reservedItem.stockItem')}
+                label={translate('sr2App.stockItem.stockItem')}
                 type="select"
               >
                 <option value="" key="0" />
