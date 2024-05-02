@@ -22,7 +22,9 @@ export const Company = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
-  const canCreateCompany = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN]));
+  const canCreateCompany = useAppSelector(state =>
+    hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]),
+  );
   const companyList = useAppSelector(state => state.company.entities);
   const loading = useAppSelector(state => state.company.loading);
   const totalItems = useAppSelector(state => state.company.totalItems);
@@ -119,7 +121,7 @@ export const Company = () => {
         </div>
       </h2>
       <div className="table-responsive">
-        {companyList && companyList.length > 0 ? (
+        {!loading && companyList && companyList.length > 0 && (
           <Table responsive>
             <thead>
               <tr>
@@ -195,12 +197,11 @@ export const Company = () => {
               ))}
             </tbody>
           </Table>
-        ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="sr2App.company.home.notFound">No Companies found</Translate>
-            </div>
-          )
+        )}
+        {!loading && !(companyList && companyList.length > 0) && (
+          <div className="alert alert-warning">
+            <Translate contentKey="sr2App.company.home.notFound">No Companies found</Translate>
+          </div>
         )}
       </div>
       {totalItems ? (

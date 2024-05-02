@@ -64,7 +64,25 @@ public class StockItemResource {
         if (stockItem.getId() != null) {
             throw new BadRequestAlertException("A new stockItem cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        //   if (stockItem.getStockItemType() != null && stockItem.getStock != null{
+        //     throw new BadRequestAlertException("A new stockItem cannot have existing stock type", ENTITY_NAME, "adaapeexists");
+        //   }
+
+        //  Check if a stock item with the same type already exists
+        Optional<StockItem> existingStockItem = stockItemRepository
+            .findByStock(stockItem.getStock())
+            .stream()
+            .filter(item -> item.getStockItemType().equals(stockItem.getStockItemType()))
+            .findFirst();
+
+        if (existingStockItem.isPresent()) {
+            log.debug("A stock item with the same type already exists: {}", existingStockItem.get());
+            throw new BadRequestAlertException("A stock item with the same type already exists", ENTITY_NAME, "typeexists");
+        }
+
         StockItem result = stockItemService.save(stockItem);
+
         return ResponseEntity
             .created(new URI("/api/stock-items/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

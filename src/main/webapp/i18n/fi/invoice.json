@@ -2,27 +2,30 @@
   "sr2App": {
     "invoice": {
       "home": {
-        "title": "Invoices",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Luo Invoice",
-        "createOrEditLabel": "Luo tai muokkaa Invoice",
-        "notFound": "Invoice ei löytynyt"
+        "title": "Laskut",
+        "refreshListLabel": "Päivitä lista",
+        "createLabel": "Luo lasku",
+        "createOrEditLabel": "Luo tai muokkaa laskut",
+        "notFound": "Laskua ei löytynyt",
+        "exportToCSV": "Tallenna CSV-tiedostona",
+        "hideFilters": "Piilota suodattimet",
+        "showFilters": "Näytä suodattimet"
       },
-      "created": "Uusi Invoice on luotu, id: {{ param }}",
-      "updated": "Invoice on päivitetty, id: {{ param }}",
-      "deleted": "Invoice on päivitetty, id: {{ param }}",
+      "created": "Uusi lasku on luotu, id: {{ param }}",
+      "updated": "Lasku on päivitetty, id: {{ param }}",
+      "deleted": "Lasku on päivitetty, id: {{ param }}",
       "delete": {
-        "question": "Haluatko varmasti poistaa Invoice {{ id }}?"
+        "question": "Haluatko varmasti poistaa laskun {{ id }}?"
       },
       "detail": {
-        "title": "Invoice"
+        "title": "Lasku"
       },
       "id": "ID",
-      "totalSum": "Total Sum",
-      "invoiceDate": "Invoice Date",
+      "totalSum": "Kokonaissumma",
+      "invoiceDate": "Laskun päivä",
       "isClosed": "Is Closed",
-      "stock": "Stock",
-      "company": "Company"
+      "stock": "Varasto",
+      "company": "Yritys"
     }
   }
 }

@@ -11,6 +11,11 @@ import { getEntities } from './invoice.reducer';
 import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { getEntities as getStocks } from '../stock/stock.reducer';
+import { DatePicker, Space, Checkbox } from 'antd';
+import { getEntities as getCompanies } from '../company/company.reducer';
+import { AUTHORITIES } from 'app/config/constants';
+
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
 export const Invoice = () => {
   const dispatch = useAppDispatch();
@@ -21,32 +26,38 @@ export const Invoice = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
+  const [selectedTimeframe, setSelectedTimeframe] = useState(null);
+  const [showFilters, setShowFilters] = useState(false); // State to toggle visibility of filters
+  const [selectedCompanies, setSelectedCompanies] = useState([]);
+  const [selectedInvoices, setSelectedInvoices] = useState([]);
+
   const invoiceList = useAppSelector(state => state.invoice.entities);
   const loading = useAppSelector(state => state.invoice.loading);
   const totalItems = useAppSelector(state => state.invoice.totalItems);
 
+  const companyList = useAppSelector(state => state.company.entities);
+
   const stockList = useAppSelector(state => state.stock.entities);
+
+  const canSelectCompanies = useAppSelector(state =>
+    hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]),
+  );
 
   // CSV configuration
   const csvConfig = mkConfig({ useKeysAsHeaders: true, fieldSeparator: ';' });
-  const invoiceCsv = useAppSelector(state =>
-    state.invoice.entities.flatMap(invoice => {
-      const stocksForInvoice = stockList.filter(stock => stock.invoice?.id === invoice.id);
-      return stocksForInvoice.map(stock => ({
-        id: invoice.id,
-        totalSum: invoice.totalSum,
-        invoiceDate: invoice.invoiceDate,
-        companyName: invoice.company ? invoice.company.companyName : '',
-        companyEmail: invoice.company ? invoice.company.companyEmail : '',
-        stockDate: stock.stockDate || '', // Use stockDate for verification
-      }));
-    }),
-  );
+  const handleCompanyChange = (e, company) => {
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      setSelectedCompanies([...selectedCompanies, company]); // Add company to selected companies
+    } else {
+      setSelectedCompanies(selectedCompanies.filter(selectedCompany => selectedCompany.id !== company.id)); // Remove company from selected companies
+    }
+  };
 
-  console.log(stockList);
   useEffect(() => {
     // Dispatch an action to fetch stocks with the same arguments as getInvoices
     dispatch(getStocks({ page: 1, size: 10, sort: 'asc' }));
+    dispatch(getCompanies({ page: 1, size: 10, sort: 'asc' }));
   }, [dispatch]);
 
   const getAllEntities = () => {
@@ -115,10 +126,86 @@ export const Invoice = () => {
     }
   };
 
+  const handleSelectAll = e => {
+    if (e.target.checked) {
+      setSelectedInvoices(filteredInvoices);
+    } else {
+      setSelectedInvoices([]);
+    }
+  };
+
+  const handleSelectInvoice = invoice => {
+    const isSelected = selectedInvoices.some(selectedInvoice => selectedInvoice.id === invoice.id);
+    if (isSelected) {
+      setSelectedInvoices(selectedInvoices.filter(inv => inv.id !== invoice.id));
+    } else {
+      setSelectedInvoices([...selectedInvoices, invoice]);
+    }
+  };
+
   // Function to handle CSV export
   const handleExportToCSV = () => {
-    const csvData = generateCsv(csvConfig)(invoiceCsv);
-    download(csvConfig)(csvData);
+    const selectedInvoiceCsv = generateCsv(csvConfig)(
+      selectedInvoices.flatMap(invoice => {
+        const stocksForInvoice = stockList.filter(stock => stock.invoice?.id === invoice.id);
+        return stocksForInvoice.flatMap(stock => {
+          const stockItemsWithTypes = stock.stockItems.map(stockItem => ({
+            id: invoice.id,
+            totalSum: invoice.totalSum,
+            invoiceDate: invoice.invoiceDate,
+            companyName: invoice.company ? invoice.company.companyName : '',
+            companyEmail: invoice.company ? invoice.company.companyEmail : '',
+            stockDate: stock.stockDate || '',
+            stockItemType: stockItem.stockItemType ? stockItem.stockItemType.typeName : '',
+            stockItemTypePrice: stockItem.stockItemType ? stockItem.price : '',
+            stockItemQuantity: stockItem.quantity ? stockItem.quantity : '',
+          }));
+          // If there are no stock items for the current invoice, include the invoice details
+          return stockItemsWithTypes.length > 0
+            ? stockItemsWithTypes
+            : [
+                {
+                  id: invoice.id,
+                  totalSum: invoice.totalSum,
+                  invoiceDate: invoice.invoiceDate,
+                  companyName: invoice.company ? invoice.company.companyName : '',
+                  companyEmail: invoice.company ? invoice.company.companyEmail : '',
+                  stockDate: stock.stockDate || '', // Use stockDate for verification
+                  stockItemType: '',
+                  stockItemTypePrice: '',
+                  stockItemQuantity: '',
+                },
+              ];
+        });
+      }),
+    );
+    download(csvConfig)(selectedInvoiceCsv);
+  };
+
+  // Function to filter invoices based on selected timeframe
+  const filteredInvoices = invoiceList.filter(invoice => {
+    if (!selectedTimeframe && !selectedCompanies.length) {
+      return true; // No timeframe or companies selected, so include all invoices
+    } else {
+      // Check timeframe
+      const invoiceDate = new Date(invoice.invoiceDate);
+      const startDate = selectedTimeframe ? new Date(selectedTimeframe[0]) : null;
+      const endDate = selectedTimeframe ? new Date(selectedTimeframe[1]) : null;
+      const withinTimeframe = !selectedTimeframe || (invoiceDate >= startDate && invoiceDate <= endDate);
+
+      // Check companies
+      const selectedCompanyIds = selectedCompanies.map(company => company.id);
+      const belongsToSelectedCompanies = selectedCompanies.length === 0 || selectedCompanyIds.includes(invoice.company?.id);
+
+      return withinTimeframe && belongsToSelectedCompanies;
+    }
+  });
+
+  // Function to toggle visibility of filters
+  const toggleFilters = () => {
+    console.log(companyList);
+    console.log(stockList);
+    setShowFilters(!showFilters);
   };
 
   return (
@@ -136,14 +223,45 @@ export const Invoice = () => {
             <Translate contentKey="sr2App.invoice.home.createLabel">Create new Invoice</Translate>
           </Link>
           {/* Add CSV Export Button */}
-          <Button onClick={handleExportToCSV}>Export to CSV</Button>
+          <Button onClick={handleExportToCSV}>
+            <Translate contentKey="sr2App.invoice.home.exportToCSV">Export to CSV</Translate>
+          </Button>
+          {/* Filter Button */}
+          <Button onClick={toggleFilters} className="mx-2">
+            <Translate contentKey={showFilters ? 'sr2App.invoice.home.hideFilters' : 'sr2App.invoice.home.showFilters'}>
+              {showFilters ? 'Hide Filters' : 'Show Filters'}
+            </Translate>
+          </Button>
         </div>
+        {/* RangePicker for timeframe filtering */}
+        {showFilters && (
+          <div className="mt-2">
+            <Space direction="vertical" size={12}>
+              <DatePicker.RangePicker onChange={(dates, dateStrings) => setSelectedTimeframe(dates)} />
+            </Space>
+          </div>
+        )}
+        {/* Company Dropdown Menu */}
+        {showFilters && canSelectCompanies && (
+          <div className="mt-2">
+            {companyList
+              .filter(company => company.companyName !== 'Recser') // Filter out the "Recser" company
+              .map(company => (
+                <Checkbox key={company.id} onChange={e => handleCompanyChange(e, company)}>
+                  {company.companyName}
+                </Checkbox>
+              ))}
+          </div>
+        )}
       </h2>
       <div className="table-responsive">
-        {invoiceList && invoiceList.length > 0 ? (
+        {!loading && invoiceList && invoiceList.length > 0 && (
           <Table responsive>
             <thead>
               <tr>
+                <th>
+                  <Checkbox onChange={handleSelectAll} />
+                </th>
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="sr2App.invoice.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
@@ -162,8 +280,14 @@ export const Invoice = () => {
               </tr>
             </thead>
             <tbody>
-              {invoiceList.map((invoice, i) => (
+              {filteredInvoices.map((invoice, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
+                  <td>
+                    <Checkbox
+                      onChange={() => handleSelectInvoice(invoice)}
+                      checked={selectedInvoices.some(selectedInvoice => selectedInvoice.id === invoice.id)}
+                    />
+                  </td>
                   <td>
                     <Button tag={Link} to={`/invoice/${invoice.id}`} color="link" size="sm">
                       {invoice.id}
@@ -213,16 +337,15 @@ export const Invoice = () => {
               ))}
             </tbody>
           </Table>
-        ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="sr2App.invoice.home.notFound">No Invoices found</Translate>
-            </div>
-          )
+        )}
+        {!loading && !(invoiceList && invoiceList.length > 0) && (
+          <div className="alert alert-warning">
+            <Translate contentKey="sr2App.invoice.home.notFound">No Invoices found</Translate>
+          </div>
         )}
       </div>
       {totalItems ? (
-        <div className={invoiceList && invoiceList.length > 0 ? '' : 'd-none'}>
+        <div className={filteredInvoices && filteredInvoices.length > 0 ? '' : 'd-none'}>
           <div className="justify-content-center d-flex">
             <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
           </div>

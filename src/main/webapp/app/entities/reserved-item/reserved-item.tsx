@@ -121,7 +121,8 @@ export const ReservedItem = () => {
                   <Translate contentKey="sr2App.reservedItem.reservation">Reservation</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  <Translate contentKey="sr2App.reservedItem.stockItem">Stock Item</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="sr2App.reservedItem.stockItemTypeName">Stock Item Type Name</Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   <Translate contentKey="sr2App.reservedItem.user">User ID</Translate>
@@ -146,7 +147,11 @@ export const ReservedItem = () => {
                     )}
                   </td>
                   <td>
-                    {reservedItem.stockItem ? <Link to={`/stock-item/${reservedItem.stockItem.id}`}>{reservedItem.stockItem.id}</Link> : ''}
+                    {reservedItem.stockItem && reservedItem.stockItem.stockItemType ? (
+                      <span>{reservedItem.stockItem.stockItemType.typeName}</span>
+                    ) : (
+                      ''
+                    )}
                   </td>
                   <td>{reservedItem.user ? reservedItem.user.login : ' '}</td>
                   <td className="text-end">

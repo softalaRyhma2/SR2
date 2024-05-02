@@ -46,9 +46,35 @@ export const getEntity = createAsyncThunk(
 export const createEntity = createAsyncThunk(
   'stockItem/create_entity',
   async (entity: IStockItem, thunkAPI) => {
-    const result = await axios.post<IStockItem>(apiUrl, cleanEntity(entity));
-    thunkAPI.dispatch(getEntities({}));
-    return result;
+    try {
+      // Check if stock items with the same type exist
+      const { data: existingStockItems } = await axios.get<IStockItem[]>(`${apiUrl}/stock/${entity.stock.id}`);
+
+      const existingItem = existingStockItems.find(item => item.stockItemType.id === entity.stockItemType.id);
+      if (existingItem) {
+        // If a stock item with the same type exists, throw an error
+        throw new Error(
+          'A stock item with the same type already exists in this stock. Either edit the existing item or create a new stock item with a different type.',
+        );
+      }
+
+      // If no stock item with the same type exists, proceed with creating the entity
+      const result = await axios.post<IStockItem>(apiUrl, cleanEntity(entity));
+      thunkAPI.dispatch(getEntities({}));
+      return result;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Handle Axios errors
+        console.log(error.response?.data);
+        console.log(error.response?.status);
+        console.log(error.response?.headers);
+        console.log(error.request);
+      } else {
+        // Handle non-Axios errors
+        console.error(error);
+      }
+      throw error; // rethrow the error to propagate it
+    }
   },
   { serializeError: serializeAxiosError },
 );

@@ -15,9 +15,7 @@ import { getEntity, updateEntity, createEntity, reset } from './stock.reducer';
 
 export const StockUpdate = () => {
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
-
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
@@ -26,10 +24,6 @@ export const StockUpdate = () => {
   const loading = useAppSelector(state => state.stock.loading);
   const updating = useAppSelector(state => state.stock.updating);
   const updateSuccess = useAppSelector(state => state.stock.updateSuccess);
-
-  const handleClose = () => {
-    navigate('/stock' + location.search);
-  };
 
   useEffect(() => {
     if (isNew) {
@@ -43,10 +37,13 @@ export const StockUpdate = () => {
 
   useEffect(() => {
     if (updateSuccess) {
-      handleClose();
+      navigate(`/stock/${id}`);
     }
-  }, [updateSuccess]);
+  }, [updateSuccess, id, navigate]);
 
+  const handleGoBack = () => {
+    navigate(`/stock/${id}`);
+  };
   // eslint-disable-next-line complexity
   const saveEntity = values => {
     if (values.id !== undefined && typeof values.id !== 'number') {
@@ -130,7 +127,7 @@ export const StockUpdate = () => {
                   <br />
                 </div>
               )}
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/stock" replace color="info">
+              <Button onClick={handleGoBack} id="cancel-save" data-cy="entityCreateCancelButton" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
