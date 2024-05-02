@@ -141,7 +141,7 @@ export const Stock = () => {
         </div>
       </h2>
       <div className="table-responsive">
-        {filteredStockList && filteredStockList.length > 0 ? (
+        {!loading && filteredStockList && filteredStockList.length > 0 && (
           <Table responsive>
             <thead>
               <tr>
@@ -224,12 +224,11 @@ export const Stock = () => {
               ))}
             </tbody>
           </Table>
-        ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="sr2App.stock.home.notFound">No Stocks found</Translate>
-            </div>
-          )
+        )}
+        {!loading && !(filteredStockList && filteredStockList.length > 0) && (
+          <div className="alert alert-warning">
+            <Translate contentKey="sr2App.stock.home.notFound">No Stocks found</Translate>
+          </div>
         )}
       </div>
       {totalItems ? (

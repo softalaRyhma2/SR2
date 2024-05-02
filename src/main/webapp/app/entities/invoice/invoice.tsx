@@ -255,7 +255,7 @@ export const Invoice = () => {
         )}
       </h2>
       <div className="table-responsive">
-        {filteredInvoices && filteredInvoices.length > 0 ? (
+        {!loading && invoiceList && invoiceList.length > 0 && (
           <Table responsive>
             <thead>
               <tr>
@@ -337,12 +337,11 @@ export const Invoice = () => {
               ))}
             </tbody>
           </Table>
-        ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="sr2App.invoice.home.notFound">No Invoices found</Translate>
-            </div>
-          )
+        )}
+        {!loading && !(invoiceList && invoiceList.length > 0) && (
+          <div className="alert alert-warning">
+            <Translate contentKey="sr2App.invoice.home.notFound">No Invoices found</Translate>
+          </div>
         )}
       </div>
       {totalItems ? (
