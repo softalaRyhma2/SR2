@@ -37,12 +37,12 @@ export const StockUpdate = () => {
 
   useEffect(() => {
     if (updateSuccess) {
-      navigate(`/stock/${id}`);
+      navigate(`/stock`);
     }
   }, [updateSuccess, id, navigate]);
 
   const handleGoBack = () => {
-    navigate(`/stock/${id}`);
+    navigate(`/stock`);
   };
   // eslint-disable-next-line complexity
   const saveEntity = values => {
