@@ -71,7 +71,9 @@
           "required": "Your password is required.",
           "minlength": "Your password is required to be at least 4 characters.",
           "maxlength": "Your password cannot be longer than 50 characters.",
-          "strength": "Password strength:"
+          "strength": "Password strength: ",
+          "weak": "Password is too weak",
+          "requirements": "Password requirements:\n- At least 4 characters\n- At least one uppercase letter\n- At least one lowercase letter\n- At least one number\n- At least one special character\n- Maximum length of 50 characters"
         },
         "confirmpassword": {
           "required": "Your confirmation password is required.",

@@ -14,7 +14,7 @@ export const PasswordResetFinishPage = () => {
 
   const [searchParams] = useSearchParams();
   const key = searchParams.get('key');
-
+  const [isWeakPassword, setIsWeakPassword] = useState(false); // State to track weak password
   const [password, setPassword] = useState('');
 
   useEffect(
@@ -36,7 +36,37 @@ export const PasswordResetFinishPage = () => {
       });
   };
 
-  const updatePassword = event => setPassword(event.target.value);
+  const updatePassword = event => {
+    setPassword(event.target.value);
+    setIsWeakPassword(isWeak(event.target.value));
+  };
+
+  const isWeak = (passwordValue: string): boolean => {
+    const strength = measureStrength(passwordValue);
+    return strength < 20;
+  };
+
+  // Function to measure password strength
+  const measureStrength = (passwordValue: string): number => {
+    let force = 0;
+    const regex = /[$-/:-?{-~!"^_`[\]]/g;
+    const flags = {
+      lowerLetters: /[a-z]+/.test(passwordValue),
+      upperLetters: /[A-Z]+/.test(passwordValue),
+      numbers: /\d+/.test(passwordValue),
+      symbols: regex.test(passwordValue),
+    };
+    const passedMatches = Object.values(flags).filter((isMatchedFlag: boolean) => !!isMatchedFlag).length;
+    force += 2 * passwordValue.length + (passwordValue.length >= 10 ? 1 : 0);
+    force += passedMatches * 10;
+    // penalty (short password)
+    force = passwordValue.length <= 6 ? Math.min(force, 10) : force;
+    // penalty (poor variety of characters)
+    force = passedMatches === 1 ? Math.min(force, 10) : force;
+    force = passedMatches === 2 ? Math.min(force, 20) : force;
+    force = passedMatches === 3 ? Math.min(force, 40) : force;
+    return force;
+  };
 
   const getResetForm = () => {
     return (
@@ -68,7 +98,7 @@ export const PasswordResetFinishPage = () => {
           }}
           data-cy="confirmResetPassword"
         />
-        <Button color="success" type="submit" data-cy="submit">
+        <Button color="success" type="submit" data-cy="submit" disabled={isWeakPassword}>
           <Translate contentKey="reset.finish.form.button">Validate new password</Translate>
         </Button>
       </ValidatedForm>
@@ -85,6 +115,19 @@ export const PasswordResetFinishPage = () => {
 
   return (
     <div>
+      <span>
+        {/* Info box explaining password requirements */}
+        <div className="alert alert-info" role="region">
+          {translate('global.messages.validate.newpassword.requirements')}
+        </div>
+      </span>
+
+      {isWeakPassword && (
+        <div className="alert alert-danger" role="alert">
+          {translate('global.messages.validate.newpassword.weak')}
+        </div>
+      )}
+
       <Row className="justify-content-center">
         <Col md="4">
           <h1>

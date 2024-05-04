@@ -71,7 +71,9 @@
           "required": "Salasana on pakollinen.",
           "minlength": "Salasanan tulee olla vähintään 4 merkin pituinen.",
           "maxlength": "Salasana ei voi olla pitempi kuin 50 merkkiä.",
-          "strength": "Salasanan vahvuus:"
+          "strength": "Salasanan vahvuus:",
+          "weak": "Salasana on liian heikko",
+          "requirements": "Salasanan vaatimukset:\n- Vähintään 4 merkkiä\n- Vähintään yksi iso kirjain\n- Vähintään yksi pieni kirjain\n- Vähintään yksi numero\n- Vähintään yksi erikoismerkki\n- Enintään 50 merkkiä pitkä"
         },
         "confirmpassword": {
           "required": "Salasana on pakollinen.",
