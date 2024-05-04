@@ -46,6 +46,23 @@ export const getEntity = createAsyncThunk(
 export const createEntity = createAsyncThunk(
   'stockItem/create_entity',
   async (entity: IStockItem, thunkAPI) => {
+    const result = await axios.post<IStockItem>(apiUrl, cleanEntity(entity));
+    const stockId = entity.stock?.id;
+
+    if (stockId) {
+      thunkAPI.dispatch(getStockItemEntitiesForStock(stockId));
+    } else {
+      thunkAPI.dispatch(getEntities({}));
+    }
+
+    return result;
+  },
+  { serializeError: serializeAxiosError },
+);
+/*
+export const createEntity = createAsyncThunk(
+  'stockItem/create_entity',
+  async (entity: IStockItem, thunkAPI) => {
     try {
       // Check if stock items with the same type exist
       const { data: existingStockItems } = await axios.get<IStockItem[]>(`${apiUrl}/stock/${entity.stock.id}`);
@@ -77,7 +94,7 @@ export const createEntity = createAsyncThunk(
     }
   },
   { serializeError: serializeAxiosError },
-);
+);*/
 
 export const updateEntity = createAsyncThunk(
   'stockItem/update_entity',

@@ -70,7 +70,7 @@ public class StockItemResource {
         //   }
 
         //  Check if a stock item with the same type already exists
-        Optional<StockItem> existingStockItem = stockItemRepository
+        /*     Optional<StockItem> existingStockItem = stockItemRepository
             .findByStock(stockItem.getStock())
             .stream()
             .filter(item -> item.getStockItemTypeCompany().equals(stockItem.getStockItemTypeCompany()))
@@ -80,7 +80,7 @@ public class StockItemResource {
             log.debug("A stock item with the same type already exists: {}", existingStockItem.get());
             throw new BadRequestAlertException("A stock item with the same type already exists", ENTITY_NAME, "typeexists");
         }
-
+*/
         StockItem result = stockItemService.save(stockItem);
 
         return ResponseEntity
