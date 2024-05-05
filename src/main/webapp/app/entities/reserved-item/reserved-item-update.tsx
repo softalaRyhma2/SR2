@@ -149,15 +149,7 @@ export const ReservedItemUpdate = () => {
                       ))
                   : null}
               </ValidatedField>
-              <Button
-                tag={Link}
-                id="cancel-save"
-                data-cy="entityCreateCancelButton"
-                onClick={handleClose}
-                to="/reserved-item"
-                replace
-                color="info"
-              >
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" onClick={handleClose} replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
