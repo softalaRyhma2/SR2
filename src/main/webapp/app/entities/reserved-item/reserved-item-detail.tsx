@@ -49,7 +49,7 @@ export const ReservedItemDetail = () => {
         <dt>
           <Translate contentKey="sr2App.reservedItem.user">User ID</Translate>
         </dt>
-        <dd>{reservedItemEntity.user ? reservedItemEntity.user.id : ''}</dd>
+        <dd>{reservedItemEntity.user ? reservedItemEntity.user.login : ''}</dd>
         <Button tag={Link} to="/reserved-item" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
           <span className="d-none d-md-inline">
