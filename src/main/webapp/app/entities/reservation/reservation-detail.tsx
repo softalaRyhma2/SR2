@@ -70,16 +70,19 @@ export const ReservationDetail = () => {
       </Col>
       <Col md="8" className="jh-entity-details">
         <h2>Reserved Items</h2>
-        <Link
+        <Button
+          tag={Link}
           to={{ pathname: '/reserved-item/new', search: `?reservationId=${reservationEntity.id}` }}
-          className="btn btn-primary jh-create-entity"
+          color="primary"
+          className="jh-create-entity"
           id="jh-create-entity"
           data-cy="entityCreateButton"
+          disabled={reservationEntity.isPickedUp}
         >
           <FontAwesomeIcon icon="plus" />
           &nbsp;
           <Translate contentKey="sr2App.reservedItem.home.createLabel">Create new Reserved Item</Translate>
-        </Link>
+        </Button>
         <Table>
           <thead>
             <tr>
@@ -90,7 +93,7 @@ export const ReservationDetail = () => {
                 <Translate contentKey="sr2App.reservedItem.quantity">Quantity</Translate>
               </th>
               <th>
-                <Translate contentKey="sr2App.reservedItem.stockItemTypeName"></Translate>
+                <Translate contentKey="sr2App.reservedItem.stockItemTypeName">Stock Item Type Name</Translate>
               </th>
               <th></th>
             </tr>
