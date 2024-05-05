@@ -90,6 +90,7 @@ export const ReservationUpdate = () => {
                   id="reservation-id"
                   label={translate('global.field.id')}
                   validate={{ required: true }}
+                  disabled={reservationEntity.isPickedUp}
                 />
               ) : null}
               <ValidatedField
@@ -101,6 +102,7 @@ export const ReservationUpdate = () => {
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
+                disabled={reservationEntity.isPickedUp}
               />
               <ValidatedField
                 label={translate('sr2App.reservation.isPickedUp')}
