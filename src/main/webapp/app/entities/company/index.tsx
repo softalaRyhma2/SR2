@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 
 import Company from './company';
+import CompanyDetail from './company-detail';
 import CompanyUpdate from './company-update';
 import CompanyDeleteDialog from './company-delete-dialog';
 import PrivateRoute from 'app/shared/auth/private-route';
@@ -21,6 +22,7 @@ const CompanyRoutes = () => (
       }
     />
     <Route path=":id">
+      <Route index element={<CompanyDetail />} />
       <Route path="edit" element={<CompanyUpdate />} />
       <Route path="delete" element={<CompanyDeleteDialog />} />
     </Route>
