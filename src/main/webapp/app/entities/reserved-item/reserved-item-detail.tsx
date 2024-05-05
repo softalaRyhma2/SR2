@@ -44,7 +44,10 @@ export const ReservedItemDetail = () => {
           <dt>
             <Translate contentKey="sr2App.reservedItem.stockItem">Stock Item</Translate>
           </dt>
-          <dd>{reservedItemEntity.stockItem ? reservedItemEntity.stockItem.id : ''}</dd>
+          <dd>
+            {reservedItemEntity.stockItem ? reservedItemEntity.stockItem.id : ''},
+            {reservedItemEntity.stockItem ? reservedItemEntity.stockItem.stockItemTypeCompany.stockItemType.typeName : ''}
+          </dd>
         </dl>
         <dt>
           <Translate contentKey="sr2App.reservedItem.user">User ID</Translate>
