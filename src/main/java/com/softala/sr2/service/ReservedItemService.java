@@ -1,7 +1,10 @@
 package com.softala.sr2.service;
 
+import com.nimbusds.jose.crypto.opts.OptionUtils;
 import com.softala.sr2.domain.ReservedItem;
+import com.softala.sr2.domain.StockItem;
 import com.softala.sr2.repository.ReservedItemRepository;
+import com.softala.sr2.repository.StockItemRepository;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +23,11 @@ public class ReservedItemService {
     private final Logger log = LoggerFactory.getLogger(ReservedItemService.class);
 
     private final ReservedItemRepository reservedItemRepository;
+    private final StockItemRepository stockItemRepository;
 
-    public ReservedItemService(ReservedItemRepository reservedItemRepository) {
+    public ReservedItemService(ReservedItemRepository reservedItemRepository, StockItemRepository stockItemRepository) {
         this.reservedItemRepository = reservedItemRepository;
+        this.stockItemRepository = stockItemRepository;
     }
 
     /**
@@ -33,7 +38,24 @@ public class ReservedItemService {
      */
     public ReservedItem save(ReservedItem reservedItem) {
         log.debug("Request to save ReservedItem : {}", reservedItem);
-        return reservedItemRepository.save(reservedItem);
+
+        Optional<StockItem> optionalStockItem = stockItemRepository.findById(reservedItem.getStockItem().getId());
+        if (optionalStockItem.isPresent()) {
+            StockItem stockItem = optionalStockItem.get();
+            int reservedQuantity = reservedItem.getQuantity();
+            int currentQuantity = stockItem.getQuantity();
+            if (currentQuantity >= reservedQuantity) {
+                int newQuantity = currentQuantity - reservedQuantity;
+                stockItem.setAvailable(newQuantity);
+                stockItemRepository.save(stockItem);
+
+                return reservedItemRepository.save(reservedItem);
+            } else {
+                throw new IllegalArgumentException("Not enough quantity available in stock");
+            }
+        } else {
+            throw new IllegalArgumentException("StockItem not found");
+        }
     }
 
     /**
