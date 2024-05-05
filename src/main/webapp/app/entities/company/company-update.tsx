@@ -96,17 +96,23 @@ export const CompanyUpdate = () => {
                   validate={{ required: true }}
                 />
               ) : null}
-              <ValidatedField
-                label={translate('sr2App.company.companyName')}
-                id="company-companyName"
-                name="companyName"
-                data-cy="companyName"
-                type="text"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                  maxLength: { value: 50, message: translate('entity.validation.maxlength', { max: 50 }) },
-                }}
-              />
+              {!isNew && isAdminOrRecser ? (
+                <ValidatedField
+                  label={translate('sr2App.company.companyName')}
+                  id="company-companyName"
+                  name="companyName"
+                  data-cy="companyName"
+                  type="text"
+                  validate={{
+                    required: { value: true, message: translate('entity.validation.required') },
+                    maxLength: { value: 50, message: translate('entity.validation.maxlength', { max: 50 }) },
+                  }}
+                />
+              ) : (
+                <div style={{ marginBottom: '10px' }}>
+                  <strong>{companyEntity.companyName}</strong>
+                </div>
+              )}
               <ValidatedField
                 label={translate('sr2App.company.companyEmail')}
                 id="company-companyEmail"
