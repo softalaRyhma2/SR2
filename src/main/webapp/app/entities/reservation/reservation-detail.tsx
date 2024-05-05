@@ -89,6 +89,9 @@ export const ReservationDetail = () => {
               <th>
                 <Translate contentKey="sr2App.reservedItem.quantity">Quantity</Translate>
               </th>
+              <th>
+                <Translate contentKey="sr2App.reservedItem.stockItemTypeName"></Translate>
+              </th>
               <th></th>
             </tr>
           </thead>
@@ -102,6 +105,7 @@ export const ReservationDetail = () => {
                 <tr key={reservedItemEntity.id}>
                   <td>{reservedItemEntity.id}</td>
                   <td>{reservedItemEntity.quantity}</td>
+                  <td>{reservedItemEntity.stockItem.stockItemTypeCompany.stockItemType.typeName}</td>
                   <td>
                     <Button tag={Link} to={`/reserved-item/${reservedItemEntity.id}`} color="primary">
                       <FontAwesomeIcon icon="eye" /> View
