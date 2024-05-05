@@ -128,9 +128,9 @@ export const ReservedItemUpdate = () => {
               >
                 <option value="" key="0" />
                 {reservations
-                  ? reservations.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                  ? reservations.map(rItem => (
+                      <option value={rItem.id} key={rItem.id}>
+                        {rItem.id}
                       </option>
                     ))
                   : null}
@@ -138,11 +138,14 @@ export const ReservedItemUpdate = () => {
               <ValidatedField id="reserved-item-stockItem" name="stockItem" data-cy="stockItem" label="Stock Item" type="select">
                 <option value="" key="0" />
                 {stockItems
-                  ? stockItems.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
+                  ? stockItems
+                      .filter(sItem => sItem.stockItemTypeCompany.company.companyName === 'Käsittelylaitos')
+                      .map(sItem => (
+                        <option value={sItem.id} key={sItem.id}>
+                          {sItem.stockItemTypeCompany.stockItemType.typeName}, available:{sItem.available} (
+                          {sItem.stockItemTypeCompany.company.companyName}, stockId: {sItem.stock.id}, stockDdate: {sItem.stock.stockDate})
+                        </option>
+                      ))
                   : null}
               </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/reserved-item" replace color="info">
