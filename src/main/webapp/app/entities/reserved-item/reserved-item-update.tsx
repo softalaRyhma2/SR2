@@ -18,7 +18,7 @@ import { getEntity, updateEntity, createEntity, reset } from './reserved-item.re
 export const ReservedItemUpdate = () => {
   const dispatch = useAppDispatch();
 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
@@ -31,7 +31,8 @@ export const ReservedItemUpdate = () => {
   const updateSuccess = useAppSelector(state => state.reservedItem.updateSuccess);
 
   const handleClose = () => {
-    navigate('/reserved-item' + location.search);
+    history.back();
+    //navigate('/reserved-item' + location.search);
   };
 
   useEffect(() => {
