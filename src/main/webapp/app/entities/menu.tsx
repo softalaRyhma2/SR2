@@ -41,8 +41,7 @@ const EntitiesMenu = () => {
         <Translate contentKey="global.menu.entities.stockItemType" />
       </MenuItem>
       <MenuItem icon="asterisk" to="/stock-item-type-company">
-        StockItemTypeCompany
-        {/*<Translate contentKey="global.menu.entities.stockItemTypeCompany" />*/}
+        <Translate contentKey="global.menu.entities.stockItemTypeCompany" />
       </MenuItem>
       <MenuItem icon="asterisk" to="/reserved-item">
         <Translate contentKey="global.menu.entities.reservedItem" />
