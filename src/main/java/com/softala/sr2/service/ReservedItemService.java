@@ -1,8 +1,8 @@
 package com.softala.sr2.service;
 
-import com.nimbusds.jose.crypto.opts.OptionUtils;
 import com.softala.sr2.domain.ReservedItem;
 import com.softala.sr2.domain.StockItem;
+import com.softala.sr2.domain.StockItemTypeCompany;
 import com.softala.sr2.repository.ReservedItemRepository;
 import com.softala.sr2.repository.StockItemRepository;
 import java.util.Optional;
@@ -30,26 +30,36 @@ public class ReservedItemService {
         this.stockItemRepository = stockItemRepository;
     }
 
-    /**
-     * Save a reservedItem.
-     *
-     * @param reservedItem the entity to save.
-     * @return the persisted entity.
-     */
     public ReservedItem save(ReservedItem reservedItem) {
         log.debug("Request to save ReservedItem : {}", reservedItem);
 
         Optional<StockItem> optionalStockItem = stockItemRepository.findById(reservedItem.getStockItem().getId());
         if (optionalStockItem.isPresent()) {
             StockItem stockItem = optionalStockItem.get();
+
             int reservedQuantity = reservedItem.getQuantity();
             int currentQuantity = stockItem.getQuantity();
-            if (currentQuantity >= reservedQuantity) {
-                int newQuantity = currentQuantity - reservedQuantity;
-                stockItem.setAvailable(newQuantity);
-                stockItemRepository.save(stockItem);
+            int currentAvailable = stockItem.getAvailable();
+            StockItemTypeCompany stockItemTypeCompany = reservedItem.getStockItem().getStockItemTypeCompany();
 
-                return reservedItemRepository.save(reservedItem);
+            if (currentQuantity >= reservedQuantity && currentAvailable >= reservedQuantity) {
+                // If reservation has no items:
+                if (stockItemTypeCompany == null) {
+                    int newQuantity = currentQuantity - reservedQuantity;
+                    stockItem.setAvailable(newQuantity);
+                    stockItemRepository.save(stockItem);
+                    return reservedItemRepository.save(reservedItem);
+                }
+
+                // If reservation has items, check for saving right amount to stock:
+                if (stockItemTypeCompany.equals(stockItem.getStockItemTypeCompany())) {
+                    int newQuantity = currentAvailable - reservedQuantity;
+                    stockItem.setAvailable(newQuantity);
+                    stockItemRepository.save(stockItem);
+                    return reservedItemRepository.save(reservedItem);
+                } else {
+                    throw new IllegalArgumentException("StockItemTypeCompany does not match for the reserved item");
+                }
             } else {
                 throw new IllegalArgumentException("Not enough quantity available in stock");
             }
