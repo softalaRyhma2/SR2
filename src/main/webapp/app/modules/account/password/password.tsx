@@ -108,8 +108,9 @@ export const PasswordPage = () => {
               type="password"
               validate={{
                 required: { value: true, message: translate('global.messages.validate.newpassword.required') },
-                minLength: { value: 4, message: translate('global.messages.validate.newpassword.minlength') },
+                minLength: { value: 8, message: translate('global.messages.validate.newpassword.minlength') },
                 maxLength: { value: 50, message: translate('global.messages.validate.newpassword.maxlength') },
+                validate: v => !isWeak(v) || translate('global.messages.validate.newpassword.weak'),
               }}
               onChange={updatePassword}
               data-cy="newPassword"
@@ -118,7 +119,14 @@ export const PasswordPage = () => {
             <span>
               {/* Info box explaining password requirements */}
               <div className="alert alert-info" role="region">
-                {translate('global.messages.validate.newpassword.requirements')}
+                <ul>
+                  <li>{translate('global.messages.validate.newpassword.atleast4characters')}</li>
+                  <li>{translate('global.messages.validate.newpassword.atleast1uppercase')}</li>
+                  <li>{translate('global.messages.validate.newpassword.atleast1lowercase')}</li>
+                  <li>{translate('global.messages.validate.newpassword.atleast1number')}</li>
+                  <li>{translate('global.messages.validate.newpassword.atleast1specialcharacter')}</li>
+                  <li>{translate('global.messages.validate.newpassword.maxlength')}</li>
+                </ul>
               </div>
             </span>
 
@@ -136,7 +144,7 @@ export const PasswordPage = () => {
               type="password"
               validate={{
                 required: { value: true, message: translate('global.messages.validate.confirmpassword.required') },
-                minLength: { value: 4, message: translate('global.messages.validate.confirmpassword.minlength') },
+                minLength: { value: 8, message: translate('global.messages.validate.confirmpassword.minlength') },
                 maxLength: { value: 50, message: translate('global.messages.validate.confirmpassword.maxlength') },
                 validate: v => v === password || translate('global.messages.error.dontmatch'),
               }}

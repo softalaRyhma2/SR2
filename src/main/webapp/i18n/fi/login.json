@@ -4,6 +4,7 @@
     "form": {
       "password": "Salasana",
       "password.placeholder": "Salasanasi",
+      "password.required": "Salasana vaaditaan.",
       "rememberme": "Muista minut",
       "button": "Kirjaudu sisään"
     },

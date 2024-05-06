@@ -43,6 +43,7 @@
     "form": {
       "username.label": "Username",
       "username.placeholder": "Your username",
+      "username.required": "Your username is required.",
       "currentpassword.label": "Current password",
       "currentpassword.placeholder": "Current password",
       "newpassword.label": "New password",
@@ -70,11 +71,15 @@
       "validate": {
         "newpassword": {
           "required": "Your password is required.",
-          "minlength": "Your password is required to be at least 4 characters.",
+          "minlength": "Your password is required to be at least 8 characters.",
           "maxlength": "Your password cannot be longer than 50 characters.",
           "strength": "Password strength: ",
           "weak": "Password is too weak",
-          "requirements": "Password requirements:\n- At least 4 characters\n- At least one uppercase letter\n- At least one lowercase letter\n- At least one number\n- At least one special character\n- Maximum length of 50 characters"
+          "atleast4characters": "At least 8 characters",
+          "atleast1uppercase": "At least one uppercase letter",
+          "atleast1lowercase": "At least one lowercase letter",
+          "atleast1number": "At least one number",
+          "atleast1specialcharacter": "At least one special character"
         },
         "confirmpassword": {
           "required": "Your confirmation password is required.",

@@ -43,6 +43,7 @@
     "form": {
       "username.label": "Käyttäjänimi",
       "username.placeholder": "Käyttäjänimesi",
+      "username.required": "Käyttäjänimi on pakollinen.",
       "currentpassword.label": "Nykyinen salasana",
       "currentpassword.placeholder": "Nykyinen salasana",
       "newpassword.label": "Uusi salasana",
@@ -74,7 +75,11 @@
           "maxlength": "Salasana ei voi olla pitempi kuin 50 merkkiä.",
           "strength": "Salasanan vahvuus:",
           "weak": "Salasana on liian heikko",
-          "requirements": "Salasanan vaatimukset:\n- Vähintään 4 merkkiä\n- Vähintään yksi iso kirjain\n- Vähintään yksi pieni kirjain\n- Vähintään yksi numero\n- Vähintään yksi erikoismerkki\n- Enintään 50 merkkiä pitkä"
+          "atleast4characters": "Vähintään 8 merkkiä",
+          "atleast1uppercase": "Vähintään yksi iso kirjain",
+          "atleast1lowercase": "Vähintään yksi pieni kirjain",
+          "atleast1number": "Vähintään yksi numero",
+          "atleast1specialcharacter": "Vähintään yksi erikoismerkki"
         },
         "confirmpassword": {
           "required": "Salasana on pakollinen.",
