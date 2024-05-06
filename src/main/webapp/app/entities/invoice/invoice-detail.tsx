@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { mkConfig, generateCsv, download } from 'export-to-csv'; // Import CSV utilities
 
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-
 import { getEntity } from './invoice.reducer';
 
 export const InvoiceDetail = () => {
   const dispatch = useAppDispatch();
-
   const { id } = useParams<'id'>();
 
   useEffect(() => {
@@ -19,6 +18,37 @@ export const InvoiceDetail = () => {
   }, []);
 
   const invoiceEntity = useAppSelector(state => state.invoice.entity);
+
+  const handleExportToCSV = () => {
+    console.log('invoice entity: ', invoiceEntity);
+    const csvConfig = mkConfig({ useKeysAsHeaders: true, fieldSeparator: ';' }); // CSV configuration
+
+    // Extracting stock data
+    const stockData = [];
+    invoiceEntity.stocks.forEach(stock => {
+      stock.stockItems.forEach(item => {
+        stockData.push({
+          'Invoice ID': invoiceEntity.id,
+          'Total Sum': invoiceEntity.totalSum,
+          'Invoice Date': invoiceEntity.invoiceDate,
+          'Is Closed': invoiceEntity.isClosed ? 'true' : 'false',
+          Company: invoiceEntity.company ? invoiceEntity.company.companyName : '',
+          'Stock ID': stock.id, // Accessing stock.id directly from the current stock
+          'Stock Date': stock.stockDate, // Accessing stock.stockDate directly from the current stock
+          'Item ID': item.id, // Accessing item.id directly from the current item
+          Type: item.stockItemTypeCompany?.stockItemType.typeName || '', // Accessing nested properties of item directly
+          Quantity: item.quantity, // Accessing item.quantity directly from the current item
+          Price: item.price + '€', // Accessing item.price directly from the current item
+        });
+      });
+    });
+
+    // Generate CSV data
+    const csvData = generateCsv(csvConfig)(stockData);
+
+    // Trigger download
+    download(csvConfig)(csvData);
+  };
 
   return (
     <Row>
@@ -70,6 +100,9 @@ export const InvoiceDetail = () => {
           <span className="d-none d-md-inline">
             <Translate contentKey="entity.action.edit">Edit</Translate>
           </span>
+        </Button>
+        <Button color="success" onClick={handleExportToCSV}>
+          CSV Export
         </Button>
         <Col>
           <h3 id="stock-heading" data-cy="StockHeading">

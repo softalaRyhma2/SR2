@@ -17,6 +17,8 @@ import { AUTHORITIES } from 'app/config/constants';
 
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
+// Import statements...
+
 export const Invoice = () => {
   const dispatch = useAppDispatch();
   const pageLocation = useLocation();
@@ -43,17 +45,6 @@ export const Invoice = () => {
     hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]),
   );
 
-  // CSV configuration
-  const csvConfig = mkConfig({ useKeysAsHeaders: true, fieldSeparator: ';' });
-  const handleCompanyChange = (e, company) => {
-    const isChecked = e.target.checked;
-    if (isChecked) {
-      setSelectedCompanies([...selectedCompanies, company]); // Add company to selected companies
-    } else {
-      setSelectedCompanies(selectedCompanies.filter(selectedCompany => selectedCompany.id !== company.id)); // Remove company from selected companies
-    }
-  };
-
   useEffect(() => {
     // Dispatch an action to fetch stocks with the same arguments as getInvoices
     dispatch(getStocks({ page: 1, size: 10, sort: 'asc' }));
@@ -68,6 +59,15 @@ export const Invoice = () => {
         sort: `${paginationState.sort},${paginationState.order}`,
       }),
     );
+  };
+
+  const handleCompanyChange = (e, company) => {
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      setSelectedCompanies([...selectedCompanies, company]); // Add company to selected companies
+    } else {
+      setSelectedCompanies(selectedCompanies.filter(selectedCompany => selectedCompany.id !== company.id)); // Remove company from selected companies
+    }
   };
 
   // Sort entities
@@ -126,62 +126,6 @@ export const Invoice = () => {
     }
   };
 
-  const handleSelectAll = e => {
-    if (e.target.checked) {
-      setSelectedInvoices(filteredInvoices);
-    } else {
-      setSelectedInvoices([]);
-    }
-  };
-
-  const handleSelectInvoice = invoice => {
-    const isSelected = selectedInvoices.some(selectedInvoice => selectedInvoice.id === invoice.id);
-    if (isSelected) {
-      setSelectedInvoices(selectedInvoices.filter(inv => inv.id !== invoice.id));
-    } else {
-      setSelectedInvoices([...selectedInvoices, invoice]);
-    }
-  };
-
-  // Function to handle CSV export
-  const handleExportToCSV = () => {
-    const selectedInvoiceCsv = generateCsv(csvConfig)(
-      selectedInvoices.flatMap(invoice => {
-        const stocksForInvoice = stockList.filter(stock => stock.invoice?.id === invoice.id);
-        return stocksForInvoice.flatMap(stock => {
-          const stockItemsWithTypes = stock.stockItems.map(stockItem => ({
-            id: invoice.id,
-            totalSum: invoice.totalSum,
-            invoiceDate: invoice.invoiceDate,
-            companyName: invoice.company ? invoice.company.companyName : '',
-            companyEmail: invoice.company ? invoice.company.companyEmail : '',
-            stockDate: stock.stockDate || '',
-            stockItemType: stockItem.stockItemTypeCompany ? stockItem.stockItemTypeCompany.stockItemType.typeName : '',
-            stockItemTypePrice: stockItem.stockItemTypeCompany ? stockItem.stockItemTypeCompany.typePrice : '',
-            stockItemQuantity: stockItem.quantity ? stockItem.quantity : '',
-          }));
-          // If there are no stock items for the current invoice, include the invoice details
-          return stockItemsWithTypes.length > 0
-            ? stockItemsWithTypes
-            : [
-                {
-                  id: invoice.id,
-                  totalSum: invoice.totalSum,
-                  invoiceDate: invoice.invoiceDate,
-                  companyName: invoice.company ? invoice.company.companyName : '',
-                  companyEmail: invoice.company ? invoice.company.companyEmail : '',
-                  stockDate: stock.stockDate || '', // Use stockDate for verification
-                  stockItemType: '',
-                  stockItemTypePrice: '',
-                  stockItemQuantity: '',
-                },
-              ];
-        });
-      }),
-    );
-    download(csvConfig)(selectedInvoiceCsv);
-  };
-
   // Function to filter invoices based on selected timeframe
   const filteredInvoices = invoiceList.filter(invoice => {
     if (!selectedTimeframe && !selectedCompanies.length) {
@@ -203,8 +147,6 @@ export const Invoice = () => {
 
   // Function to toggle visibility of filters
   const toggleFilters = () => {
-    console.log(companyList);
-    console.log(stockList);
     setShowFilters(!showFilters);
   };
 
@@ -222,10 +164,6 @@ export const Invoice = () => {
             &nbsp;
             <Translate contentKey="sr2App.invoice.home.createLabel">Create new Invoice</Translate>
           </Link>
-          {/* Add CSV Export Button */}
-          <Button onClick={handleExportToCSV}>
-            <Translate contentKey="sr2App.invoice.home.exportToCSV">Export to CSV</Translate>
-          </Button>
           {/* Filter Button */}
           <Button onClick={toggleFilters} className="mx-2">
             <Translate contentKey={showFilters ? 'sr2App.invoice.home.hideFilters' : 'sr2App.invoice.home.showFilters'}>
@@ -259,9 +197,8 @@ export const Invoice = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th>
-                  <Checkbox onChange={handleSelectAll} />
-                </th>
+                {/* Table header content */}
+                {/* Removed checkboxes */}
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="sr2App.invoice.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
@@ -282,12 +219,7 @@ export const Invoice = () => {
             <tbody>
               {filteredInvoices.map((invoice, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Checkbox
-                      onChange={() => handleSelectInvoice(invoice)}
-                      checked={selectedInvoices.some(selectedInvoice => selectedInvoice.id === invoice.id)}
-                    />
-                  </td>
+                  {/* Removed checkboxes */}
                   <td>{invoice.id}</td>
                   <td>{invoice.totalSum}</td>
                   <td>
