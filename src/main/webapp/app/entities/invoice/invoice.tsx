@@ -288,16 +288,12 @@ export const Invoice = () => {
                       checked={selectedInvoices.some(selectedInvoice => selectedInvoice.id === invoice.id)}
                     />
                   </td>
-                  <td>
-                    <Button tag={Link} to={`/invoice/${invoice.id}`} color="link" size="sm">
-                      {invoice.id}
-                    </Button>
-                  </td>
+                  <td>{invoice.id}</td>
                   <td>{invoice.totalSum}</td>
                   <td>
                     {invoice.invoiceDate ? <TextFormat type="date" value={invoice.invoiceDate} format={APP_LOCAL_DATE_FORMAT} /> : null}
                   </td>
-                  <td>{invoice.company ? <Link to={`/company/${invoice.company.id}`}>{invoice.company.companyName}</Link> : ''}</td>
+                  <td>{invoice.company ? <span>{invoice.company.companyName}</span> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/invoice/${invoice.id}`} color="info" size="sm" data-cy="entityDetailsButton">

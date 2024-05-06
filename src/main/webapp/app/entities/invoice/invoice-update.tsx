@@ -28,7 +28,7 @@ export const InvoiceUpdate = () => {
   const updateSuccess = useAppSelector(state => state.invoice.updateSuccess);
 
   const handleClose = () => {
-    navigate('/invoice' + location.search);
+    navigate(`/invoice/${id}` + location.search);
   };
 
   useEffect(() => {
@@ -44,6 +44,7 @@ export const InvoiceUpdate = () => {
   useEffect(() => {
     if (updateSuccess) {
       handleClose();
+      navigate(`/invoice/${id}`);
     }
   }, [updateSuccess]);
 
@@ -150,7 +151,7 @@ export const InvoiceUpdate = () => {
                   <span>{invoiceEntity.company?.companyName}</span>
                 </div>
               )}
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/invoice" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to={`/invoice/${id}`} replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
