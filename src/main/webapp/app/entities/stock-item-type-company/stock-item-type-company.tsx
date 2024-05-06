@@ -131,13 +131,13 @@ export const StockItemTypeCompany = () => {
                   <Translate contentKey="sr2App.stockItemTypeCompany.typePrice">Type Price</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('typePrice')} />
                 </th>
-                <th>
-                  {/*<Translate contentKey="sr2App.stockItemTypeCompany.stockItemType">Stock Item Type</Translate>{' '}*/}
-                  Stock Item Type(from stockItemTypeCompany)
-                  <FontAwesomeIcon icon="sort" />
+                <th className="hand" onClick={sort('stockItemType')}>
+                  <Translate contentKey="sr2App.stockItemTypeCompany.stockItemType">Stock Item Type</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('stockItemType')} />
                 </th>
-                <th>
-                  <Translate contentKey="sr2App.stockItemTypeCompany.company">Company</Translate> <FontAwesomeIcon icon="sort" />
+                <th className="hand" onClick={sort('company')}>
+                  <Translate contentKey="sr2App.stockItemTypeCompany.company">Company</Translate>
+                  <FontAwesomeIcon icon={getSortIconByFieldName('company')} />
                 </th>
                 <th />
               </tr>
