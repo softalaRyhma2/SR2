@@ -111,6 +111,7 @@ export const ReservationUpdate = () => {
                 data-cy="isPickedUp"
                 check
                 type="checkbox"
+                disabled={reservationEntity.isPickedUp}
               />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/reservation" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
