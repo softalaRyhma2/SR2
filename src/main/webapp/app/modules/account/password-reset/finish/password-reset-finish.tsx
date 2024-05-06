@@ -80,11 +80,26 @@ export const PasswordResetFinishPage = () => {
             required: { value: true, message: translate('global.messages.validate.newpassword.required') },
             minLength: { value: 4, message: translate('global.messages.validate.newpassword.minlength') },
             maxLength: { value: 50, message: translate('global.messages.validate.newpassword.maxlength') },
+            validate: v => !isWeak(v) || translate('global.messages.validate.newpassword.weak'),
           }}
           onChange={updatePassword}
           data-cy="resetPassword"
         />
+
+        {/* Info box explaining password requirements */}
+        <div className="alert alert-info" role="region">
+          <ul>
+            <li>{translate('global.messages.validate.newpassword.atleast4characters')}</li>
+            <li>{translate('global.messages.validate.newpassword.atleast1uppercase')}</li>
+            <li>{translate('global.messages.validate.newpassword.atleast1lowercase')}</li>
+            <li>{translate('global.messages.validate.newpassword.atleast1number')}</li>
+            <li>{translate('global.messages.validate.newpassword.atleast1specialcharacter')}</li>
+            <li>{translate('global.messages.validate.newpassword.maxlength')}</li>
+          </ul>
+        </div>
+
         <PasswordStrengthBar password={password} />
+
         <ValidatedField
           name="confirmPassword"
           label={translate('global.form.confirmpassword.label')}
@@ -98,6 +113,7 @@ export const PasswordResetFinishPage = () => {
           }}
           data-cy="confirmResetPassword"
         />
+
         <Button color="success" type="submit" data-cy="submit" disabled={isWeakPassword}>
           <Translate contentKey="reset.finish.form.button">Validate new password</Translate>
         </Button>
@@ -115,19 +131,6 @@ export const PasswordResetFinishPage = () => {
 
   return (
     <div>
-      <span>
-        {/* Info box explaining password requirements */}
-        <div className="alert alert-info" role="region">
-          {translate('global.messages.validate.newpassword.requirements')}
-        </div>
-      </span>
-
-      {isWeakPassword && (
-        <div className="alert alert-danger" role="alert">
-          {translate('global.messages.validate.newpassword.weak')}
-        </div>
-      )}
-
       <Row className="justify-content-center">
         <Col md="4">
           <h1>
