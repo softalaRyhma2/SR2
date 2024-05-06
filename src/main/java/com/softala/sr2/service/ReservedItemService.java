@@ -147,6 +147,9 @@ public class ReservedItemService {
                         throw new IllegalStateException("Cannot delete ReservedItem because it is associated with an active StockItem.");
                     }
                 }
+                //if reserved item is in reservation which is not picked up, when deleting reserved amount is returned back to the stock
+                stockItem.setAvailable(stockItem.getAvailable() + reservedItem.getQuantity());
+                stockItemRepository.save(stockItem);
             }
             // If the ReservedItem is not associated with any StockItem
             // or if it is not associated with the same ReservedItem as any associated ReservedItem,
