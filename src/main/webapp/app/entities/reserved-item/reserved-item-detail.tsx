@@ -65,7 +65,7 @@ export const ReservedItemDetail = () => {
           to={`/reserved-item/${reservedItemEntity.id}/edit`}
           replace
           color="primary"
-          disabled={reservedItemEntity.reservation}
+          //disabled={Boolean(reservedItemEntity.reservation)}
         >
           <FontAwesomeIcon icon="pencil-alt" />{' '}
           <span className="d-none d-md-inline">

@@ -76,7 +76,46 @@ public class ReservedItemService {
      */
     public ReservedItem update(ReservedItem reservedItem) {
         log.debug("Request to update ReservedItem : {}", reservedItem);
-        return reservedItemRepository.save(reservedItem);
+        Optional<ReservedItem> existingReservedItemOptional = reservedItemRepository.findById(reservedItem.getId());
+
+        existingReservedItemOptional.ifPresent(existingReservedItem -> {
+            int oldQuantity = existingReservedItem.getQuantity();
+            log.info("Request to update ReservedItem oldQ : {}", oldQuantity);
+            int newQuantity = reservedItem.getQuantity();
+            log.info("Request to update ReservedItem newQ : {}", newQuantity);
+
+            // Fetching related StockItem
+            StockItem stockItem = existingReservedItem.getStockItem();
+            if (stockItem != null) {
+                int stockQuantity = stockItem.getQuantity();
+                int stockAvailable = stockItem.getAvailable();
+                log.info("Request to update ReservedItem available in stock : {}", stockAvailable);
+                int difference = newQuantity - oldQuantity;
+                log.info("Request to update ReservedItem difference : {}", difference);
+                int newAmount;
+                if (difference >= 0) {
+                    newAmount = difference + oldQuantity;
+                } else {
+                    newAmount = oldQuantity + difference;
+                }
+                // check if it's enough available items in stock
+                if (stockAvailable - difference >= 0 && stockAvailable - difference <= stockQuantity) {
+                    // update ReservedItem
+                    existingReservedItem.setQuantity(newAmount);
+                    reservedItemRepository.save(existingReservedItem);
+
+                    // update StockItem
+                    stockItem.setAvailable(stockAvailable - difference);
+                    stockItemRepository.save(stockItem);
+                } else {
+                    throw new IllegalArgumentException("Not enough quantity available in stock");
+                }
+            } else {
+                throw new IllegalArgumentException("StockItem not found");
+            }
+        });
+
+        return reservedItem;
     }
 
     /**
@@ -93,6 +132,7 @@ public class ReservedItemService {
             .map(existingReservedItem -> {
                 if (reservedItem.getQuantity() != null) {
                     existingReservedItem.setQuantity(reservedItem.getQuantity());
+                    update(existingReservedItem);
                 }
 
                 return existingReservedItem;

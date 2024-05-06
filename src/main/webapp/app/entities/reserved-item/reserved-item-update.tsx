@@ -117,7 +117,10 @@ export const ReservedItemUpdate = () => {
                 type="text"
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
-                  validate: v => isNumber(v) || translate('entity.validation.number'),
+                  validate: {
+                    isNumber: v => isNumber(v) || translate('entity.validation.number'),
+                    nonNegative: v => (!isNaN(v) && v >= 0) || "Number can't be negative",
+                  },
                 }}
               />
               <ValidatedField
