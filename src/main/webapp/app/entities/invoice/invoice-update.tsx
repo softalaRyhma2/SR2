@@ -78,6 +78,8 @@ export const InvoiceUpdate = () => {
           company: invoiceEntity?.company?.id,
         };
 
+  const isClosed = invoiceEntity?.isClosed;
+
   return (
     <div>
       <Row className="justify-content-center">
@@ -101,6 +103,7 @@ export const InvoiceUpdate = () => {
                   id="invoice-id"
                   label={translate('global.field.id')}
                   validate={{ required: true }}
+                  disabled={isClosed}
                 />
               ) : null}
               {!isNew ? (
@@ -110,6 +113,7 @@ export const InvoiceUpdate = () => {
                   name="totalSum"
                   data-cy="totalSum"
                   type="text"
+                  disabled={isClosed}
                 />
               ) : null}
               <ValidatedField
@@ -118,6 +122,7 @@ export const InvoiceUpdate = () => {
                 name="invoiceDate"
                 data-cy="invoiceDate"
                 type="date"
+                disabled={isClosed}
               />
               {!isNew ? (
                 <ValidatedField
@@ -127,6 +132,7 @@ export const InvoiceUpdate = () => {
                   data-cy="isClosed"
                   check
                   type="checkbox"
+                  disabled={isClosed} // added disabled attribute here
                 />
               ) : null}
               {isNew ? (
@@ -163,7 +169,7 @@ export const InvoiceUpdate = () => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating || isClosed}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
