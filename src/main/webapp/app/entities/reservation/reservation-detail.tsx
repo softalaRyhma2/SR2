@@ -4,11 +4,12 @@ import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, AUTHORITIES } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './reservation.reducer';
 import { getReservedItemEntitiesForReservation } from '../reserved-item/reserved-item.reducer';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
 export const ReservationDetail = () => {
   const dispatch = useAppDispatch();
@@ -22,8 +23,9 @@ export const ReservationDetail = () => {
 
   const reservationEntity = useAppSelector(state => state.reservation.entity);
   const reservedItemList = useAppSelector(state => state.reservedItem.entities);
-  console.log('RESERVEDITEMLIST: ' + JSON.stringify(reservedItemList));
-
+  //  console.log('RESERVEDITEMLIST: ' + JSON.stringify(reservedItemList));
+  const authorities = useAppSelector(state => state.authentication.account.authorities);
+  const isAdminOrRecser = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]);
   return (
     <Row>
       <Col md="8">
@@ -109,11 +111,13 @@ export const ReservationDetail = () => {
                   <td>{reservedItemEntity.id}</td>
                   <td>{reservedItemEntity.quantity}</td>
                   <td>{reservedItemEntity.stockItem.stockItemTypeCompany.stockItemType.typeName}</td>
-                  <td>
-                    <Button tag={Link} to={`/reserved-item/${reservedItemEntity.id}`} color="primary">
-                      <FontAwesomeIcon icon="eye" /> View
-                    </Button>
-                  </td>
+                  {isAdminOrRecser && (
+                    <td>
+                      <Button tag={Link} to={`/reserved-item/${reservedItemEntity.id}`} color="primary">
+                        <FontAwesomeIcon icon="eye" /> View
+                      </Button>
+                    </td>
+                  )}
                 </tr>
               ))
             )}
