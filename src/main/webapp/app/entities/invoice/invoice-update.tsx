@@ -103,13 +103,15 @@ export const InvoiceUpdate = () => {
                   validate={{ required: true }}
                 />
               ) : null}
-              <ValidatedField
-                label={translate('sr2App.invoice.totalSum')}
-                id="invoice-totalSum"
-                name="totalSum"
-                data-cy="totalSum"
-                type="text"
-              />
+              {!isNew ? (
+                <ValidatedField
+                  label={translate('sr2App.invoice.totalSum')}
+                  id="invoice-totalSum"
+                  name="totalSum"
+                  data-cy="totalSum"
+                  type="text"
+                />
+              ) : null}
               <ValidatedField
                 label={translate('sr2App.invoice.invoiceDate')}
                 id="invoice-invoiceDate"
@@ -117,14 +119,16 @@ export const InvoiceUpdate = () => {
                 data-cy="invoiceDate"
                 type="date"
               />
-              <ValidatedField
-                label={translate('sr2App.invoice.isClosed')}
-                id="invoice-isClosed"
-                name="isClosed"
-                data-cy="isClosed"
-                check
-                type="checkbox"
-              />
+              {!isNew ? (
+                <ValidatedField
+                  label={translate('sr2App.invoice.isClosed')}
+                  id="invoice-isClosed"
+                  name="isClosed"
+                  data-cy="isClosed"
+                  check
+                  type="checkbox"
+                />
+              ) : null}
               {isNew ? (
                 <ValidatedField
                   id="invoice-company"
