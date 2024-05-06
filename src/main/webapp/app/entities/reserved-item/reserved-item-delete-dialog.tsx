@@ -15,6 +15,7 @@ export const ReservedItemDeleteDialog = () => {
   const { id } = useParams<'id'>();
 
   const [loadModal, setLoadModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     dispatch(getEntity(id));
@@ -35,14 +36,25 @@ export const ReservedItemDeleteDialog = () => {
     }
   }, [updateSuccess]);
 
-  const confirmDelete = () => {
-    dispatch(deleteEntity(reservedItemEntity.id));
+  const confirmDelete = async () => {
+    console.log('Confirm delete function called');
+    try {
+      await dispatch(deleteEntity(reservedItemEntity.id));
+    } catch (error) {
+      console.error('Error occurred:', error);
+      if (error.response && error.response.data && error.response.data.detail) {
+        setErrorMessage(error.response.data.detail);
+      } else {
+        setErrorMessage('An error occurred while deleting the ReservedItem.');
+      }
+    }
   };
 
   return (
     <Modal isOpen toggle={handleClose}>
       <ModalHeader toggle={handleClose} data-cy="reservedItemDeleteDialogHeading">
         <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
+        {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
       </ModalHeader>
       <ModalBody id="sr2App.reservedItem.delete.question">
         <Translate contentKey="sr2App.reservedItem.delete.question" interpolate={{ id: reservedItemEntity.id }}>

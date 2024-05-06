@@ -130,7 +130,28 @@ public class ReservedItemService {
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete ReservedItem : {}", id);
-        reservedItemRepository.deleteById(id);
+        log.debug("Request to delete ReservedItem: {}", id);
+
+        // Fetch the ReservedItem by id
+        Optional<ReservedItem> reservedItemOptional = reservedItemRepository.findById(id);
+
+        reservedItemOptional.ifPresent(reservedItem -> {
+            // Check if the ReservedItem is associated with a StockItem
+            StockItem stockItem = reservedItem.getStockItem();
+            if (stockItem != null) {
+                // Iterate over the associated ReservedItems of the StockItem
+                for (ReservedItem associatedReservedItem : stockItem.getReservedItems()) {
+                    // Check if the current ReservedItem matches any associated ReservedItem by ID
+                    if (associatedReservedItem.getId().equals(reservedItem.getId())) {
+                        // The ReservedItem is associated with an active StockItem
+                        throw new IllegalStateException("Cannot delete ReservedItem because it is associated with an active StockItem.");
+                    }
+                }
+            }
+            // If the ReservedItem is not associated with any StockItem
+            // or if it is not associated with the same ReservedItem as any associated ReservedItem,
+            // then proceed with deletion
+            reservedItemRepository.deleteById(id);
+        });
     }
 }
