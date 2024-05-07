@@ -74,7 +74,7 @@ export const InvoiceUpdate = () => {
 
   const defaultValues = () =>
     isNew
-      ? {}
+      ? { invoiceDate: new Date().toISOString().split('T')[0] }
       : {
           ...invoiceEntity,
           company: invoiceEntity?.company?.id,
