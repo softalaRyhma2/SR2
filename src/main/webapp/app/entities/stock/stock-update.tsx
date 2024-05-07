@@ -138,7 +138,7 @@ export const StockUpdate = () => {
                     ))
                   ) : (
                     <option disabled>
-                      <Translate contentKey="sr2App.reservedItem.home.notFound">No Reserved Items found</Translate>
+                      <Translate contentKey="sr2App.invoice.home.notFound">No Reserved Items found</Translate>
                     </option>
                   )}
                 </ValidatedField>

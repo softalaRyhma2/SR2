@@ -33,7 +33,6 @@ export const StockItemUpdate = () => {
   const updating = useAppSelector(state => state.stockItem.updating);
   const updateSuccess = useAppSelector(state => state.stockItem.updateSuccess);
 
-
   const [selectedStockItemType, setSelectedStockItemType] = useState(null);
 
   const [companyNameForStock, setCompanyNameForStock] = useState(null);
@@ -45,7 +44,7 @@ export const StockItemUpdate = () => {
       navigate('/stock-item' + location.search);
     }
   };
-  
+
   const handleGoBack = () => {
     navigate(-1);
   };
@@ -233,7 +232,7 @@ export const StockItemUpdate = () => {
               &nbsp;
               <Button
                 onClick={handleGoBack}
-                updateSuccesscolor="primary"
+                updateSuccessColor="primary"
                 id="save-entity"
                 data-cy="entityCreateSaveButton"
                 type="submit"
