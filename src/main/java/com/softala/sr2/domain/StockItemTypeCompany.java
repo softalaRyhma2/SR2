@@ -29,11 +29,13 @@ public class StockItemTypeCompany implements Serializable {
     @Column(name = "type_price", precision = 21, scale = 2, nullable = false)
     private BigDecimal typePrice;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "stock_item_type_id")
     @JsonIgnoreProperties(value = { "stockItemTypeCompanies" }, allowSetters = true)
     private StockItemType stockItemType;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     @JsonIgnoreProperties(value = { "stockItemTypeCompanies" }, allowSetters = true)
@@ -93,7 +95,8 @@ public class StockItemTypeCompany implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -108,7 +111,8 @@ public class StockItemTypeCompany implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -118,11 +122,13 @@ public class StockItemTypeCompany implements Serializable {
         return "StockItemTypeCompany [id=" + id + ", typePrice=" + typePrice + ", stockItemType=" + stockItemType
                 + ", company=" + company + "]";
     }
-    /*    @Override
-    public String toString() {
-        return "StockItemTypeCompany{" +
-            "id=" + getId() +
-            ", typePrice=" + getTypePrice() +
-            "}";
-     } */
+    /*
+     * @Override
+     * public String toString() {
+     * return "StockItemTypeCompany{" +
+     * "id=" + getId() +
+     * ", typePrice=" + getTypePrice() +
+     * "}";
+     * }
+     */
 }

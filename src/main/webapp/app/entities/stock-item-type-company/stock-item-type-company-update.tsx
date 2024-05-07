@@ -122,6 +122,7 @@ export const StockItemTypeCompanyUpdate = () => {
               <ValidatedField
                 id="stock-item-type-company-stockItemType"
                 name="stockItemType"
+                required
                 data-cy="stockItemType"
                 label={translate('sr2App.stockItemTypeCompany.stockItemType')}
                 type="select"
@@ -138,6 +139,7 @@ export const StockItemTypeCompanyUpdate = () => {
               <ValidatedField
                 id="stock-item-type-company-company"
                 name="company"
+                required
                 data-cy="company"
                 label={translate('sr2App.stockItemTypeCompany.company')}
                 type="select"
