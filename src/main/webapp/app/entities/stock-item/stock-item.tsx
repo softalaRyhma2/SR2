@@ -49,7 +49,7 @@ export const StockItem = () => {
 
   useEffect(() => {
     sortEntities();
-  }, [paginationState.activePage, paginationState.order, paginationState.sort]);
+  }, [paginationState.activePage, paginationState.order]);
 
   useEffect(() => {
     const params = new URLSearchParams(pageLocation.search);
@@ -70,7 +70,7 @@ export const StockItem = () => {
     setPaginationState({
       ...paginationState,
       order: paginationState.order === ASC ? DESC : ASC,
-      sort: p,
+      sort: 'id', // Only sort by 'id'
     });
   };
 
@@ -85,6 +85,9 @@ export const StockItem = () => {
   };
 
   const getSortIconByFieldName = (fieldName: string) => {
+    if (fieldName !== 'id') {
+      return null; // No sorting arrows for columns other than 'id'
+    }
     const sortFieldName = paginationState.sort;
     const order = paginationState.order;
     if (sortFieldName !== fieldName) {
@@ -118,19 +121,16 @@ export const StockItem = () => {
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="sr2App.stockItem.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
-                <th className="hand" onClick={sort('quantity')}>
-                  <Translate contentKey="sr2App.stockItem.quantity">Quantity</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('quantity')} />
+                <th className="hand">
+                  <Translate contentKey="sr2App.stockItem.quantity">Quantity</Translate>
                 </th>
                 {!isTransport && (
-                  <th className="hand" onClick={sort('available')}>
-                    <Translate contentKey="sr2App.stockItem.available">Available</Translate>{' '}
-                    <FontAwesomeIcon icon={getSortIconByFieldName('available')} />
+                  <th className="hand">
+                    <Translate contentKey="sr2App.stockItem.available">Available</Translate>
                   </th>
                 )}
-                <th className="hand" onClick={sort('price')}>
-                  <Translate contentKey="sr2App.stockItem.price">Price</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('price')} />
+                <th className="hand">
+                  <Translate contentKey="sr2App.stockItem.price">Price</Translate>
                 </th>
                 <th>Type</th>
                 <th>
