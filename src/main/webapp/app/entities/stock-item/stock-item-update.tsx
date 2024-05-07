@@ -1,4 +1,3 @@
-// stock-item-update.tsx
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Button, Row, Col, FormText } from 'reactstrap';
@@ -122,9 +121,12 @@ export const StockItemUpdate = () => {
 
   const [filteredStockItemTypes, setFilteredStockItemTypes] = useState([]);
   useEffect(() => {
-    const filteredTypes = stockItemTypes.filter(type => type.company?.companyName === companyNameForStock);
+    let filteredTypes = [];
+    if (companyNameForStock) {
+      filteredTypes = stockItemTypes.filter(type => type.company?.companyName === companyNameForStock);
+    }
     setFilteredStockItemTypes(filteredTypes);
-  }, [companyNameForStock]);
+  }, [companyNameForStock, stockItemTypes]);
 
   return (
     <div>
