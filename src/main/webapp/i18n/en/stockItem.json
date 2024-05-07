@@ -25,6 +25,7 @@
       "reservedItem": "Reserved Item",
       "stock": "Stock",
       "stockItemType": "Stock Item Type",
+      "stockDate": "Stock Date",
 
       "errors": {
         "stockItemTypeExists": "A stock item with the same type already exists. Please choose a different type.",

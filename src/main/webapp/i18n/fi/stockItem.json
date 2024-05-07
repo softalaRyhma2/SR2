@@ -25,6 +25,7 @@
       "reservedItem": "Reserved Item",
       "stock": "Varasto",
       "stockItemType": "Lavatyyppi",
+      "stockDate": "Varastotuotteen päivämäärä",
 
       "errors": {
         "stockItemTypeExists": "Varastosta löytyy jo samantyyppinen tuote. Valitse erilainen tuotetyyppi.",

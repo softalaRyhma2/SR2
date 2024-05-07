@@ -136,22 +136,17 @@ export const StockItem = () => {
                 <th>
                   <Translate contentKey="sr2App.stockItem.stock">Stock</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+                <th>StockItemTypeCompany id, company</th>
                 <th>
-                  {/*<Translate contentKey="sr2App.stockItem.stockItemType">Stock Item Type</Translate> <FontAwesomeIcon icon="sort" />*/}
-                  StockItemTypeCompany id, company
+                  <Translate contentKey="sr2App.stockItem.stockDate">Stock Date</Translate>
                 </th>
-
                 <th />
               </tr>
             </thead>
             <tbody>
               {stockItemList.map((stockItem, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/stock-item/${stockItem.id}`} color="link" size="sm">
-                      {stockItem.id}
-                    </Button>
-                  </td>
+                  <td>{stockItem.id}</td>
                   <td>{stockItem.quantity}</td>
                   {!isTransport && <td>{stockItem.available}</td>}
                   <td>{stockItem.price}</td>
@@ -161,7 +156,7 @@ export const StockItem = () => {
                     {stockItem.stockItemTypeCompany ? stockItem.stockItemTypeCompany.company.id : ''},{' '}
                     {stockItem.stockItemTypeCompany ? stockItem.stockItemTypeCompany.company.companyName : ''}
                   </td>
-
+                  <td>{stockItem.stock ? stockItem.stock.stockDate : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/stock-item/${stockItem.id}`} color="info" size="sm" data-cy="entityDetailsButton">
