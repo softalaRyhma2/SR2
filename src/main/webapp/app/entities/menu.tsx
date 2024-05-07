@@ -14,6 +14,12 @@ const EntitiesMenu = () => {
   const hasTransportAuthority = () => {
     return currentUserAuthorities?.some(authority => authority === 'ROLE_TRANSPORT');
   };
+  const hasADMINAuthority = () => {
+    return currentUserAuthorities?.some(authority => authority === 'ROLE_ADMIN');
+  };
+  const hasRECSERAuthority = () => {
+    return currentUserAuthorities?.some(authority => authority === 'ROLE_RECSER');
+  };
 
   return (
     <>
@@ -32,7 +38,7 @@ const EntitiesMenu = () => {
       <MenuItem icon="asterisk" to="/invoice">
         <Translate contentKey="global.menu.entities.invoice" />
       </MenuItem>
-      {!hasTransportAuthority() && !hasPCENTERAuthority && (
+      {hasADMINAuthority() && (
         <MenuItem icon="asterisk" to="/stock-item">
           <Translate contentKey="global.menu.entities.stockItem" />
         </MenuItem>
