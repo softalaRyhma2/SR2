@@ -144,11 +144,15 @@ export const StockItemTypeCompanyUpdate = () => {
               >
                 <option value="">Select a company</option>
                 {companies
-                  ? companies.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.companyName}
-                      </option>
-                    ))
+                  ? companies.map(otherEntity => {
+                      if (otherEntity.companyName !== 'Recser') {
+                        return (
+                          <option value={otherEntity.id} key={otherEntity.id}>
+                            {otherEntity.companyName}
+                          </option>
+                        );
+                      }
+                    })
                   : null}
               </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/stock-item-type-company" replace color="info">
