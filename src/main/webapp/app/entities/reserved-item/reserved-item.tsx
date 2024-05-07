@@ -117,16 +117,15 @@ export const ReservedItem = () => {
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="sr2App.reservedItem.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
-                <th className="hand" onClick={sort('quantity')}>
+                <th /*className="hand" onClick={sort('quantity')}*/>
                   <Translate contentKey="sr2App.reservedItem.quantity">Quantity</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('quantity')} />
+                  {/* <FontAwesomeIcon icon={getSortIconByFieldName('quantity')} /> */}
                 </th>
                 <th>
-                  <Translate contentKey="sr2App.reservedItem.reservation">Reservation</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="sr2App.reservedItem.reservation">Reservation</Translate>
                 </th>
                 <th>
                   <Translate contentKey="sr2App.reservedItem.stockItemTypeName">Stock Item Type Name</Translate>{' '}
-                  <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   <Translate contentKey="sr2App.reservedItem.user">User ID</Translate>

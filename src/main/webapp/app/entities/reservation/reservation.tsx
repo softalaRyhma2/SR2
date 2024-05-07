@@ -128,11 +128,7 @@ export const Reservation = () => {
             <tbody>
               {reservationList.map((reservation, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/reservation/${reservation.id}`} color="link" size="sm">
-                      {reservation.id}
-                    </Button>
-                  </td>
+                  <td>{reservation.id}</td>
                   <td>
                     {reservation.reservationDate ? (
                       <TextFormat type="date" value={reservation.reservationDate} format={APP_LOCAL_DATE_FORMAT} />

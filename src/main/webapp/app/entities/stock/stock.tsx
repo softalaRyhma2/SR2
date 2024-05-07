@@ -37,14 +37,13 @@ export const Stock = () => {
       getEntities({
         page: paginationState.activePage - 1,
         size: paginationState.itemsPerPage,
-        sort: `${paginationState.sort},${paginationState.order}`,
       }),
     );
   };
 
   const sortEntities = () => {
     getAllEntities();
-    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    const endURL = `?page=${paginationState.activePage}`;
     if (pageLocation.search !== endURL) {
       navigate(`${pageLocation.pathname}${endURL}`);
     }
@@ -52,30 +51,18 @@ export const Stock = () => {
 
   useEffect(() => {
     sortEntities();
-  }, [paginationState.activePage, paginationState.order, paginationState.sort]);
+  }, [paginationState.activePage]);
 
   useEffect(() => {
     const params = new URLSearchParams(pageLocation.search);
     const page = params.get('page');
-    const sort = params.get(SORT);
-    if (page && sort) {
-      const sortSplit = sort.split(',');
+    if (page) {
       setPaginationState({
         ...paginationState,
         activePage: +page,
-        sort: sortSplit[0],
-        order: sortSplit[1],
       });
     }
   }, [pageLocation.search]);
-
-  const sort = p => () => {
-    setPaginationState({
-      ...paginationState,
-      order: paginationState.order === ASC ? DESC : ASC,
-      sort: p,
-    });
-  };
 
   const handlePagination = currentPage =>
     setPaginationState({
@@ -85,16 +72,6 @@ export const Stock = () => {
 
   const handleSyncList = () => {
     sortEntities();
-  };
-
-  const getSortIconByFieldName = (fieldName: string) => {
-    const sortFieldName = paginationState.sort;
-    const order = paginationState.order;
-    if (sortFieldName !== fieldName) {
-      return faSort;
-    } else {
-      return order === ASC ? faSortUp : faSortDown;
-    }
   };
 
   useEffect(() => {
@@ -145,18 +122,17 @@ export const Stock = () => {
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  <Translate contentKey="sr2App.stock.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                <th>
+                  <Translate contentKey="sr2App.stock.id">ID</Translate>
                 </th>
-                <th className="hand" onClick={sort('stockDate')}>
+                <th>
                   <Translate contentKey="sr2App.stock.stockDate">Stock Date</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('stockDate')} />
                 </th>
                 <th>
-                  <Translate contentKey="sr2App.stock.invoice">Invoice</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="sr2App.stock.invoice">Invoice</Translate>
                 </th>
                 <th>
-                  <Translate contentKey="sr2App.stock.companyName">Company Name</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="sr2App.stock.companyName">Company Name</Translate>
                 </th>
                 <th />
               </tr>

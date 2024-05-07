@@ -136,7 +136,10 @@ export const StockItem = () => {
                 <th>
                   <Translate contentKey="sr2App.stockItem.stock">Stock</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
-                <th>StockItemTypeCompany id, company</th>
+                <th>
+                  <Translate contentKey="sr2App.stockItem.stockItemTypeCompanyId">StockItemTypeCompany id, company</Translate>
+                </th>
+
                 <th>
                   <Translate contentKey="sr2App.stockItem.stockDate">Stock Date</Translate>
                 </th>

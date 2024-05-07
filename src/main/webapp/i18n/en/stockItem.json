@@ -24,9 +24,9 @@
       "total": "Total",
       "reservedItem": "Reserved Item",
       "stock": "Stock",
+      "stockItemTypeCompanyId": "Item Type Id for company",
       "stockItemType": "Stock Item Type",
       "stockDate": "Stock Date",
-
       "errors": {
         "stockItemTypeExists": "A stock item with the same type already exists. Please choose a different type.",
         "notFound": "Error: Stock Item not found.",
