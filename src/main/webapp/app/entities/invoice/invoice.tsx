@@ -56,7 +56,6 @@ export const Invoice = () => {
       getEntities({
         page: paginationState.activePage - 1,
         size: paginationState.itemsPerPage,
-        sort: `${paginationState.sort},${paginationState.order}`,
       }),
     );
   };
@@ -73,7 +72,7 @@ export const Invoice = () => {
   // Sort entities
   const sortEntities = () => {
     getAllEntities();
-    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    const endURL = `?page=${paginationState.activePage}`;
     if (pageLocation.search !== endURL) {
       navigate(`${pageLocation.pathname}${endURL}`);
     }
@@ -81,7 +80,7 @@ export const Invoice = () => {
 
   useEffect(() => {
     sortEntities();
-  }, [paginationState.activePage, paginationState.order, paginationState.sort]);
+  }, [paginationState.activePage]);
 
   useEffect(() => {
     const params = new URLSearchParams(pageLocation.search);
@@ -98,33 +97,13 @@ export const Invoice = () => {
     }
   }, [pageLocation.search]);
 
-  const sort = p => () => {
-    setPaginationState({
-      ...paginationState,
-      order: paginationState.order === ASC ? DESC : ASC,
-      sort: p,
-    });
-  };
-
   const handlePagination = currentPage =>
     setPaginationState({
       ...paginationState,
       activePage: currentPage,
     });
 
-  const handleSyncList = () => {
-    sortEntities();
-  };
-
-  const getSortIconByFieldName = (fieldName: string) => {
-    const sortFieldName = paginationState.sort;
-    const order = paginationState.order;
-    if (sortFieldName !== fieldName) {
-      return faSort;
-    } else {
-      return order === ASC ? faSortUp : faSortDown;
-    }
-  };
+  const handleSyncList = () => {};
 
   // Function to filter invoices based on selected timeframe
   const filteredInvoices = invoiceList.filter(invoice => {
@@ -199,19 +178,17 @@ export const Invoice = () => {
               <tr>
                 {/* Table header content */}
                 {/* Removed checkboxes */}
-                <th className="hand" onClick={sort('id')}>
-                  <Translate contentKey="sr2App.invoice.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-                </th>
-                <th className="hand" onClick={sort('totalSum')}>
-                  <Translate contentKey="sr2App.invoice.totalSum">Total Sum</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('totalSum')} />
-                </th>
-                <th className="hand" onClick={sort('invoiceDate')}>
-                  <Translate contentKey="sr2App.invoice.invoiceDate">Invoice Date</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('invoiceDate')} />
+                <th>
+                  <Translate contentKey="sr2App.invoice.id">ID</Translate>
                 </th>
                 <th>
-                  <Translate contentKey="sr2App.invoice.company">Company</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="sr2App.invoice.totalSum">Total Sum</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="sr2App.invoice.invoiceDate">Invoice Date</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="sr2App.invoice.company">Company</Translate>
                 </th>
                 <th />
               </tr>
