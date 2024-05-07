@@ -27,26 +27,28 @@ export const InvoiceUpdate = () => {
   const updating = useAppSelector(state => state.invoice.updating);
   const updateSuccess = useAppSelector(state => state.invoice.updateSuccess);
 
-  const handleClose = () => {
-    navigate(`/invoice/${id}` + location.search);
-  };
-
   useEffect(() => {
     if (isNew) {
       dispatch(reset());
     } else {
       dispatch(getEntity(id));
     }
-
     dispatch(getCompanies({}));
   }, []);
 
   useEffect(() => {
     if (updateSuccess) {
-      handleClose();
+      navigate(`/invoice`);
+    }
+  }, [updateSuccess, id, navigate]);
+
+  const handleGoBack = () => {
+    if (isNew) {
+      navigate('/invoice');
+    } else {
       navigate(`/invoice/${id}`);
     }
-  }, [updateSuccess]);
+  };
 
   // eslint-disable-next-line complexity
   const saveEntity = values => {
@@ -161,14 +163,7 @@ export const InvoiceUpdate = () => {
                   <span>{invoiceEntity.company?.companyName}</span>
                 </div>
               )}
-              <Button
-                tag={Link}
-                id="cancel-save"
-                data-cy="entityCreateCancelButton"
-                to={isNew ? `/invoice?page=1&sort=id,asc` : `/invoice/${id}`}
-                replace
-                color="info"
-              >
+              <Button onClick={handleGoBack} id="cancel-save" data-cy="entityCreateCancelButton" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
