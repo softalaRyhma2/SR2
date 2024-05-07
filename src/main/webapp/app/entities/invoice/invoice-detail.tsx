@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
@@ -18,6 +18,21 @@ export const InvoiceDetail = () => {
   }, []);
 
   const invoiceEntity = useAppSelector(state => state.invoice.entity);
+  const [totalSum, setTotalSum] = useState<number>(0);
+
+  // Count totalSum for incvoice
+  useEffect(() => {
+    let updatedTotalSum = 0;
+    if (invoiceEntity && invoiceEntity.stocks) {
+      invoiceEntity.stocks.forEach(stock => {
+        stock.stockItems.forEach(item => {
+          const totalPrice = item.quantity * item.price; // Calculate total price for the item
+          updatedTotalSum += totalPrice; // Add total price to the total sum
+        });
+      });
+    }
+    setTotalSum(updatedTotalSum);
+  }, [invoiceEntity]);
 
   const handleExportToCSV = () => {
     console.log('invoice entity: ', invoiceEntity);
@@ -29,7 +44,7 @@ export const InvoiceDetail = () => {
       stock.stockItems.forEach(item => {
         stockData.push({
           'Invoice ID': invoiceEntity.id,
-          'Total Sum': invoiceEntity.totalSum,
+          'Total Sum': totalSum, // Käytetään tässä laskettua totalSum-arvoa
           'Invoice Date': invoiceEntity.invoiceDate,
           'Is Closed': invoiceEntity.isClosed ? 'true' : 'false',
           Company: invoiceEntity.company ? invoiceEntity.company.companyName : '',
@@ -68,7 +83,7 @@ export const InvoiceDetail = () => {
               <Translate contentKey="sr2App.invoice.totalSum">Total Sum</Translate>
             </span>
           </dt>
-          <dd>{invoiceEntity.totalSum}</dd>
+          <dd>{totalSum}</dd>
           <dt>
             <span id="invoiceDate">
               <Translate contentKey="sr2App.invoice.invoiceDate">Invoice Date</Translate>
@@ -101,6 +116,7 @@ export const InvoiceDetail = () => {
             <Translate contentKey="entity.action.edit">Edit</Translate>
           </span>
         </Button>
+        &nbsp;
         <Button color="success" onClick={handleExportToCSV}>
           CSV Export
         </Button>

@@ -202,10 +202,10 @@ export const Invoice = () => {
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="sr2App.invoice.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
-                <th className="hand" onClick={sort('totalSum')}>
+                {/*<th className="hand" onClick={sort('totalSum')}>
                   <Translate contentKey="sr2App.invoice.totalSum">Total Sum</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('totalSum')} />
-                </th>
+        </th>*/}
                 <th className="hand" onClick={sort('invoiceDate')}>
                   <Translate contentKey="sr2App.invoice.invoiceDate">Invoice Date</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('invoiceDate')} />
@@ -221,7 +221,7 @@ export const Invoice = () => {
                 <tr key={`entity-${i}`} data-cy="entityTable">
                   {/* Removed checkboxes */}
                   <td>{invoice.id}</td>
-                  <td>{invoice.totalSum}</td>
+                  {/* <td>{invoice.totalSum}</td>*/}
                   <td>
                     {invoice.invoiceDate ? <TextFormat type="date" value={invoice.invoiceDate} format={APP_LOCAL_DATE_FORMAT} /> : null}
                   </td>
