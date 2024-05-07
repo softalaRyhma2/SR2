@@ -185,9 +185,8 @@ export const Invoice = () => {
                   <Translate contentKey="sr2App.invoice.totalSum">Total Sum</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('totalSum')} />
         </th>*/}
-                <th className="hand" onClick={sort('invoiceDate')}>
+                <th>
                   <Translate contentKey="sr2App.invoice.invoiceDate">Invoice Date</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('invoiceDate')} />
                 </th>
                 <th>
                   <Translate contentKey="sr2App.invoice.company">Company</Translate>
