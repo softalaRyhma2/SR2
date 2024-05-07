@@ -1,5 +1,6 @@
 package com.softala.sr2.service;
 
+import com.softala.sr2.domain.Reservation;
 import com.softala.sr2.domain.ReservedItem;
 import com.softala.sr2.domain.StockItem;
 import com.softala.sr2.domain.StockItemTypeCompany;
@@ -79,6 +80,10 @@ public class ReservedItemService {
         Optional<ReservedItem> existingReservedItemOptional = reservedItemRepository.findById(reservedItem.getId());
 
         existingReservedItemOptional.ifPresent(existingReservedItem -> {
+            Reservation reservation = existingReservedItem.getReservation();
+            if (reservation != null && reservation.getIsPickedUp()) {
+                throw new IllegalArgumentException("Cannot update a ReservedItem associated with a closed Reservation.");
+            }
             int oldQuantity = existingReservedItem.getQuantity();
             log.info("Request to update ReservedItem oldQ : {}", oldQuantity);
             int newQuantity = reservedItem.getQuantity();
