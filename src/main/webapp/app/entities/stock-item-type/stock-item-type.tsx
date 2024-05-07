@@ -123,20 +123,16 @@ export const StockItemType = () => {
             <tbody>
               {stockItemTypeList.map((stockItemType, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/stock-item-type/${stockItemType.id}`} color="link" size="sm">
-                      {stockItemType.id}
-                    </Button>
-                  </td>
+                  <td>{stockItemType.id}</td>
                   <td>{stockItemType.typeName}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`/stock-item-type/${stockItemType.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                      {/*} <Button tag={Link} to={`/stock-item-type/${stockItemType.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
-                      </Button>
+              </Button>*/}
                       <Button
                         tag={Link}
                         to={`/stock-item-type/${stockItemType.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
