@@ -24,7 +24,16 @@
       "total": "Total",
       "reservedItem": "Reserved Item",
       "stock": "Stock",
-      "stockItemType": "Stock Item Type"
+      "stockItemType": "Stock Item Type",
+
+      "errors": {
+        "stockItemTypeExists": "A stock item with the same type already exists. Please choose a different type.",
+        "notFound": "Error: Stock Item not found.",
+        "invalidId": "Error: Invalid ID provided.",
+        "creationFailed": "Error: Failed to create Stock Item.",
+        "updateFailed": "Error: Failed to update Stock Item.",
+        "deletionFailed": "Error: Failed to delete Stock Item."
+      }
     }
   }
 }

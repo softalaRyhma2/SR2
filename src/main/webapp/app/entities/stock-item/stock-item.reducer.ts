@@ -4,6 +4,7 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IStockItem, defaultValue as defaultStockItem } from 'app/shared/model/stock-item.model';
 import { IStock, defaultValue as defaultStock } from 'app/shared/model/stock.model';
+import { translate } from 'react-jhipster';
 
 const initialState: EntityState<IStockItem> = {
   loading: false,
@@ -46,19 +47,43 @@ export const getEntity = createAsyncThunk(
 export const createEntity = createAsyncThunk(
   'stockItem/create_entity',
   async (entity: IStockItem, thunkAPI) => {
-    const result = await axios.post<IStockItem>(apiUrl, cleanEntity(entity));
-    const stockId = entity.stock?.id;
+    try {
+      const result = await axios.post<IStockItem>(apiUrl, cleanEntity(entity));
 
-    if (stockId) {
-      thunkAPI.dispatch(getStockItemEntitiesForStock(stockId));
-    } else {
-      thunkAPI.dispatch(getEntities({}));
+      // If the request is successful, dispatch appropriate actions based on stock existence
+      const stockId = entity.stock?.id;
+      if (stockId) {
+        thunkAPI.dispatch(getStockItemEntitiesForStock(stockId)); // Fetch stock items for the stock
+      } else {
+        thunkAPI.dispatch(getEntities({})); // Fetch all entities
+      }
+
+      return result;
+    } catch (error) {
+      // Handle the error
+      if (axios.isAxiosError(error)) {
+        // Handle Axios errors
+        console.log(error.response?.data);
+        console.log(error.response?.status);
+        console.log(error.response?.headers);
+        console.log(error.request);
+
+        // If the error is a 400 Bad Request, display a user-friendly message
+        if (error.response?.status === 400) {
+          throw new Error(translate('sr2App.stockItem.errors.stockItemTypeExists'));
+        }
+      } else {
+        // Handle non-Axios errors
+        console.error(error);
+      }
+
+      // Rethrow the error to propagate it
+      throw error;
     }
-
-    return result;
   },
   { serializeError: serializeAxiosError },
 );
+
 /*
 export const createEntity = createAsyncThunk(
   'stockItem/create_entity',
