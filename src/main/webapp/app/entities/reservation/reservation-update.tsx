@@ -62,7 +62,9 @@ export const ReservationUpdate = () => {
 
   const defaultValues = () =>
     isNew
-      ? {}
+      ? {
+          reservationDate: new Date().toISOString().split('T')[0],
+        }
       : {
           ...reservationEntity,
         };
@@ -104,15 +106,17 @@ export const ReservationUpdate = () => {
                 }}
                 disabled={reservationEntity.isPickedUp}
               />
-              <ValidatedField
-                label={translate('sr2App.reservation.isPickedUp')}
-                id="reservation-isPickedUp"
-                name="isPickedUp"
-                data-cy="isPickedUp"
-                check
-                type="checkbox"
-                disabled={reservationEntity.isPickedUp}
-              />
+              {!isNew && (
+                <ValidatedField
+                  label={translate('sr2App.reservation.isPickedUp')}
+                  id="reservation-isPickedUp"
+                  name="isPickedUp"
+                  data-cy="isPickedUp"
+                  check
+                  type="checkbox"
+                  disabled={reservationEntity.isPickedUp}
+                />
+              )}
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/reservation" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
