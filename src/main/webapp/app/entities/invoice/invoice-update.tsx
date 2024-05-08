@@ -108,7 +108,7 @@ export const InvoiceUpdate = () => {
                   disabled={isClosed}
                 />
               ) : null}
-              {!isNew ? (
+              {/*!isNew ? (
                 <ValidatedField
                   label={translate('sr2App.invoice.totalSum')}
                   id="invoice-totalSum"
@@ -117,7 +117,7 @@ export const InvoiceUpdate = () => {
                   type="text"
                   disabled={isClosed}
                 />
-              ) : null}
+              ) : null*/}
               <ValidatedField
                 label={translate('sr2App.invoice.invoiceDate')}
                 id="invoice-invoiceDate"
@@ -161,6 +161,8 @@ export const InvoiceUpdate = () => {
                 <div>
                   <span>Company: </span>
                   <span>{invoiceEntity.company?.companyName}</span>
+                  <br />
+                  <br />
                 </div>
               )}
               <Button onClick={handleGoBack} id="cancel-save" data-cy="entityCreateCancelButton" replace color="info">
