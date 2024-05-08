@@ -169,14 +169,15 @@ public class ReservationResource {
     @GetMapping("/{id}")
     public ResponseEntity<Reservation> getReservation(@PathVariable("id") Long id) {
         log.debug("REST request to get Reservation : {}", id);
-        Optional<Reservation> reservation = reservationService.findOne(id);
-        if (reservation.isPresent()) {
-            Reservation fetchedReservation = reservation.get();
-            List<ReservedItem> reservedItems = reservationService.getReservedItemsByReservationId(fetchedReservation);
-            Set<ReservedItem> reservedItemSet = new HashSet<>(reservedItems);
-            fetchedReservation.setReservedItems(reservedItemSet);
-        }
-        return ResponseUtil.wrapOrNotFound(reservation);
+        Optional<Reservation> reservationOptional = reservationService.findOne(id);
+        return reservationOptional
+            .map(reservation -> {
+                List<ReservedItem> reservedItems = reservationService.getReservedItemsByReservationId(reservation);
+                Set<ReservedItem> reservedItemSet = new HashSet<>(reservedItems);
+                reservation.setReservedItems(reservedItemSet);
+                return ResponseEntity.ok(reservation);
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 
     /**

@@ -177,15 +177,16 @@ public class InvoiceResource {
     @GetMapping("/{id}")
     public ResponseEntity<Invoice> getInvoice(@PathVariable("id") Long id) {
         log.debug("REST request to get Invoice : {}", id);
-        Optional<Invoice> invoice = invoiceService.findOne(id);
-        //fetching all stockIds related to invoice Id:
-        if (invoice.isPresent()) {
-            Invoice fetchedInvoice = invoice.get();
-            List<Stock> stocks = invoiceService.getStocksByInvoiceId(fetchedInvoice);
-            Set<Stock> stockSet = new HashSet<>(stocks);
-            fetchedInvoice.setStocks(stockSet);
-        }
-        return ResponseUtil.wrapOrNotFound(invoice);
+        Optional<Invoice> invoiceOptional = invoiceService.findOne(id);
+
+        return invoiceOptional
+            .map(invoice -> {
+                List<Stock> stocks = invoiceService.getStocksByInvoiceId(invoice);
+                Set<Stock> stockSet = new HashSet<>(stocks);
+                invoice.setStocks(stockSet);
+                return ResponseEntity.ok(invoice);
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 
     /**
@@ -197,7 +198,17 @@ public class InvoiceResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteInvoice(@PathVariable("id") Long id) {
         log.debug("REST request to delete Invoice : {}", id);
+
+        // Check if there are stocks associated with the invoice
+        Invoice invoice = invoiceService.findOne(id).orElseThrow(() -> new IllegalArgumentException("Invoice not found with id: " + id));
+
+        if (!invoice.getStocks().isEmpty()) {
+            throw new BadRequestAlertException("Invoice cannot be deleted because it has associated stocks", ENTITY_NAME, "cannotdelete");
+        }
+
+        // Proceed with deletion if no associated stocks are found
         invoiceService.delete(id);
+
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

@@ -8,8 +8,6 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.cons
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { AUTHORITIES } from 'app/config/constants';
-import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import { getEntities } from './stock-item-type.reducer';
 
 export const StockItemType = () => {
@@ -22,7 +20,6 @@ export const StockItemType = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
-  const isAuthorized = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN]));
   const stockItemTypeList = useAppSelector(state => state.stockItemType.entities);
   const loading = useAppSelector(state => state.stockItemType.loading);
   const totalItems = useAppSelector(state => state.stockItemType.totalItems);
@@ -101,13 +98,11 @@ export const StockItemType = () => {
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="sr2App.stockItemType.home.refreshListLabel">Refresh List</Translate>
           </Button>
-          {isAuthorized && (
-            <Link to="/stock-item-type/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-              <FontAwesomeIcon icon="plus" />
-              &nbsp;
-              <Translate contentKey="sr2App.stockItemType.home.createLabel">Create new Stock Item Type</Translate>
-            </Link>
-          )}
+          <Link to="/stock-item-type/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="sr2App.stockItemType.home.createLabel">Create new Stock Item Type</Translate>
+          </Link>
         </div>
       </h2>
       <div className="table-responsive">
@@ -128,49 +123,41 @@ export const StockItemType = () => {
             <tbody>
               {stockItemTypeList.map((stockItemType, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/stock-item-type/${stockItemType.id}`} color="link" size="sm">
-                      {stockItemType.id}
-                    </Button>
-                  </td>
+                  <td>{stockItemType.id}</td>
                   <td>{stockItemType.typeName}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`/stock-item-type/${stockItemType.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                      {/*} <Button tag={Link} to={`/stock-item-type/${stockItemType.id}`} color="info" size="sm" data-cy="entityDetailsButton">
                         <FontAwesomeIcon icon="eye" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
+              </Button>*/}
+                      <Button
+                        tag={Link}
+                        to={`/stock-item-type/${stockItemType.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                        color="primary"
+                        size="sm"
+                        data-cy="entityEditButton"
+                      >
+                        <FontAwesomeIcon icon="pencil-alt" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.edit">Edit</Translate>
+                        </span>
                       </Button>
-                      {isAuthorized && (
-                        <>
-                          <Button
-                            tag={Link}
-                            to={`/stock-item-type/${stockItemType.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                            color="primary"
-                            size="sm"
-                            data-cy="entityEditButton"
-                          >
-                            <FontAwesomeIcon icon="pencil-alt" />{' '}
-                            <span className="d-none d-md-inline">
-                              <Translate contentKey="entity.action.edit">Edit</Translate>
-                            </span>
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              (window.location.href = `/stock-item-type/${stockItemType.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                            }
-                            color="danger"
-                            size="sm"
-                            data-cy="entityDeleteButton"
-                          >
-                            <FontAwesomeIcon icon="trash" />{' '}
-                            <span className="d-none d-md-inline">
-                              <Translate contentKey="entity.action.delete">Delete</Translate>
-                            </span>
-                          </Button>
-                        </>
-                      )}
+                      <Button
+                        onClick={() =>
+                          (window.location.href = `/stock-item-type/${stockItemType.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                        }
+                        color="danger"
+                        size="sm"
+                        data-cy="entityDeleteButton"
+                      >
+                        <FontAwesomeIcon icon="trash" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.delete">Delete</Translate>
+                        </span>
+                      </Button>
                     </div>
                   </td>
                 </tr>

@@ -106,6 +106,7 @@ export const CompanyUpdate = () => {
                   required: { value: true, message: translate('entity.validation.required') },
                   maxLength: { value: 50, message: translate('entity.validation.maxlength', { max: 50 }) },
                 }}
+                readOnly={!isAdminOrRecser}
               />
               <ValidatedField
                 label={translate('sr2App.company.companyEmail')}

@@ -7,8 +7,5 @@ export interface ICompany {
   companyDetails?: string | null;
   invoices?: IInvoice[] | null;
 }
-export interface ICompanyNames {
-  [invoiceId: string]: string;
-}
 
 export const defaultValue: Readonly<ICompany> = {};

@@ -25,7 +25,12 @@
       "invoiceDate": "Invoice Date",
       "isClosed": "Is Closed",
       "stock": "Stock",
-      "company": "Company"
+      "company": "Company",
+
+      "errors": {
+        "associatedStocks": "Invoice cannot be deleted because it has associated stocks",
+        "deleteError": "An error occurred while deleting the invoice"
+      }
     }
   }
 }

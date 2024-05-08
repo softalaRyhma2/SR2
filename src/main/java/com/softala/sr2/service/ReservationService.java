@@ -2,8 +2,10 @@ package com.softala.sr2.service;
 
 import com.softala.sr2.domain.Reservation;
 import com.softala.sr2.domain.ReservedItem;
+import com.softala.sr2.domain.StockItem;
 import com.softala.sr2.repository.ReservationRepository;
 import com.softala.sr2.repository.ReservedItemRepository;
+import com.softala.sr2.repository.StockItemRepository;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -25,10 +27,16 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
 
     private final ReservedItemRepository reservedItemRepository;
+    private final StockItemRepository stockItemRepository;
 
-    public ReservationService(ReservationRepository reservationRepository, ReservedItemRepository reservedItemRepository) {
+    public ReservationService(
+        ReservationRepository reservationRepository,
+        ReservedItemRepository reservedItemRepository,
+        StockItemRepository stockItemRepository
+    ) {
         this.reservationRepository = reservationRepository;
         this.reservedItemRepository = reservedItemRepository;
+        this.stockItemRepository = stockItemRepository;
     }
 
     /**
@@ -50,7 +58,23 @@ public class ReservationService {
      */
     public Reservation update(Reservation reservation) {
         log.debug("Request to update Reservation : {}", reservation);
-        return reservationRepository.save(reservation);
+        Reservation updatedReservation = reservationRepository.save(reservation);
+
+        if (updatedReservation.getIsPickedUp()) {
+            List<ReservedItem> reservedItems = reservedItemRepository.findByReservation(updatedReservation);
+            for (ReservedItem reservedItem : reservedItems) {
+                StockItem stockItem = reservedItem.getStockItem();
+                int reservedQuantity = reservedItem.getQuantity();
+                int currentQuantity = stockItem.getQuantity();
+
+                int newQuantity = currentQuantity - reservedQuantity;
+                stockItem.setQuantity(newQuantity);
+                stockItem.setAvailable(newQuantity);
+
+                stockItemRepository.save(stockItem);
+            }
+        }
+        return updatedReservation;
     }
 
     /**

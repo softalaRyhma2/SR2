@@ -18,7 +18,7 @@ import { getEntity, updateEntity, createEntity, reset } from './reserved-item.re
 export const ReservedItemUpdate = () => {
   const dispatch = useAppDispatch();
 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
@@ -31,7 +31,8 @@ export const ReservedItemUpdate = () => {
   const updateSuccess = useAppSelector(state => state.reservedItem.updateSuccess);
 
   const handleClose = () => {
-    navigate('/reserved-item' + location.search);
+    history.back();
+    //navigate('/reserved-item' + location.search);
   };
 
   useEffect(() => {
@@ -116,7 +117,10 @@ export const ReservedItemUpdate = () => {
                 type="text"
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
-                  validate: v => isNumber(v) || translate('entity.validation.number'),
+                  validate: {
+                    isNumber: v => isNumber(v) || translate('entity.validation.number'),
+                    nonNegative: v => (!isNaN(v) && v >= 0) || "Number can't be negative",
+                  },
                 }}
               />
               <ValidatedField
@@ -128,9 +132,9 @@ export const ReservedItemUpdate = () => {
               >
                 <option value="" key="0" />
                 {reservations
-                  ? reservations.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                  ? reservations.map(rItem => (
+                      <option value={rItem.id} key={rItem.id}>
+                        {rItem.id}
                       </option>
                     ))
                   : null}
@@ -138,14 +142,17 @@ export const ReservedItemUpdate = () => {
               <ValidatedField id="reserved-item-stockItem" name="stockItem" data-cy="stockItem" label="Stock Item" type="select">
                 <option value="" key="0" />
                 {stockItems
-                  ? stockItems.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
-                      </option>
-                    ))
+                  ? stockItems
+                      .filter(sItem => sItem.stockItemTypeCompany.company.companyName === 'Käsittelylaitos')
+                      .map(sItem => (
+                        <option value={sItem.id} key={sItem.id}>
+                          {sItem.stockItemTypeCompany.stockItemType.typeName}, available:{sItem.available} (
+                          {sItem.stockItemTypeCompany.company.companyName}, stockId: {sItem.stock.id}, stockDdate: {sItem.stock.stockDate})
+                        </option>
+                      ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/reserved-item" replace color="info">
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" onClick={handleClose} replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">

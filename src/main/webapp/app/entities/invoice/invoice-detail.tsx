@@ -3,15 +3,14 @@ import { Link, useParams } from 'react-router-dom';
 import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { mkConfig, generateCsv, download } from 'export-to-csv'; // Import CSV utilities
 
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-
 import { getEntity } from './invoice.reducer';
 
 export const InvoiceDetail = () => {
   const dispatch = useAppDispatch();
-
   const { id } = useParams<'id'>();
 
   useEffect(() => {
@@ -19,6 +18,53 @@ export const InvoiceDetail = () => {
   }, []);
 
   const invoiceEntity = useAppSelector(state => state.invoice.entity);
+  const [totalSum, setTotalSum] = useState<number>(0);
+
+  // Count totalSum for incvoice
+  useEffect(() => {
+    let updatedTotalSum = 0;
+    if (invoiceEntity && invoiceEntity.stocks) {
+      invoiceEntity.stocks.forEach(stock => {
+        stock.stockItems.forEach(item => {
+          const totalPrice = item.quantity * item.price; // Calculate total price for the item
+          updatedTotalSum += totalPrice; // Add total price to the total sum
+        });
+      });
+    }
+    updatedTotalSum = parseFloat(updatedTotalSum.toFixed(2));
+    setTotalSum(updatedTotalSum);
+  }, [invoiceEntity]);
+
+  const handleExportToCSV = () => {
+    console.log('invoice entity: ', invoiceEntity);
+    const csvConfig = mkConfig({ useKeysAsHeaders: true, fieldSeparator: ';' }); // CSV configuration
+
+    // Extracting stock data
+    const stockData = [];
+    invoiceEntity.stocks.forEach(stock => {
+      stock.stockItems.forEach(item => {
+        stockData.push({
+          'Invoice ID': invoiceEntity.id,
+          'Total Sum': totalSum + '€', // Käytetään tässä laskettua totalSum-arvoa
+          'Invoice Date': invoiceEntity.invoiceDate,
+          'Is Closed': invoiceEntity.isClosed ? 'true' : 'false',
+          Company: invoiceEntity.company ? invoiceEntity.company.companyName : '',
+          'Stock ID': stock.id, // Accessing stock.id directly from the current stock
+          'Stock Date': stock.stockDate, // Accessing stock.stockDate directly from the current stock
+          'Item ID': item.id, // Accessing item.id directly from the current item
+          Type: item.stockItemTypeCompany?.stockItemType.typeName || '', // Accessing nested properties of item directly
+          Quantity: item.quantity, // Accessing item.quantity directly from the current item
+          Price: item.price + '€', // Accessing item.price directly from the current item
+        });
+      });
+    });
+
+    // Generate CSV data
+    const csvData = generateCsv(csvConfig)(stockData);
+
+    // Trigger download
+    download(csvConfig)(csvData);
+  };
 
   return (
     <Row>
@@ -38,7 +84,7 @@ export const InvoiceDetail = () => {
               <Translate contentKey="sr2App.invoice.totalSum">Total Sum</Translate>
             </span>
           </dt>
-          <dd>{invoiceEntity.totalSum}</dd>
+          <dd>{totalSum} €</dd>
           <dt>
             <span id="invoiceDate">
               <Translate contentKey="sr2App.invoice.invoiceDate">Invoice Date</Translate>
@@ -71,6 +117,10 @@ export const InvoiceDetail = () => {
             <Translate contentKey="entity.action.edit">Edit</Translate>
           </span>
         </Button>
+        &nbsp;
+        <Button color="success" onClick={handleExportToCSV}>
+          CSV Export
+        </Button>
         <Col>
           <h3 id="stock-heading" data-cy="StockHeading">
             <Translate contentKey="sr2App.stock.home.title">Stocks</Translate>
@@ -94,7 +144,7 @@ export const InvoiceDetail = () => {
                         <Table>
                           <thead>
                             <tr>
-                              <th>Item id</th>
+                              <th>Item id, company</th>
                               <th>Type</th>
                               <th>Quantity</th>
                               <th>Price</th>
@@ -103,8 +153,15 @@ export const InvoiceDetail = () => {
                           <tbody>
                             {stock.stockItems.map(item => (
                               <tr key={item.id}>
-                                <td>{item.id}</td>
-                                <td>{item.stockItemType.typeName}</td>
+                                <td>
+                                  {item.id},{' '}
+                                  {item.stockItemTypeCompany?.company.companyName ? item.stockItemTypeCompany.company.companyName : ''}
+                                </td>
+                                <td>
+                                  {item.stockItemTypeCompany?.stockItemType.typeName
+                                    ? item.stockItemTypeCompany.stockItemType.typeName
+                                    : ''}
+                                </td>
                                 <td>{item.quantity}</td>
                                 <td>{item.price}€</td>
                               </tr>

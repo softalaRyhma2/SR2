@@ -4,6 +4,7 @@
     "form": {
       "password": "Password",
       "password.placeholder": "Your password",
+      "password.required": "Password is required",
       "rememberme": "Remember me",
       "button": "Sign in"
     },

@@ -16,5 +16,5 @@ import org.springframework.stereotype.Repository;
 public interface StockItemRepository extends JpaRepository<StockItem, Long> {
     List<StockItem> findByStockId(Long id);
     List<StockItem> findByStock(Stock stock);
-    Optional<StockItem> findByStockItemType(StockItemType stockItemType);
+    // Optional<StockItem> findByStockItemType(StockItemType stockItemType);
 }

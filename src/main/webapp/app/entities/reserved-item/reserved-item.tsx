@@ -9,6 +9,8 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities } from './reserved-item.reducer';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
+import { AUTHORITIES } from 'app/config/constants';
 
 export const ReservedItem = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +25,8 @@ export const ReservedItem = () => {
   const reservedItemList = useAppSelector(state => state.reservedItem.entities);
   const loading = useAppSelector(state => state.reservedItem.loading);
   const totalItems = useAppSelector(state => state.reservedItem.totalItems);
+  const authorities = useAppSelector(state => state.authentication.account.authorities);
+  const isAdmin = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN]);
 
   const getAllEntities = () => {
     dispatch(
@@ -113,16 +117,15 @@ export const ReservedItem = () => {
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="sr2App.reservedItem.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
-                <th className="hand" onClick={sort('quantity')}>
+                <th /*className="hand" onClick={sort('quantity')}*/>
                   <Translate contentKey="sr2App.reservedItem.quantity">Quantity</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('quantity')} />
+                  {/* <FontAwesomeIcon icon={getSortIconByFieldName('quantity')} /> */}
                 </th>
                 <th>
-                  <Translate contentKey="sr2App.reservedItem.reservation">Reservation</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="sr2App.reservedItem.reservation">Reservation</Translate>
                 </th>
                 <th>
                   <Translate contentKey="sr2App.reservedItem.stockItemTypeName">Stock Item Type Name</Translate>{' '}
-                  <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   <Translate contentKey="sr2App.reservedItem.user">User ID</Translate>
@@ -133,11 +136,7 @@ export const ReservedItem = () => {
             <tbody>
               {reservedItemList.map((reservedItem, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/reserved-item/${reservedItem.id}`} color="link" size="sm">
-                      {reservedItem.id}
-                    </Button>
-                  </td>
+                  <td>{reservedItem.id}</td>
                   <td>{reservedItem.quantity}</td>
                   <td>
                     {reservedItem.reservation ? (
@@ -147,12 +146,9 @@ export const ReservedItem = () => {
                     )}
                   </td>
                   <td>
-                    {reservedItem.stockItem && reservedItem.stockItem.stockItemType ? (
-                      <span>{reservedItem.stockItem.stockItemType.typeName}</span>
-                    ) : (
-                      ''
-                    )}
+                    {reservedItem.stockItem ? <span>{reservedItem.stockItem.stockItemTypeCompany.stockItemType.typeName}</span> : <></>}
                   </td>
+
                   <td>{reservedItem.user ? reservedItem.user.login : ' '}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">

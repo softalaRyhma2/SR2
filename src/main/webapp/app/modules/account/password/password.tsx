@@ -10,8 +10,10 @@ import { savePassword, reset } from './password.reducer';
 
 export const PasswordPage = () => {
   const [password, setPassword] = useState('');
+  const [isWeakPassword, setIsWeakPassword] = useState(false); // State to track weak password
   const dispatch = useAppDispatch();
 
+  // Effect to fetch session and reset
   useEffect(() => {
     dispatch(reset());
     dispatch(getSession());
@@ -20,11 +22,51 @@ export const PasswordPage = () => {
     };
   }, []);
 
+  // Function to handle form submission
   const handleValidSubmit = ({ currentPassword, newPassword }) => {
-    dispatch(savePassword({ currentPassword, newPassword }));
+    if (!isWeakPassword) {
+      // Check if the password is not weak
+      dispatch(savePassword({ currentPassword, newPassword }));
+    } else {
+      toast.error(translate('global.messages.validate.newpassword.weak')); // Show error message for weak password
+    }
   };
 
-  const updatePassword = event => setPassword(event.target.value);
+  // Function to handle password change
+  const updatePassword = event => {
+    const newPassword = event.target.value;
+    setPassword(newPassword);
+    setIsWeakPassword(isWeak(newPassword)); // Update isWeakPassword state based on new password
+  };
+
+  // Function to determine password strength
+  const isWeak = (passwordValue: string): boolean => {
+    const strength = measureStrength(passwordValue);
+    // Define the threshold for weak password, for example, if strength is less than 20
+    return strength < 20;
+  };
+
+  // Function to measure password strength
+  const measureStrength = (passwordValue: string): number => {
+    let force = 0;
+    const regex = /[$-/:-?{-~!"^_`[\]]/g;
+    const flags = {
+      lowerLetters: /[a-z]+/.test(passwordValue),
+      upperLetters: /[A-Z]+/.test(passwordValue),
+      numbers: /\d+/.test(passwordValue),
+      symbols: regex.test(passwordValue),
+    };
+    const passedMatches = Object.values(flags).filter((isMatchedFlag: boolean) => !!isMatchedFlag).length;
+    force += 2 * passwordValue.length + (passwordValue.length >= 10 ? 1 : 0);
+    force += passedMatches * 10;
+    // penalty (short password)
+    force = passwordValue.length <= 6 ? Math.min(force, 10) : force;
+    // penalty (poor variety of characters)
+    force = passedMatches === 1 ? Math.min(force, 10) : force;
+    force = passedMatches === 2 ? Math.min(force, 20) : force;
+    force = passedMatches === 3 ? Math.min(force, 40) : force;
+    return force;
+  };
 
   const account = useAppSelector(state => state.authentication.account);
   const successMessage = useAppSelector(state => state.password.successMessage);
@@ -66,12 +108,34 @@ export const PasswordPage = () => {
               type="password"
               validate={{
                 required: { value: true, message: translate('global.messages.validate.newpassword.required') },
-                minLength: { value: 4, message: translate('global.messages.validate.newpassword.minlength') },
+                minLength: { value: 8, message: translate('global.messages.validate.newpassword.minlength') },
                 maxLength: { value: 50, message: translate('global.messages.validate.newpassword.maxlength') },
+                validate: v => !isWeak(v) || translate('global.messages.validate.newpassword.weak'),
               }}
               onChange={updatePassword}
               data-cy="newPassword"
             />
+
+            <span>
+              {/* Info box explaining password requirements */}
+              <div className="alert alert-info" role="region">
+                <ul>
+                  <li>{translate('global.messages.validate.newpassword.atleast4characters')}</li>
+                  <li>{translate('global.messages.validate.newpassword.atleast1uppercase')}</li>
+                  <li>{translate('global.messages.validate.newpassword.atleast1lowercase')}</li>
+                  <li>{translate('global.messages.validate.newpassword.atleast1number')}</li>
+                  <li>{translate('global.messages.validate.newpassword.atleast1specialcharacter')}</li>
+                  <li>{translate('global.messages.validate.newpassword.maxlength')}</li>
+                </ul>
+              </div>
+            </span>
+
+            {isWeakPassword && (
+              <div className="alert alert-danger" role="alert">
+                {translate('global.messages.validate.newpassword.weak')}
+              </div>
+            )}
+
             <PasswordStrengthBar password={password} />
             <ValidatedField
               name="confirmPassword"
@@ -80,13 +144,13 @@ export const PasswordPage = () => {
               type="password"
               validate={{
                 required: { value: true, message: translate('global.messages.validate.confirmpassword.required') },
-                minLength: { value: 4, message: translate('global.messages.validate.confirmpassword.minlength') },
+                minLength: { value: 8, message: translate('global.messages.validate.confirmpassword.minlength') },
                 maxLength: { value: 50, message: translate('global.messages.validate.confirmpassword.maxlength') },
                 validate: v => v === password || translate('global.messages.error.dontmatch'),
               }}
               data-cy="confirmPassword"
             />
-            <Button color="success" type="submit" data-cy="submit">
+            <Button color="success" type="submit" data-cy="submit" disabled={isWeakPassword}>
               <Translate contentKey="password.form.button">Save</Translate>
             </Button>
           </ValidatedForm>

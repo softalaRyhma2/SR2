@@ -27,25 +27,28 @@ export const InvoiceUpdate = () => {
   const updating = useAppSelector(state => state.invoice.updating);
   const updateSuccess = useAppSelector(state => state.invoice.updateSuccess);
 
-  const handleClose = () => {
-    navigate('/invoice' + location.search);
-  };
-
   useEffect(() => {
     if (isNew) {
       dispatch(reset());
     } else {
       dispatch(getEntity(id));
     }
-
     dispatch(getCompanies({}));
   }, []);
 
   useEffect(() => {
     if (updateSuccess) {
-      handleClose();
+      navigate(`/invoice`);
     }
-  }, [updateSuccess]);
+  }, [updateSuccess, id, navigate]);
+
+  const handleGoBack = () => {
+    if (isNew) {
+      navigate('/invoice');
+    } else {
+      navigate(`/invoice/${id}`);
+    }
+  };
 
   // eslint-disable-next-line complexity
   const saveEntity = values => {
@@ -71,11 +74,13 @@ export const InvoiceUpdate = () => {
 
   const defaultValues = () =>
     isNew
-      ? {}
+      ? { invoiceDate: new Date().toISOString().split('T')[0] }
       : {
           ...invoiceEntity,
           company: invoiceEntity?.company?.id,
         };
+
+  const isClosed = invoiceEntity?.isClosed;
 
   return (
     <div>
@@ -100,30 +105,38 @@ export const InvoiceUpdate = () => {
                   id="invoice-id"
                   label={translate('global.field.id')}
                   validate={{ required: true }}
+                  disabled={isClosed}
                 />
               ) : null}
-              <ValidatedField
-                label={translate('sr2App.invoice.totalSum')}
-                id="invoice-totalSum"
-                name="totalSum"
-                data-cy="totalSum"
-                type="text"
-              />
+              {/*!isNew ? (
+                <ValidatedField
+                  label={translate('sr2App.invoice.totalSum')}
+                  id="invoice-totalSum"
+                  name="totalSum"
+                  data-cy="totalSum"
+                  type="text"
+                  disabled={isClosed}
+                />
+              ) : null*/}
               <ValidatedField
                 label={translate('sr2App.invoice.invoiceDate')}
                 id="invoice-invoiceDate"
                 name="invoiceDate"
                 data-cy="invoiceDate"
                 type="date"
+                disabled={isClosed}
               />
-              <ValidatedField
-                label={translate('sr2App.invoice.isClosed')}
-                id="invoice-isClosed"
-                name="isClosed"
-                data-cy="isClosed"
-                check
-                type="checkbox"
-              />
+              {!isNew ? (
+                <ValidatedField
+                  label={translate('sr2App.invoice.isClosed')}
+                  id="invoice-isClosed"
+                  name="isClosed"
+                  data-cy="isClosed"
+                  check
+                  type="checkbox"
+                  disabled={isClosed} // added disabled attribute here
+                />
+              ) : null}
               {isNew ? (
                 <ValidatedField
                   id="invoice-company"
@@ -148,9 +161,11 @@ export const InvoiceUpdate = () => {
                 <div>
                   <span>Company: </span>
                   <span>{invoiceEntity.company?.companyName}</span>
+                  <br />
+                  <br />
                 </div>
               )}
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/invoice" replace color="info">
+              <Button onClick={handleGoBack} id="cancel-save" data-cy="entityCreateCancelButton" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
@@ -158,7 +173,7 @@ export const InvoiceUpdate = () => {
                 </span>
               </Button>
               &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating || isClosed}>
                 <FontAwesomeIcon icon="save" />
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
