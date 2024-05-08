@@ -4,6 +4,7 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IInvoice, defaultValue } from 'app/shared/model/invoice.model';
 import { IStock } from 'app/shared/model/stock.model';
+import { translate } from 'react-jhipster';
 
 const initialState: EntityState<IInvoice> = {
   loading: false,
@@ -89,9 +90,31 @@ export const deleteEntity = createAsyncThunk(
   'invoice/delete_entity',
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
-    const result = await axios.delete<IInvoice>(requestUrl);
-    thunkAPI.dispatch(getEntities({}));
-    return result;
+    try {
+      // Check if there are associated stocks
+      const response = await axios.get<IInvoice>(requestUrl);
+      const invoice = response.data;
+      if (invoice.stocks && invoice.stocks.length > 0) {
+        throw new Error(translate('sr2App.invoice.errors.associatedStocks'));
+      }
+
+      // Proceed with deletion if no associated stocks are found
+      const result = await axios.delete<IInvoice>(requestUrl);
+      thunkAPI.dispatch(getEntities({}));
+      return result;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Handle Axios errors
+        console.log(error.response?.data);
+        console.log(error.response?.status);
+        console.log(error.response?.headers);
+        console.log(error.request);
+      } else {
+        // Handle non-Axios errors
+        console.error(error);
+      }
+      throw error; // rethrow the error to propagate it
+    }
   },
   { serializeError: serializeAxiosError },
 );

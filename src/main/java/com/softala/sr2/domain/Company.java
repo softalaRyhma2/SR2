@@ -46,7 +46,20 @@ public class Company implements Serializable {
     @JsonIgnoreProperties(value = { "stocks", "company" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "company")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
+    private Set<StockItemTypeCompany> stockItemTypeCompanies = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public Set<StockItemTypeCompany> getStockItemTypeCompanies() {
+        return stockItemTypeCompanies;
+    }
+
+    public void setStockItemTypeCompanies(Set<StockItemTypeCompany> stockItemTypeCompanies) {
+        this.stockItemTypeCompanies = stockItemTypeCompanies;
+    }
 
     public Long getId() {
         return this.id;

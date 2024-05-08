@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Row, Col, FormText } from 'reactstrap';
+import { Button, Row, Col, FormText, Alert } from 'reactstrap'; // Import Alert component
 import { isNumber, Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -25,6 +25,8 @@ export const StockUpdate = () => {
   const updating = useAppSelector(state => state.stock.updating);
   const updateSuccess = useAppSelector(state => state.stock.updateSuccess);
 
+  const [error, setError] = useState<string | null>(null); // State to manage error message
+
   useEffect(() => {
     if (isNew) {
       dispatch(reset());
@@ -37,14 +39,14 @@ export const StockUpdate = () => {
 
   useEffect(() => {
     if (updateSuccess) {
-      navigate(`/stock/${id}`);
+      navigate(`/stock`);
     }
   }, [updateSuccess, id, navigate]);
 
   const handleGoBack = () => {
-    navigate(`/stock/${id}`);
+    navigate(`/stock`);
   };
-  // eslint-disable-next-line complexity
+
   const saveEntity = values => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
@@ -56,13 +58,18 @@ export const StockUpdate = () => {
       invoice: invoices.find(it => it.id.toString() === values.invoice.toString()),
     };
 
+    // Check if invoice is not selected
+    if (!entity.invoice) {
+      setError('Please select an invoice before saving.'); // Set error message
+      return; // Prevent further execution
+    }
+
     if (isNew) {
       dispatch(createEntity(entity));
     } else {
       dispatch(updateEntity(entity));
     }
   };
-
   const defaultValues = () =>
     isNew
       ? {}
@@ -73,8 +80,20 @@ export const StockUpdate = () => {
 
   const today = new Date().toISOString().substring(0, 10);
 
+  // Filter invoices where isClosed is false
+  const filteredInvoices = invoices.filter(invoice => !invoice.isClosed);
+
   return (
     <div>
+      {/* Render error message if exists */}
+      {error && (
+        <Row className="justify-content-center">
+          <Col md="8">
+            <Alert color="warning">{error}</Alert>
+          </Col>
+        </Row>
+      )}
+
       <Row className="justify-content-center">
         <Col md="8">
           <h2 id="sr2App.stock.home.createOrEditLabel" data-cy="StockCreateUpdateHeading">
@@ -111,13 +130,17 @@ export const StockUpdate = () => {
               />
               {isNew ? (
                 <ValidatedField id="stock-invoice" name="invoice" data-cy="invoice" label={translate('sr2App.stock.invoice')} type="select">
-                  {invoices
-                    ? invoices.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id} - {otherEntity.company.companyName}
-                        </option>
-                      ))
-                    : null}
+                  {filteredInvoices && filteredInvoices.length > 0 ? (
+                    filteredInvoices.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.id} - {otherEntity.company.companyName}
+                      </option>
+                    ))
+                  ) : (
+                    <option disabled>
+                      <Translate contentKey="sr2App.invoice.home.notFound">No Reserved Items found</Translate>
+                    </option>
+                  )}
                 </ValidatedField>
               ) : (
                 <div>

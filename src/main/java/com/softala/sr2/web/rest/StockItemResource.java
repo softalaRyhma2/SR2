@@ -65,7 +65,7 @@ public class StockItemResource {
             throw new BadRequestAlertException("A new stockItem cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        //   if (stockItem.getStockItemType() != null && stockItem.getStock != null{
+        //   if (stockItem.getStockItemTypeCompany() != null && stockItem.getStock != null){
         //     throw new BadRequestAlertException("A new stockItem cannot have existing stock type", ENTITY_NAME, "adaapeexists");
         //   }
 
@@ -73,7 +73,7 @@ public class StockItemResource {
         Optional<StockItem> existingStockItem = stockItemRepository
             .findByStock(stockItem.getStock())
             .stream()
-            .filter(item -> item.getStockItemType().equals(stockItem.getStockItemType()))
+            .filter(item -> item.getStockItemTypeCompany().equals(stockItem.getStockItemTypeCompany()))
             .findFirst();
 
         if (existingStockItem.isPresent()) {

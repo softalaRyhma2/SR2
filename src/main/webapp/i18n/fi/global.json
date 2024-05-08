@@ -6,15 +6,16 @@
       "home": "Etusivu",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
-        "main": "Entiteetit",
+        "main": "Menu",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "company": "Company",
-        "stock": "Stock",
-        "reservation": "Reservation",
-        "invoice": "Invoice",
-        "stockItem": "Stock Item",
-        "stockItemType": "Stock Item Type",
-        "reservedItem": "Reserved Item"
+        "company": "Yritys",
+        "stock": "Varasto",
+        "reservation": "Varaus",
+        "invoice": "Lasku",
+        "stockItem": "Varastotuote",
+        "stockItemType": "Tuotetyyppi",
+        "stockItemTypeCompany": "Yrityksen tyyppihinta",
+        "reservedItem": "Varauksen tuote"
       },
       "account": {
         "main": "Tili",
@@ -42,6 +43,7 @@
     "form": {
       "username.label": "Käyttäjänimi",
       "username.placeholder": "Käyttäjänimesi",
+      "username.required": "Käyttäjänimi on pakollinen.",
       "currentpassword.label": "Nykyinen salasana",
       "currentpassword.placeholder": "Nykyinen salasana",
       "newpassword.label": "Uusi salasana",
@@ -71,7 +73,13 @@
           "required": "Salasana on pakollinen.",
           "minlength": "Salasanan tulee olla vähintään 4 merkin pituinen.",
           "maxlength": "Salasana ei voi olla pitempi kuin 50 merkkiä.",
-          "strength": "Salasanan vahvuus:"
+          "strength": "Salasanan vahvuus:",
+          "weak": "Salasana on liian heikko",
+          "atleast4characters": "Vähintään 8 merkkiä",
+          "atleast1uppercase": "Vähintään yksi iso kirjain",
+          "atleast1lowercase": "Vähintään yksi pieni kirjain",
+          "atleast1number": "Vähintään yksi numero",
+          "atleast1specialcharacter": "Vähintään yksi erikoismerkki"
         },
         "confirmpassword": {
           "required": "Salasana on pakollinen.",

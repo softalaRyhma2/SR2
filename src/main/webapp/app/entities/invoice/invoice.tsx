@@ -17,6 +17,8 @@ import { AUTHORITIES } from 'app/config/constants';
 
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
+// Import statements...
+
 export const Invoice = () => {
   const dispatch = useAppDispatch();
   const pageLocation = useLocation();
@@ -43,17 +45,6 @@ export const Invoice = () => {
     hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]),
   );
 
-  // CSV configuration
-  const csvConfig = mkConfig({ useKeysAsHeaders: true, fieldSeparator: ';' });
-  const handleCompanyChange = (e, company) => {
-    const isChecked = e.target.checked;
-    if (isChecked) {
-      setSelectedCompanies([...selectedCompanies, company]); // Add company to selected companies
-    } else {
-      setSelectedCompanies(selectedCompanies.filter(selectedCompany => selectedCompany.id !== company.id)); // Remove company from selected companies
-    }
-  };
-
   useEffect(() => {
     // Dispatch an action to fetch stocks with the same arguments as getInvoices
     dispatch(getStocks({ page: 1, size: 10, sort: 'asc' }));
@@ -65,15 +56,23 @@ export const Invoice = () => {
       getEntities({
         page: paginationState.activePage - 1,
         size: paginationState.itemsPerPage,
-        sort: `${paginationState.sort},${paginationState.order}`,
       }),
     );
+  };
+
+  const handleCompanyChange = (e, company) => {
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      setSelectedCompanies([...selectedCompanies, company]); // Add company to selected companies
+    } else {
+      setSelectedCompanies(selectedCompanies.filter(selectedCompany => selectedCompany.id !== company.id)); // Remove company from selected companies
+    }
   };
 
   // Sort entities
   const sortEntities = () => {
     getAllEntities();
-    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    const endURL = `?page=${paginationState.activePage}`;
     if (pageLocation.search !== endURL) {
       navigate(`${pageLocation.pathname}${endURL}`);
     }
@@ -81,7 +80,7 @@ export const Invoice = () => {
 
   useEffect(() => {
     sortEntities();
-  }, [paginationState.activePage, paginationState.order, paginationState.sort]);
+  }, [paginationState.activePage]);
 
   useEffect(() => {
     const params = new URLSearchParams(pageLocation.search);
@@ -98,89 +97,13 @@ export const Invoice = () => {
     }
   }, [pageLocation.search]);
 
-  const sort = p => () => {
-    setPaginationState({
-      ...paginationState,
-      order: paginationState.order === ASC ? DESC : ASC,
-      sort: p,
-    });
-  };
-
   const handlePagination = currentPage =>
     setPaginationState({
       ...paginationState,
       activePage: currentPage,
     });
 
-  const handleSyncList = () => {
-    sortEntities();
-  };
-
-  const getSortIconByFieldName = (fieldName: string) => {
-    const sortFieldName = paginationState.sort;
-    const order = paginationState.order;
-    if (sortFieldName !== fieldName) {
-      return faSort;
-    } else {
-      return order === ASC ? faSortUp : faSortDown;
-    }
-  };
-
-  const handleSelectAll = e => {
-    if (e.target.checked) {
-      setSelectedInvoices(filteredInvoices);
-    } else {
-      setSelectedInvoices([]);
-    }
-  };
-
-  const handleSelectInvoice = invoice => {
-    const isSelected = selectedInvoices.some(selectedInvoice => selectedInvoice.id === invoice.id);
-    if (isSelected) {
-      setSelectedInvoices(selectedInvoices.filter(inv => inv.id !== invoice.id));
-    } else {
-      setSelectedInvoices([...selectedInvoices, invoice]);
-    }
-  };
-
-  // Function to handle CSV export
-  const handleExportToCSV = () => {
-    const selectedInvoiceCsv = generateCsv(csvConfig)(
-      selectedInvoices.flatMap(invoice => {
-        const stocksForInvoice = stockList.filter(stock => stock.invoice?.id === invoice.id);
-        return stocksForInvoice.flatMap(stock => {
-          const stockItemsWithTypes = stock.stockItems.map(stockItem => ({
-            id: invoice.id,
-            totalSum: invoice.totalSum,
-            invoiceDate: invoice.invoiceDate,
-            companyName: invoice.company ? invoice.company.companyName : '',
-            companyEmail: invoice.company ? invoice.company.companyEmail : '',
-            stockDate: stock.stockDate || '',
-            stockItemType: stockItem.stockItemType ? stockItem.stockItemType.typeName : '',
-            stockItemTypePrice: stockItem.stockItemType ? stockItem.price : '',
-            stockItemQuantity: stockItem.quantity ? stockItem.quantity : '',
-          }));
-          // If there are no stock items for the current invoice, include the invoice details
-          return stockItemsWithTypes.length > 0
-            ? stockItemsWithTypes
-            : [
-                {
-                  id: invoice.id,
-                  totalSum: invoice.totalSum,
-                  invoiceDate: invoice.invoiceDate,
-                  companyName: invoice.company ? invoice.company.companyName : '',
-                  companyEmail: invoice.company ? invoice.company.companyEmail : '',
-                  stockDate: stock.stockDate || '', // Use stockDate for verification
-                  stockItemType: '',
-                  stockItemTypePrice: '',
-                  stockItemQuantity: '',
-                },
-              ];
-        });
-      }),
-    );
-    download(csvConfig)(selectedInvoiceCsv);
-  };
+  const handleSyncList = () => {};
 
   // Function to filter invoices based on selected timeframe
   const filteredInvoices = invoiceList.filter(invoice => {
@@ -203,9 +126,10 @@ export const Invoice = () => {
 
   // Function to toggle visibility of filters
   const toggleFilters = () => {
-    console.log(companyList);
-    console.log(stockList);
     setShowFilters(!showFilters);
+
+    const newText = showFilters ? 'Show Filters' : 'Hide Filters';
+    document.getElementById('filterButton').innerText = newText;
   };
 
   return (
@@ -222,15 +146,9 @@ export const Invoice = () => {
             &nbsp;
             <Translate contentKey="sr2App.invoice.home.createLabel">Create new Invoice</Translate>
           </Link>
-          {/* Add CSV Export Button */}
-          <Button onClick={handleExportToCSV}>
-            <Translate contentKey="sr2App.invoice.home.exportToCSV">Export to CSV</Translate>
-          </Button>
           {/* Filter Button */}
-          <Button onClick={toggleFilters} className="mx-2">
-            <Translate contentKey={showFilters ? 'sr2App.invoice.home.hideFilters' : 'sr2App.invoice.home.showFilters'}>
-              {showFilters ? 'Hide Filters' : 'Show Filters'}
-            </Translate>
+          <Button id="filterButton" onClick={toggleFilters} className="mx-2">
+            <Translate contentKey={showFilters ? 'sr2App.invoice.home.hideFilters' : 'sr2App.invoice.home.showFilters'} />
           </Button>
         </div>
         {/* RangePicker for timeframe filtering */}
@@ -259,22 +177,20 @@ export const Invoice = () => {
           <Table responsive>
             <thead>
               <tr>
+                {/* Table header content */}
+                {/* Removed checkboxes */}
                 <th>
-                  <Checkbox onChange={handleSelectAll} />
+                  <Translate contentKey="sr2App.invoice.id">ID</Translate>
                 </th>
-                <th className="hand" onClick={sort('id')}>
-                  <Translate contentKey="sr2App.invoice.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-                </th>
-                <th className="hand" onClick={sort('totalSum')}>
+                {/*<th className="hand" onClick={sort('totalSum')}>
                   <Translate contentKey="sr2App.invoice.totalSum">Total Sum</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('totalSum')} />
-                </th>
-                <th className="hand" onClick={sort('invoiceDate')}>
+        </th>*/}
+                <th>
                   <Translate contentKey="sr2App.invoice.invoiceDate">Invoice Date</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('invoiceDate')} />
                 </th>
                 <th>
-                  <Translate contentKey="sr2App.invoice.company">Company</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="sr2App.invoice.company">Company</Translate>
                 </th>
                 <th />
               </tr>
@@ -282,22 +198,13 @@ export const Invoice = () => {
             <tbody>
               {filteredInvoices.map((invoice, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Checkbox
-                      onChange={() => handleSelectInvoice(invoice)}
-                      checked={selectedInvoices.some(selectedInvoice => selectedInvoice.id === invoice.id)}
-                    />
-                  </td>
-                  <td>
-                    <Button tag={Link} to={`/invoice/${invoice.id}`} color="link" size="sm">
-                      {invoice.id}
-                    </Button>
-                  </td>
-                  <td>{invoice.totalSum}</td>
+                  {/* Removed checkboxes */}
+                  <td>{invoice.id}</td>
+                  {/* <td>{invoice.totalSum}</td>*/}
                   <td>
                     {invoice.invoiceDate ? <TextFormat type="date" value={invoice.invoiceDate} format={APP_LOCAL_DATE_FORMAT} /> : null}
                   </td>
-                  <td>{invoice.company ? <Link to={`/company/${invoice.company.id}`}>{invoice.company.companyName}</Link> : ''}</td>
+                  <td>{invoice.company ? <span>{invoice.company.companyName}</span> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/invoice/${invoice.id}`} color="info" size="sm" data-cy="entityDetailsButton">

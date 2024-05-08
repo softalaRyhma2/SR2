@@ -4,6 +4,7 @@ import com.softala.sr2.domain.Company;
 import com.softala.sr2.domain.Invoice;
 import com.softala.sr2.domain.User;
 import com.softala.sr2.repository.CompanyRepository;
+import com.softala.sr2.repository.StockItemTypeCompanyRepository;
 import com.softala.sr2.repository.UserRepository;
 import com.softala.sr2.security.SecurityUtils;
 import com.softala.sr2.service.CompanyService;
@@ -55,16 +56,20 @@ public class CompanyResource {
 
     private final InvoiceService invoiceService;
 
+    private final StockItemTypeCompanyRepository stockItemTypeCompanyRepository;
+
     public CompanyResource(
         CompanyService companyService,
         CompanyRepository companyRepository,
         UserRepository userRepository,
-        InvoiceService invoiceService
+        InvoiceService invoiceService,
+        StockItemTypeCompanyRepository stockItemTypeCompanyRepository
     ) {
         this.companyService = companyService;
         this.companyRepository = companyRepository;
         this.userRepository = userRepository;
         this.invoiceService = invoiceService;
+        this.stockItemTypeCompanyRepository = stockItemTypeCompanyRepository;
     }
 
     @GetMapping("/companies/current")

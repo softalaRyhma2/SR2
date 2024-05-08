@@ -1,4 +1,3 @@
-// stock-item-update.tsx
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Button, Row, Col, FormText } from 'reactstrap';
@@ -11,8 +10,8 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { IStock } from 'app/shared/model/stock.model';
 import { getEntities as getStocks } from 'app/entities/stock/stock.reducer';
-import { IStockItemType } from 'app/shared/model/stock-item-type.model';
-import { getEntities as getStockItemTypes } from 'app/entities/stock-item-type/stock-item-type.reducer';
+import { IStockItemTypeCompany } from 'app/shared/model/stock-item-type-company.model';
+import { getEntities as getStockItemTypes } from 'app/entities/stock-item-type-company/stock-item-type-company.reducer';
 import { IStockItem } from 'app/shared/model/stock-item.model';
 import { getEntity, updateEntity, createEntity, reset } from './stock-item.reducer';
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
@@ -27,11 +26,23 @@ export const StockItemUpdate = () => {
   const isNew = id === undefined;
 
   const stocks = useAppSelector(state => state.stock.entities);
-  const stockItemTypes = useAppSelector(state => state.stockItemType.entities);
+  const stockItemTypes = useAppSelector(state => state.stockItemTypeCompany.entities);
   const stockItemEntity = useAppSelector(state => state.stockItem.entity);
   const loading = useAppSelector(state => state.stockItem.loading);
   const updating = useAppSelector(state => state.stockItem.updating);
   const updateSuccess = useAppSelector(state => state.stockItem.updateSuccess);
+
+  const [selectedStockItemType, setSelectedStockItemType] = useState(null);
+
+  const [companyNameForStock, setCompanyNameForStock] = useState(null);
+
+  const handleClose = () => {
+    if (stockId) {
+      navigate(`/stock/${stockId}`);
+    } else {
+      navigate('/stock-item' + location.search);
+    }
+  };
 
   const handleGoBack = () => {
     navigate(-1);
@@ -55,7 +66,6 @@ export const StockItemUpdate = () => {
   }, [updateSuccess, navigate]);
 
   // eslint-disable-next-line complexity
-  // eslint-disable-next-line complexity
   const saveEntity = values => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
@@ -70,20 +80,13 @@ export const StockItemUpdate = () => {
       values.price = Number(values.price);
     }
 
-    // Default price value for non-admin users
-    const DEFAULT_PRICE = 0;
-
     const entity = {
       ...stockItemEntity,
       ...values,
       stock: stocks.find(it => it.id.toString() === values.stock.toString()),
-      stockItemType: stockItemTypes.find(it => it.id.toString() === values.stockItemType.toString()),
+      companyName: companyNameForStock,
+      stockItemTypeCompany: selectedStockItemType,
     };
-
-    // Set default price if user is not admin or recser
-    if (!isAdminOrRecser) {
-      entity.price = DEFAULT_PRICE;
-    }
 
     if (isNew) {
       dispatch(createEntity(entity));
@@ -98,18 +101,32 @@ export const StockItemUpdate = () => {
       : {
           ...stockItemEntity,
           stock: stockItemEntity?.stock?.id,
-          stockItemType: stockItemEntity?.stockItemType?.id,
+          stockItemTypeCompany: stockItemEntity?.stockItemTypeCompany?.id,
         };
   //code below for fetching stockid when coming from stock-detail.tsx
   const location = useLocation();
   const [stockId, setStockId] = useState(null);
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const stockid = params.get('stockId');
-    if (stockid) {
-      setStockId(stockid);
+    const stockIdParam = params.get('stockId');
+    const companyNameParam = params.get('companyNameForStock');
+    if (stockIdParam) {
+      setStockId(stockIdParam);
+    }
+    if (companyNameParam) {
+      setCompanyNameForStock(companyNameParam);
     }
   }, [location.search]);
+
+  const [filteredStockItemTypes, setFilteredStockItemTypes] = useState([]);
+  useEffect(() => {
+    let filteredTypes = [];
+    if (companyNameForStock) {
+      filteredTypes = stockItemTypes.filter(type => type.company?.companyName === companyNameForStock);
+    }
+    setFilteredStockItemTypes(filteredTypes);
+  }, [companyNameForStock, stockItemTypes]);
 
   return (
     <div>
@@ -158,20 +175,15 @@ export const StockItemUpdate = () => {
                   validate: v => isNumber(v) || translate('entity.validation.number'),
                 }}
               />
-              {isAdminOrRecser && (
-                <ValidatedField
-                  label={translate('sr2App.stockItem.price')}
-                  id="stock-item-price"
-                  name="price"
-                  data-cy="price"
-                  type="text"
-                  validate={{
-                    validate: v => isNumber(v) || translate('entity.validation.number'),
-                    ...(isAdminOrRecser && { required: { value: true, message: translate('entity.validation.required') } }),
-                  }}
-                  disabled={!isAdminOrRecser}
-                />
-              )}
+              <ValidatedField
+                label={translate('sr2App.stockItem.price')}
+                id="stock-item-price"
+                name="price"
+                data-cy="price"
+                type="text"
+                validate={{ required: true }}
+                value={selectedStockItemType ? selectedStockItemType.typePrice : ''}
+              />
               {/* Jos stockId on saatavilla, näytä se */}
               {stockId && (
                 <ValidatedField id="stock-item-stock" name="stock" data-cy="stock" label="Stock ID" type="text" value={stockId} />
@@ -188,23 +200,29 @@ export const StockItemUpdate = () => {
                 </ValidatedField>
               )}
               <ValidatedField
-                id="stock-item-stockItemType"
-                name="stockItemType"
-                data-cy="stockItemType"
+                id="stock-item-type-company"
+                name="stockItemTypeCompany"
+                data-cy="stockItemTypeCompany"
                 label={translate('sr2App.stockItem.stockItemType')}
                 type="select"
+                onChange={e => {
+                  const selectedItem = filteredStockItemTypes.find(type => type.id.toString() === e.target.value);
+                  setSelectedStockItemType(selectedItem);
+                }}
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
               >
                 <option value="" key="0" />
-                {stockItemTypes
-                  ? stockItemTypes.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.typeName}
-                      </option>
-                    ))
-                  : null}
+                {filteredStockItemTypes && filteredStockItemTypes.length > 0 ? (
+                  filteredStockItemTypes.map(otherEntity => (
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.stockItemType.typeName}, {otherEntity.typePrice}, {otherEntity.company.companyName}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">No type prices for this company</option>
+                )}
               </ValidatedField>
               <Button onClick={handleGoBack} id="cancel-save" data-cy="entityCreateCancelButton" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
@@ -216,7 +234,7 @@ export const StockItemUpdate = () => {
               &nbsp;
               <Button
                 onClick={handleGoBack}
-                updateSuccesscolor="primary"
+                updateSuccessColor="primary"
                 id="save-entity"
                 data-cy="entityCreateSaveButton"
                 type="submit"

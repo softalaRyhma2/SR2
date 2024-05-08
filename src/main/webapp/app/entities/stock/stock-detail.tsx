@@ -4,11 +4,12 @@ import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, AUTHORITIES } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getCompanyNameByInvoiceId, getEntity } from './stock.reducer';
 import { getStockItemEntitiesForStock } from '../stock-item/stock-item.reducer';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
 export const StockDetail = () => {
   const dispatch = useAppDispatch();
@@ -22,14 +23,16 @@ export const StockDetail = () => {
 
   const stockEntity = useAppSelector(state => state.stock.entity);
   const stockItemList = useAppSelector(state => state.stockItem.entities);
-  console.log('STOCKITEMLIST: ' + JSON.stringify(stockItemList));
-  //const stockItemTypeList = useAppSelector(state => state.stockItemType.entities);
-  //console.log('STOCKITEMTYPELIST: ' + JSON.stringify(stockItemTypeList));
+  //console.log('STOCKITEMLIST: ' + JSON.stringify(stockItemList));
+
   const [companyName, setCompanyName] = useState('');
   const stockTotal = useAppSelector(state => state.stock.stockTotal);
+  const authorities = useAppSelector(state => state.authentication.account.authorities);
+  const isAdminOrPCenter = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.PCENTER]);
 
   const calculateTotal = (quantity: number, price: number) => {
-    return quantity * price;
+    const total = quantity * price;
+    return total.toFixed(2);
   };
 
   useEffect(() => {
@@ -72,7 +75,7 @@ export const StockDetail = () => {
               <Translate contentKey="sr2App.stock.total">Total</Translate>
             </span>
           </dt>
-          <dd>{stockTotal} €</dd>
+          <dd>{stockTotal.toFixed(2)} €</dd>
         </dl>
         <Button tag={Link} to="/stock" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}
@@ -81,17 +84,22 @@ export const StockDetail = () => {
           </span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/stock/${stockEntity.id}/edit`} replace color="primary">
-          <FontAwesomeIcon icon="pencil-alt" />{' '}
-          <span className="d-none d-md-inline">
-            <Translate contentKey="entity.action.edit">Edit</Translate>
-          </span>
-        </Button>
+        {isAdminOrPCenter && (
+          <Button tag={Link} to={`/stock/${stockEntity.id}/edit`} replace color="primary">
+            <FontAwesomeIcon icon="pencil-alt" />{' '}
+            <span className="d-none d-md-inline">
+              <Translate contentKey="entity.action.edit">Edit</Translate>
+            </span>
+          </Button>
+        )}
       </Col>
       <Col md="8" className="jh-entity-details">
         <h2>Stock Items</h2>
         <Link
-          to={{ pathname: '/stock-item/new', search: `?stockId=${stockEntity.id}` }}
+          to={{
+            pathname: '/stock-item/new',
+            search: `?stockId=${stockEntity.id}&companyNameForStock=${companyName}`,
+          }}
           className="btn btn-primary jh-create-entity"
           id="jh-create-entity"
           data-cy="entityCreateButton"
@@ -137,10 +145,15 @@ export const StockDetail = () => {
                   <td>{stockItemEntity.available}</td>
                   <td>{stockItemEntity.price} €</td>
                   <td>{calculateTotal(stockItemEntity.quantity, stockItemEntity.price)} €</td>
-                  <td>{stockItemEntity.stockItemType ? stockItemEntity.stockItemType.typeName : ''}</td>
+                  <td>{stockItemEntity.stockItemTypeCompany ? stockItemEntity.stockItemTypeCompany.stockItemType.typeName : ''}</td>
+                  {/*<td>
+                      <Button tag={Link} to={`/stock-item/${stockItemEntity.id}`} color="primary">
+                        <FontAwesomeIcon icon="eye" /> View
+                      </Button>
+                </td> */}
                   <td>
-                    <Button tag={Link} to={`/stock-item/${stockItemEntity.id}`} color="primary">
-                      <FontAwesomeIcon icon="eye" /> View
+                    <Button tag={Link} to={`/stock-item/${stockItemEntity.id}/edit`} replace color="primary">
+                      <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
                     </Button>
                   </td>
                 </tr>

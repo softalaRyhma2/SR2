@@ -24,8 +24,7 @@ class StockItemTypeTest {
         stockItemType2 = getStockItemTypeSample2();
         assertThat(stockItemType1).isNotEqualTo(stockItemType2);
     }
-
-    @Test
+    /*@Test
     void stockItemTest() throws Exception {
         StockItemType stockItemType = getStockItemTypeRandomSampleGenerator();
         StockItem stockItemBack = getStockItemRandomSampleGenerator();
@@ -45,5 +44,5 @@ class StockItemTypeTest {
         stockItemType.setStockItems(new HashSet<>());
         assertThat(stockItemType.getStockItems()).doesNotContain(stockItemBack);
         assertThat(stockItemBack.getStockItemType()).isNull();
-    }
+    }*/
 }

@@ -49,7 +49,7 @@ export const StockItem = () => {
 
   useEffect(() => {
     sortEntities();
-  }, [paginationState.activePage, paginationState.order, paginationState.sort]);
+  }, [paginationState.activePage, paginationState.order]);
 
   useEffect(() => {
     const params = new URLSearchParams(pageLocation.search);
@@ -70,7 +70,7 @@ export const StockItem = () => {
     setPaginationState({
       ...paginationState,
       order: paginationState.order === ASC ? DESC : ASC,
-      sort: p,
+      sort: 'id', // Only sort by 'id'
     });
   };
 
@@ -85,6 +85,9 @@ export const StockItem = () => {
   };
 
   const getSortIconByFieldName = (fieldName: string) => {
+    if (fieldName !== 'id') {
+      return null; // No sorting arrows for columns other than 'id'
+    }
     const sortFieldName = paginationState.sort;
     const order = paginationState.order;
     if (sortFieldName !== fieldName) {
@@ -118,25 +121,27 @@ export const StockItem = () => {
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="sr2App.stockItem.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
-                <th className="hand" onClick={sort('quantity')}>
-                  <Translate contentKey="sr2App.stockItem.quantity">Quantity</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('quantity')} />
+                <th className="hand">
+                  <Translate contentKey="sr2App.stockItem.quantity">Quantity</Translate>
                 </th>
                 {!isTransport && (
-                  <th className="hand" onClick={sort('available')}>
-                    <Translate contentKey="sr2App.stockItem.available">Available</Translate>{' '}
-                    <FontAwesomeIcon icon={getSortIconByFieldName('available')} />
+                  <th className="hand">
+                    <Translate contentKey="sr2App.stockItem.available">Available</Translate>
                   </th>
                 )}
-                <th className="hand" onClick={sort('price')}>
-                  <Translate contentKey="sr2App.stockItem.price">Price</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('price')} />
+                <th className="hand">
+                  <Translate contentKey="sr2App.stockItem.price">Price</Translate>
                 </th>
+                <th>Type</th>
                 <th>
                   <Translate contentKey="sr2App.stockItem.stock">Stock</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  <Translate contentKey="sr2App.stockItem.stockItemType">Stock Item Type</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="sr2App.stockItem.stockItemTypeCompanyId">StockItemTypeCompany id, company</Translate>
+                </th>
+
+                <th>
+                  <Translate contentKey="sr2App.stockItem.stockDate">Stock Date</Translate>
                 </th>
                 <th />
               </tr>
@@ -144,17 +149,17 @@ export const StockItem = () => {
             <tbody>
               {stockItemList.map((stockItem, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/stock-item/${stockItem.id}`} color="link" size="sm">
-                      {stockItem.id}
-                    </Button>
-                  </td>
+                  <td>{stockItem.id}</td>
                   <td>{stockItem.quantity}</td>
                   {!isTransport && <td>{stockItem.available}</td>}
                   <td>{stockItem.price}</td>
+                  <td>{stockItem.stockItemTypeCompany ? stockItem.stockItemTypeCompany.stockItemType.typeName : ''}</td>
                   <td>{stockItem.stock ? <span>{stockItem.stock.id}</span> : ''}</td>
-                  <td>{stockItem.stockItemType ? <span>{stockItem.stockItemType.typeName}</span> : ''}</td>
-
+                  <td>
+                    {stockItem.stockItemTypeCompany ? stockItem.stockItemTypeCompany.company.id : ''},{' '}
+                    {stockItem.stockItemTypeCompany ? stockItem.stockItemTypeCompany.company.companyName : ''}
+                  </td>
+                  <td>{stockItem.stock ? stockItem.stock.stockDate : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/stock-item/${stockItem.id}`} color="info" size="sm" data-cy="entityDetailsButton">
