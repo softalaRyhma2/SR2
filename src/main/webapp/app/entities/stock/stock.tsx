@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Input, Table } from 'reactstrap';
+import { Button, Table } from 'reactstrap';
 import { Translate, TextFormat, getPaginationState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { getEntities, getCompanyNameByInvoiceId } from './stock.reducer';
+import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { DatePicker, Space, Checkbox } from 'antd';
+import { getEntities as getCompanies } from '../company/company.reducer';
 import { AUTHORITIES } from 'app/config/constants';
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
-import { getCompanyNameByInvoiceId, getEntities } from './stock.reducer';
-
 export const Stock = () => {
   const dispatch = useAppDispatch();
-
   const pageLocation = useLocation();
   const navigate = useNavigate();
 
@@ -23,14 +23,34 @@ export const Stock = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
+  const [selectedTimeframe, setSelectedTimeframe] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedCompanies, setSelectedCompanies] = useState([]);
+
   const stockList = useAppSelector(state => state.stock.entities);
   const loading = useAppSelector(state => state.stock.loading);
   const totalItems = useAppSelector(state => state.stock.totalItems);
 
   const companyNames = useAppSelector(state => state.stock.companyNames);
+
+  const companyList = useAppSelector(state => state.company.entities);
   const authorities = useAppSelector(state => state.authentication.account.authorities);
   const isAdminOrRecser = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]);
-  const [filterValue, setFilterValue] = useState('');
+  const canSelectCompanies = useAppSelector(state =>
+    hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]),
+  );
+
+  useEffect(() => {
+    dispatch(getCompanies({ page: 1, size: 10, sort: 'asc' }));
+  }, [dispatch]);
+
+  useEffect(() => {
+    stockList.forEach(stock => {
+      if (stock.invoice && stock.invoice.id) {
+        dispatch(getCompanyNameByInvoiceId(String(stock.invoice.id)));
+      }
+    });
+  }, [dispatch, stockList]);
 
   const getAllEntities = () => {
     dispatch(
@@ -39,6 +59,15 @@ export const Stock = () => {
         size: paginationState.itemsPerPage,
       }),
     );
+  };
+
+  const handleCompanyChange = (e, company) => {
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      setSelectedCompanies([...selectedCompanies, company]);
+    } else {
+      setSelectedCompanies(selectedCompanies.filter(selectedCompany => selectedCompany.id !== company.id));
+    }
   };
 
   const sortEntities = () => {
@@ -56,10 +85,14 @@ export const Stock = () => {
   useEffect(() => {
     const params = new URLSearchParams(pageLocation.search);
     const page = params.get('page');
-    if (page) {
+    const sort = params.get(SORT);
+    if (page && sort) {
+      const sortSplit = sort.split(',');
       setPaginationState({
         ...paginationState,
         activePage: +page,
+        sort: sortSplit[0],
+        order: sortSplit[1],
       });
     }
   }, [pageLocation.search]);
@@ -70,42 +103,45 @@ export const Stock = () => {
       activePage: currentPage,
     });
 
-  const handleSyncList = () => {
-    sortEntities();
-  };
-
-  useEffect(() => {
-    stockList.forEach(stock => {
-      if (stock.invoice && stock.invoice.id) {
-        dispatch(getCompanyNameByInvoiceId(String(stock.invoice.id)));
-      }
-    });
-  }, [stockList]);
+  const handleSyncList = () => {};
 
   const getCompanyNameForInvoiceId = (invoiceId: string) => {
     return companyNames[invoiceId] || '';
   };
 
-  const filteredStockList = stockList.filter(stock =>
-    getCompanyNameForInvoiceId(stock.invoice?.id)
-      .toLowerCase()
-      .includes(filterValue.toLowerCase()),
-  );
+  // Function to filter stocks based on selected timeframe and companies
+  const filteredStockList = stockList.filter(stock => {
+    if (!selectedTimeframe && !selectedCompanies.length) {
+      return true; // No timeframe or companies selected, so include all stocks
+    } else {
+      // Check timeframe
+      const stockDate = new Date(stock.stockDate);
+      const startDate = selectedTimeframe ? new Date(selectedTimeframe[0]) : null;
+      const endDate = selectedTimeframe ? new Date(selectedTimeframe[1]) : null;
+      const withinTimeframe = !selectedTimeframe || (stockDate >= startDate && stockDate <= endDate);
+
+      // Check companies
+      const companyName = getCompanyNameForInvoiceId(stock.invoice?.id); // Get company name for invoice ID
+      const belongsToSelectedCompanies =
+        selectedCompanies.length === 0 || selectedCompanies.some(company => company.companyName === companyName);
+
+      return withinTimeframe && belongsToSelectedCompanies;
+    }
+  });
+
+  // Function to toggle visibility of filters
+  const toggleFilters = () => {
+    setShowFilters(!showFilters);
+
+    const newText = showFilters ? 'Show Filters' : 'Hide Filters';
+    document.getElementById('filterButton').innerText = newText;
+  };
 
   return (
     <div>
       <h2 id="stock-heading" data-cy="StockHeading">
         <Translate contentKey="sr2App.stock.home.title">Stocks</Translate>
         <div className="d-flex justify-content-end">
-          {isAdminOrRecser && (
-            <Input
-              type="text"
-              placeholder="Filter by company name"
-              value={filterValue}
-              onChange={e => setFilterValue(e.target.value)}
-              style={{ width: '300px', marginRight: '250px' }}
-            />
-          )}
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="sr2App.stock.home.refreshListLabel">Refresh List</Translate>
@@ -115,13 +151,38 @@ export const Stock = () => {
             &nbsp;
             <Translate contentKey="sr2App.stock.home.createLabel">Create new Stock</Translate>
           </Link>
+          {/* Filter Button */}
+          <Button id="filterButton" onClick={toggleFilters} className="mx-2">
+            <Translate contentKey={showFilters ? 'sr2App.invoice.home.hideFilters' : 'sr2App.invoice.home.showFilters'} />
+          </Button>
         </div>
+        {/* RangePicker for timeframe filtering */}
+        {showFilters && (
+          <div className="mt-2">
+            <Space direction="vertical" size={12}>
+              <DatePicker.RangePicker onChange={(dates, dateStrings) => setSelectedTimeframe(dates)} />
+            </Space>
+          </div>
+        )}
+        {/* Company Checkbox Filter */}
+        {showFilters && canSelectCompanies && (
+          <div className="mt-2">
+            {companyList
+              .filter(company => company.companyName !== 'Recser') // Filter out the "Recser" company
+              .map(company => (
+                <Checkbox key={company.id} onChange={e => handleCompanyChange(e, company)}>
+                  {company.companyName}
+                </Checkbox>
+              ))}
+          </div>
+        )}
       </h2>
       <div className="table-responsive">
         {!loading && filteredStockList && filteredStockList.length > 0 && (
           <Table responsive>
             <thead>
               <tr>
+                {/* Table header content */}
                 <th>
                   <Translate contentKey="sr2App.stock.id">ID</Translate>
                 </th>
@@ -149,14 +210,9 @@ export const Stock = () => {
                     }
                   </td>
                   <td>{stock.stockDate ? <TextFormat type="date" value={stock.stockDate} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
-                  <td>
-                    {
-                      stock.invoice
-                        ? stock.invoice.id
-                        : '' /*stock.invoice ? <Link to={`/invoice/${stock.invoice.id}`}>{stock.invoice.id}</Link> : ''*/
-                    }
-                  </td>
-                  <td>{stock.invoice ? getCompanyNameForInvoiceId(stock.invoice.id) : ''}</td>
+                  <td>{stock.invoice ? stock.invoice.id : ''}</td>
+                  <td>{stock.invoice ? getCompanyNameForInvoiceId(stock.invoice.id) : ''}</td>{' '}
+                  {/* Updated to use getCompanyNameForInvoiceId */}
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/stock/${stock.id}`} color="info" size="sm" data-cy="entityDetailsButton">
@@ -208,7 +264,7 @@ export const Stock = () => {
         )}
       </div>
       {totalItems ? (
-        <div className={stockList && stockList.length > 0 ? '' : 'd-none'}>
+        <div className={filteredStockList && filteredStockList.length > 0 ? '' : 'd-none'}>
           <div className="justify-content-center d-flex">
             <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
           </div>

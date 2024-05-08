@@ -127,6 +127,9 @@ export const Invoice = () => {
   // Function to toggle visibility of filters
   const toggleFilters = () => {
     setShowFilters(!showFilters);
+
+    const newText = showFilters ? 'Show Filters' : 'Hide Filters';
+    document.getElementById('filterButton').innerText = newText;
   };
 
   return (
@@ -144,10 +147,8 @@ export const Invoice = () => {
             <Translate contentKey="sr2App.invoice.home.createLabel">Create new Invoice</Translate>
           </Link>
           {/* Filter Button */}
-          <Button onClick={toggleFilters} className="mx-2">
-            <Translate contentKey={showFilters ? 'sr2App.invoice.home.hideFilters' : 'sr2App.invoice.home.showFilters'}>
-              {showFilters ? 'Hide Filters' : 'Show Filters'}
-            </Translate>
+          <Button id="filterButton" onClick={toggleFilters} className="mx-2">
+            <Translate contentKey={showFilters ? 'sr2App.invoice.home.hideFilters' : 'sr2App.invoice.home.showFilters'} />
           </Button>
         </div>
         {/* RangePicker for timeframe filtering */}
