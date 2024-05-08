@@ -31,6 +31,7 @@ export const InvoiceDetail = () => {
         });
       });
     }
+    updatedTotalSum = parseFloat(updatedTotalSum.toFixed(2));
     setTotalSum(updatedTotalSum);
   }, [invoiceEntity]);
 
@@ -44,7 +45,7 @@ export const InvoiceDetail = () => {
       stock.stockItems.forEach(item => {
         stockData.push({
           'Invoice ID': invoiceEntity.id,
-          'Total Sum': totalSum, // Käytetään tässä laskettua totalSum-arvoa
+          'Total Sum': totalSum + '€', // Käytetään tässä laskettua totalSum-arvoa
           'Invoice Date': invoiceEntity.invoiceDate,
           'Is Closed': invoiceEntity.isClosed ? 'true' : 'false',
           Company: invoiceEntity.company ? invoiceEntity.company.companyName : '',
@@ -83,7 +84,7 @@ export const InvoiceDetail = () => {
               <Translate contentKey="sr2App.invoice.totalSum">Total Sum</Translate>
             </span>
           </dt>
-          <dd>{totalSum}</dd>
+          <dd>{totalSum} €</dd>
           <dt>
             <span id="invoiceDate">
               <Translate contentKey="sr2App.invoice.invoiceDate">Invoice Date</Translate>
