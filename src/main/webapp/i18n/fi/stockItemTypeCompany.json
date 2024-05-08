@@ -1,0 +1,26 @@
+{
+  "sr2App": {
+    "stockItemTypeCompany": {
+      "home": {
+        "title": "Stock Item Type Companies",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Luo Stock Item Type Company",
+        "createOrEditLabel": "Luo tai muokkaa Stock Item Type Company",
+        "notFound": "Stock Item Type Company ei löytynyt"
+      },
+      "created": "Uusi Stock Item Type Company on luotu, id: {{ param }}",
+      "updated": "Stock Item Type Company on päivitetty, id: {{ param }}",
+      "deleted": "Stock Item Type Company on päivitetty, id: {{ param }}",
+      "delete": {
+        "question": "Haluatko varmasti poistaa Stock Item Type Company {{ id }}?"
+      },
+      "detail": {
+        "title": "Stock Item Type Company"
+      },
+      "id": "ID",
+      "typePrice": "Type Price",
+      "stockItemType": "Stock Item Type",
+      "company": "Company"
+    }
+  }
+}
