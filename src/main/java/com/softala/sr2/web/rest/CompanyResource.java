@@ -216,15 +216,22 @@ public class CompanyResource {
     @GetMapping("/{id}")
     public ResponseEntity<Company> getCompany(@PathVariable("id") Long id) {
         log.debug("REST request to get Company : {}", id);
-        List<Company> companies = companyService.findAllCompaniesByLoggedInUser();
-        Optional<Company> requestedCompany = companies.stream().filter(company -> company.getId().equals(id)).findFirst();
-        if (requestedCompany.isPresent()) {
-            Company fetchedCompany = requestedCompany.get();
-            List<Invoice> invoices = invoiceService.getInvoicesByCompanyId(fetchedCompany);
-            Set<Invoice> invoiceSet = new HashSet<>(invoices);
-            fetchedCompany.setInvoices(invoiceSet);
-        }
 
+        // Find all companies associated with the logged-in user
+        List<Company> companies = companyService.findAllCompaniesByLoggedInUser();
+
+        // Find the requested company by id
+        Optional<Company> requestedCompany = companies.stream().filter(company -> company.getId().equals(id)).findFirst();
+
+        // If the requested company is present, fetch its invoices and set them
+        requestedCompany.ifPresent(company -> {
+            List<Invoice> invoices = invoiceService.getInvoicesByCompanyId(company);
+            Set<Invoice> invoiceSet = new HashSet<>(invoices);
+
+            company.setInvoices(invoiceSet);
+        });
+
+        // Return either the requested company if present, or a not found response
         return requestedCompany.map(company -> ResponseEntity.ok().body(company)).orElse(ResponseEntity.notFound().build());
     }
 
