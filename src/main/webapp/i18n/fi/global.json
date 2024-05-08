@@ -8,14 +8,14 @@
       "entities": {
         "main": "Menu",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "company": "Company",
-        "stock": "Stock",
-        "reservation": "Reservation",
-        "invoice": "Invoice",
-        "stockItem": "Stock Item",
-        "stockItemType": "Stock Item Type",
-        "stockItemTypeCompany": "Stock Item Type Company",
-        "reservedItem": "Reserved Item"
+        "company": "Yritys",
+        "stock": "Varasto",
+        "reservation": "Varaus",
+        "invoice": "Lasku",
+        "stockItem": "Varastotuote",
+        "stockItemType": "Tuotetyyppi",
+        "stockItemTypeCompany": "Yrityksen tyyppihinta",
+        "reservedItem": "Varauksen tuote"
       },
       "account": {
         "main": "Tili",
