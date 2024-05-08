@@ -198,7 +198,23 @@ public class InvoiceResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteInvoice(@PathVariable("id") Long id) {
         log.debug("REST request to delete Invoice : {}", id);
+
+        // Check if there are stocks associated with the invoice
+        Optional<Invoice> invoiceOptional = invoiceService.findOne(id);
+        if (invoiceOptional.isPresent()) {
+            Invoice invoice = invoiceOptional.get();
+            if (!invoice.getStocks().isEmpty()) {
+                throw new BadRequestAlertException(
+                    "Invoice cannot be deleted because it has associated stocks",
+                    ENTITY_NAME,
+                    "cannotdelete"
+                );
+            }
+        }
+
+        // Proceed with deletion if no associated stocks are found
         invoiceService.delete(id);
+
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

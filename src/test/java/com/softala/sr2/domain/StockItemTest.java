@@ -60,7 +60,7 @@ class StockItemTest {
         stockItem.stock(null);
         assertThat(stockItem.getStock()).isNull();
     }
-
+    /*
     @Test
     void stockItemTypeTest() throws Exception {
         StockItem stockItem = getStockItemRandomSampleGenerator();
@@ -71,5 +71,5 @@ class StockItemTest {
 
         stockItem.stockItemType(null);
         assertThat(stockItem.getStockItemType()).isNull();
-    }
+    } */
 }

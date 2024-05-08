@@ -20,6 +20,9 @@
       "detail": {
         "title": "Lasku"
       },
+      "errors": {
+        "associatedStocks": "Laskua ei voi poistaa, koska siihen liittyy varastoja."
+      },
       "id": "ID",
       "totalSum": "Kokonaissumma",
       "invoiceDate": "Laskun päivä",

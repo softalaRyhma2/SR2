@@ -28,7 +28,7 @@ public class ReservedItem implements Serializable {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "reservedItems" }, allowSetters = true)
     private Reservation reservation;
 

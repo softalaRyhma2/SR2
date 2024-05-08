@@ -69,7 +69,7 @@ public class StockItemResource {
         List<StockItem> existingStockItems = stockItemRepository.findByStock(stockItem.getStock());
         Optional<StockItem> existingStockItem = existingStockItems
             .stream()
-            .filter(item -> item.getStockItemType().equals(stockItem.getStockItemType()))
+            .filter(item -> item.getStockItemTypeCompany().equals(stockItem.getStockItemTypeCompany()))
             .findFirst();
 
         existingStockItem.ifPresent(item -> {

@@ -4,11 +4,12 @@ import { Button, Row, Col, Table } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, AUTHORITIES } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './reservation.reducer';
 import { getReservedItemEntitiesForReservation } from '../reserved-item/reserved-item.reducer';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
 export const ReservationDetail = () => {
   const dispatch = useAppDispatch();
@@ -22,8 +23,9 @@ export const ReservationDetail = () => {
 
   const reservationEntity = useAppSelector(state => state.reservation.entity);
   const reservedItemList = useAppSelector(state => state.reservedItem.entities);
-  console.log('RESERVEDITEMLIST: ' + JSON.stringify(reservedItemList));
-
+  //  console.log('RESERVEDITEMLIST: ' + JSON.stringify(reservedItemList));
+  const authorities = useAppSelector(state => state.authentication.account.authorities);
+  const isAdminOrRecser = hasAnyAuthority(authorities, [AUTHORITIES.ADMIN, AUTHORITIES.RECSER]);
   return (
     <Row>
       <Col md="8">
@@ -61,7 +63,7 @@ export const ReservationDetail = () => {
           </span>
         </Button>
         &nbsp;
-        <Button tag={Link} to={`/reservation/${reservationEntity.id}/edit`} replace color="primary">
+        <Button tag={Link} to={`/reservation/${reservationEntity.id}/edit`} replace color="primary" disabled={reservationEntity.isPickedUp}>
           <FontAwesomeIcon icon="pencil-alt" />{' '}
           <span className="d-none d-md-inline">
             <Translate contentKey="entity.action.edit">Edit</Translate>
@@ -70,16 +72,19 @@ export const ReservationDetail = () => {
       </Col>
       <Col md="8" className="jh-entity-details">
         <h2>Reserved Items</h2>
-        <Link
+        <Button
+          tag={Link}
           to={{ pathname: '/reserved-item/new', search: `?reservationId=${reservationEntity.id}` }}
-          className="btn btn-primary jh-create-entity"
+          color="primary"
+          className="jh-create-entity"
           id="jh-create-entity"
           data-cy="entityCreateButton"
+          disabled={reservationEntity.isPickedUp}
         >
           <FontAwesomeIcon icon="plus" />
           &nbsp;
           <Translate contentKey="sr2App.reservedItem.home.createLabel">Create new Reserved Item</Translate>
-        </Link>
+        </Button>
         <Table>
           <thead>
             <tr>
@@ -88,6 +93,9 @@ export const ReservationDetail = () => {
               </th>
               <th>
                 <Translate contentKey="sr2App.reservedItem.quantity">Quantity</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sr2App.reservedItem.stockItemTypeName">Stock Item Type Name</Translate>
               </th>
               <th></th>
             </tr>
@@ -102,11 +110,14 @@ export const ReservationDetail = () => {
                 <tr key={reservedItemEntity.id}>
                   <td>{reservedItemEntity.id}</td>
                   <td>{reservedItemEntity.quantity}</td>
-                  <td>
-                    <Button tag={Link} to={`/reserved-item/${reservedItemEntity.id}`} color="primary">
-                      <FontAwesomeIcon icon="eye" /> View
-                    </Button>
-                  </td>
+                  <td>{reservedItemEntity.stockItem.stockItemTypeCompany.stockItemType.typeName}</td>
+                  {isAdminOrRecser && (
+                    <td>
+                      <Button tag={Link} to={`/reserved-item/${reservedItemEntity.id}`} color="primary">
+                        <FontAwesomeIcon icon="eye" /> View
+                      </Button>
+                    </td>
+                  )}
                 </tr>
               ))
             )}
