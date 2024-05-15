@@ -196,28 +196,22 @@ public class InvoiceResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-public ResponseEntity<Void> deleteInvoice(@PathVariable("id") Long id) {
-    log.debug("REST request to delete Invoice : {}", id);
+    public ResponseEntity<Void> deleteInvoice(@PathVariable("id") Long id) {
+        log.debug("REST request to delete Invoice : {}", id);
 
-    // Check if there are stocks associated with the invoice
-    Invoice invoice = invoiceService.findOne(id)
-            .orElseThrow(() -> new IllegalArgumentException("Invoice not found with id: " + id));
+        // Check if there are stocks associated with the invoice
+        Invoice invoice = invoiceService.findOne(id).orElseThrow(() -> new IllegalArgumentException("Invoice not found with id: " + id));
 
-    if (!invoice.getStocks().isEmpty()) {
-        throw new BadRequestAlertException(
-            "Invoice cannot be deleted because it has associated stocks",
-            ENTITY_NAME,
-            "cannotdelete"
-        );
+        if (!invoice.getStocks().isEmpty()) {
+            throw new BadRequestAlertException("Invoice cannot be deleted because it has associated stocks", ENTITY_NAME, "cannotdelete");
+        }
+
+        // Proceed with deletion if no associated stocks are found
+        invoiceService.delete(id);
+
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
-
-    // Proceed with deletion if no associated stocks are found
-    invoiceService.delete(id);
-
-    return ResponseEntity
-        .noContent()
-        .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-        .build();
-}
-
 }

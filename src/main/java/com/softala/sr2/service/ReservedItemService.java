@@ -32,38 +32,38 @@ public class ReservedItemService {
     }
 
     public ReservedItem save(ReservedItem reservedItem) {
-    log.debug("Request to save ReservedItem : {}", reservedItem);
+        log.debug("Request to save ReservedItem : {}", reservedItem);
 
-    Optional<StockItem> optionalStockItem = stockItemRepository.findById(reservedItem.getStockItem().getId());
-    StockItem stockItem = optionalStockItem.orElseThrow(() -> new IllegalArgumentException("StockItem not found"));
+        Optional<StockItem> optionalStockItem = stockItemRepository.findById(reservedItem.getStockItem().getId());
+        StockItem stockItem = optionalStockItem.orElseThrow(() -> new IllegalArgumentException("StockItem not found"));
 
-    int reservedQuantity = reservedItem.getQuantity();
-    int currentQuantity = stockItem.getQuantity();
-    int currentAvailable = stockItem.getAvailable();
-    StockItemTypeCompany stockItemTypeCompany = reservedItem.getStockItem().getStockItemTypeCompany();
+        int reservedQuantity = reservedItem.getQuantity();
+        int currentQuantity = stockItem.getQuantity();
+        int currentAvailable = stockItem.getAvailable();
+        StockItemTypeCompany stockItemTypeCompany = reservedItem.getStockItem().getStockItemTypeCompany();
 
-    if (currentQuantity >= reservedQuantity && currentAvailable >= reservedQuantity) {
-        // If reservation has no items:
-        if (stockItemTypeCompany == null) {
-            int newQuantity = currentQuantity - reservedQuantity;
-            stockItem.setAvailable(newQuantity);
-            stockItemRepository.save(stockItem);
-            return reservedItemRepository.save(reservedItem);
-        }
+        if (currentQuantity >= reservedQuantity && currentAvailable >= reservedQuantity) {
+            // If reservation has no items:
+            if (stockItemTypeCompany == null) {
+                int newQuantity = currentQuantity - reservedQuantity;
+                stockItem.setAvailable(newQuantity);
+                stockItemRepository.save(stockItem);
+                return reservedItemRepository.save(reservedItem);
+            }
 
-        // If reservation has items, check for saving right amount to stock:
-        if (stockItemTypeCompany.equals(stockItem.getStockItemTypeCompany())) {
-            int newQuantity = currentAvailable - reservedQuantity;
-            stockItem.setAvailable(newQuantity);
-            stockItemRepository.save(stockItem);
-            return reservedItemRepository.save(reservedItem);
+            // If reservation has items, check for saving right amount to stock:
+            if (stockItemTypeCompany.equals(stockItem.getStockItemTypeCompany())) {
+                int newQuantity = currentAvailable - reservedQuantity;
+                stockItem.setAvailable(newQuantity);
+                stockItemRepository.save(stockItem);
+                return reservedItemRepository.save(reservedItem);
+            } else {
+                throw new IllegalArgumentException("StockItemTypeCompany does not match for the reserved item");
+            }
         } else {
-            throw new IllegalArgumentException("StockItemTypeCompany does not match for the reserved item");
+            throw new IllegalArgumentException("Not enough quantity available in stock");
         }
-    } else {
-        throw new IllegalArgumentException("Not enough quantity available in stock");
     }
-}
 
     /**
      * Update a reservedItem.
