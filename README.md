@@ -150,7 +150,6 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 
 [RESTdocumentation-SR2.pdf](https://github.com/softalaRyhma2/SR2/files/15179523/RESTdocumentation-SR2.pdf)
 
-
 ## Tietohakemisto
 
 > ### _Company_
@@ -190,14 +189,14 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 >
 > _StockItem-taulu sisältää tuotetiedot, kuten varaston kokonais- sekä varattavissa oleva lavamäärä, päivän säilytyshinta, lavatyyppi. Yhteen tuotetietoriviin kuuluu vain yhden tyypin lavat. Yksi tuotetietorivi voi kuulua yhteen varastoon ja yhdessä varastossa voi olla useampi erityyppinen tuote._
 >
-> | Kenttä          | Tyyppi        | Kuvaus                                                                                      |
-> | --------------- | ------------- | ------------------------------------------------------------------------------------------- |
-> | stockItemId     | Long PK       | Tuotetietojen rivin id-tunniste.                                                            |
-> | quantity        | int           | Varastossa oleva yhden tyypin kokonaislavamäärä.                                            |
-> | available       | int           | Varattavissa oleva yhden tyypin lavamäärä.                                                  |
-> | price           | decimal(21,2) | Yhden lavatyypin varastointihinta per päivä.                                                |
-> | stockItemTypeId | int FK        | Lavatyypin id-kenttä, viittaus [_StockItemType_](#stockitemtype)-tauluun.                   |
-> | stockId         | int FK        | Varaston id-kenttä, johon kuuluu tietyntyyppiset lavat, viittaus [_Stock_](#stock)-tauluun. |
+> | Kenttä                 | Tyyppi        | Kuvaus                                                                                                            |
+> | ---------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------- |
+> | stockItemId            | Long PK       | Tuotetietojen rivin id-tunniste.                                                                                  |
+> | quantity               | int           | Varastossa oleva yhden tyypin kokonaislavamäärä.                                                                  |
+> | available              | int           | Varattavissa oleva yhden tyypin lavamäärä.                                                                        |
+> | price                  | decimal(21,2) | Yhden lavatyypin varastointihinta per päivä.                                                                      |
+> | stockItemTypeCompanyId | int FK        | Yrityskohtaisen lavatyyppihintarivin id-kenttä, viittaus [_StockItemTypeCompany_](#stockitemtypecompany)-tauluun. |
+> | stockId                | int FK        | Varaston id-kenttä, johon kuuluu tietyntyyppiset lavat, viittaus [_Stock_](#stock)-tauluun.                       |
 
 > ### _StockItemType_
 >
@@ -207,6 +206,17 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > | -------- | ------- | ----------------------- |
 > | id       | Long PK | Lavatyypin id-tunniste. |
 > | typeName | String  | Lavatyyppin nimi.       |
+
+> ### _StockItemTypeCompany_
+>
+> _StockItemTypeCompany-taulu sisältää yrityskohtaiset hinnat eri lavatyyppeille._
+>
+> | Kenttä        | Tyyppi        | Kuvaus                                                                |
+> | ------------- | ------------- | --------------------------------------------------------------------- |
+> | id            | Long PK       | Rivin id-tunniste.                                                    |
+> | typePrice     | decimal(21,2) | Lavatyyppin hinta.                                                    |
+> | stockItemType | String        | Lavatyyppin nimi, viittaus [_StockItemType_](#stockitemtype)-tauluun. |
+> | company       | String        | Yrityksen nimi, viittaus [_Company_](#company)-tauluun.               |
 
 > ### _Reservation_
 >
