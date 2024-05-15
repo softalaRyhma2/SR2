@@ -4,40 +4,10 @@ Tiimi: [Bozic Zorana](https://github.com/zokaas), [Lairi Piia](https://github.co
 
 ## Johdanto
 
-<!--
-Johdantoon kirjoitetaan lyhyt, ytimekäs kuvaus siitä, mikä on projektin aihe,
-kuka on asiakas (käyttäjä), mitä hän haluaa ja saa järjestelmältä, mitä
-tekniikoita käytetään ja mitä konkreettisesti on valmiina, kun projekti päättyy.
-
--   Järjestelmän tarkoitus ja tiivis kuvaus siitä, mistä on kyse ja kenelle järjestelmä on tarkoitettu.
--   Toteutus- ja toimintaympäristö lyhyesti:
-    -   Palvelinpuolen ratkaisut ja teknologiat (esim. palvelinteknologia, mikä tietokantajärjestelmä on käytössä)
-    -   Käyttöliittymäratkaisut ja teknologiat (esim. päätelaitteet: puhelin,
-    täppäri, desktop)
-
-    -->
-
 Web-sovelluksen tarkoituksena on tehdä yritykselle, kuljetusliikkeille ja käsittelylaitokselle yhteinen sovellus, jonka kautta voidaan hallinnoida, varata ja laskuttaa akku- ja paristokierrätykseen tarvittavia lavoja. Ennen tätä sovellusta eri toimijoilla on ollut käytössä vaihtelevia tapoja tehdä näitä toimintoja. Projektin tarkoituksena on tehdä asiakkaalle prototyyppi.
 Sovelluksen tekemiseen käytetään JHipster -kehitystyökalua, joka tarjoaa mm. valmiin käyttäjänhallinnan, tietokantarajapinnat sekä tietoturvan.
 
 Sovelluksessa on palvelinpuolella käytössä Spring Boot ja kehitysvaiheessa käytössä on H2-tietokanta. Käyttöliittymäratkaisuna on React TypeScriptillä ja sovellusta on tarkoitus käyttää pääasiallisesti tietokoneella, mutta sen skaalautuvuus on suunniteltu siten, että sitä voi käyttää myös mobiililaitteella.
-
-<!--
-## Järjestelmän määrittely
-
-Määrittelyssä järjestelmää tarkastellaan käyttäjän näkökulmasta. Järjestelmän
-toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, ja kuvataan järjestelmän
-käyttäjäryhmät.
-
--   Lyhyt kuvaus käyttäjäryhmistä (rooleista)
-Sovelluksen käyttäjät: Yritys, Käsittelylaitos, Kuljetusliikkeet 1-4
--   Käyttäjäroolit ja roolien tarvitsemat toiminnot, esim. käyttötapauskaaviona
-    (use case diagram) tai käyttäjätarinoina.
--   Lyhyt kuvaus käyttötapauksista tai käyttäjätarinat
-
-Kuvauksissa kannattaa harkita, mikä on toteuttajalle ja asiakkaalle oleellista
-tietoa ja keskittyä siihen.
--->
 
 ## Käyttöliittymä
 
@@ -54,12 +24,6 @@ tietoa ja keskittyä siihen.
 
 - [Linkki Herokussa julkaistuun sovellukseen](https://recser-app-6b6a8f3d45a1.herokuapp.com)
 
-<!--
-Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona.
-
-Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
--->
-
 #### Käyttäjäroolit
 
 Projektissamme on neljä käyttäjäroolia: Admin (Ylläpitäjä), Recser (Yritys), Pcenter (Käsittelylaitos) ja Transport (Kuljetusliike). Kukin rooli on suunniteltu tukemaan erilaisia toimintoja ja käyttöoikeuksia järjestelmässä. Admin-rooli on suunniteltu järjestelmän ylläpitäjälle, jolla on laajimmat pääsy- ja hallintaoikeudet.
@@ -69,11 +33,10 @@ Transport-rooli on suunniteltu kuljetuspalveluiden tarjoajille.
 
 _Ylläpitäjä (Admin) voi:_
 
-<!-- - tarkastella ja muokata järjestelmän Administration-valikkoa -->
-
+- tarkastella ja muokata järjestelmän Administration-valikkoa
 - luoda uusia organisaatioita sekä käyttäjiä ja päivittää niiden tietoja.
 - nähdä käsittelylaitoksen ja kuljetusliikkeen varastosaldot ja muokata niitä.
-- muokata käsittelylaitoksen ja kuljetusliikkeen lavapaikkahintoja.
+- luoda ja muokata käsittelylaitoksen ja kuljetusliikkeen lavapaikkahintoja.
 - nähdä käsittelylaitoksen ja kuljetusliikkeen laskuhistoriat.
 - nähdä käsittelylaitoksen ja kuljetusliikkeen organisaatiotietoja.
 - tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
@@ -82,7 +45,7 @@ _Yritys (Recser) voi:_
 
 - luoda uusia organisaatioita sekä käyttäjiä ja päivittää niiden tietoja.
 - nähdä käsittelylaitoksen ja kuljetusliikkeen varastosaldot ja muokata niitä.
-- muokata käsittelylaitoksen ja kuljetusliikkeen lavapaikkahintoja.
+- luoda ja muokata käsittelylaitoksen ja kuljetusliikkeen lavapaikkahintoja.
 - nähdä käsittelylaitoksen ja kuljetusliikkeen laskuhistoriat.
 - nähdä käsittelylaitoksen ja kuljetusliikkeen organisaatiotietoja.
 - tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
@@ -94,12 +57,12 @@ _Käsittelylaitos voi:_
 - nähdä oma varastointihinta per lava.
 - laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista.
 - tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
-- **Ei saa nähdä mitään tietoja kuljetusliikkeistä**
+- Ei saa nähdä mitään tietoja kuljetusliikkeistä
 
 _Kuljetusliike voi:_
 
 - nähdä ja muokata oman varaston saldoa.
-- nähdä montako varattavissa olevaa lavaa käsittelylaitoksen varastossa on, varata niitä ja **merkata noudetuksi**.
+- nähdä montako varattavissa olevaa lavaa käsittelylaitoksen varastossa on, varata niitä ja merkata noudetuksi.
 - nähdä oma varastointihinta per lava.
 - laskuttaa yritystä kuukausittain varastossa säilytetyistä lavoista.
 - tulostaa yhteenvedon (varastosaldo+päivähinta) csv-muodossa.
@@ -121,7 +84,7 @@ _Kuljetusliike voi:_
 | Kuljetusliike   | Haluaa nähdä käsittelylaitoksen varastossa olevat vapaat lavat | Pysty varaamaan lavat                                         |
 | Kuljetusliike   | Haluaa varata tyhjiä lavoja                                    | Voi kuljettaa kuorman omaan varastoon                         |
 | Kuljetusliike   | Haluaa nähdä yhteenvedon                                       | Pystyy laskuttamaan yritystä                                  |
-| Kuljetusliike   | Haluaa nähdä **ja muokata** lavasäilytyshinta                  | Pystyy laskuttamaan yritystä ajantasaisesti                   |
+| Kuljetusliike   | Haluaa nähdä lavasäilytyshinta                                 | Pystyy laskuttamaan yritystä ajantasaisesti                   |
 |                 |                                                                |                                                               |
 
 ## Tietokanta
@@ -135,16 +98,6 @@ _Kuljetusliike voi:_
 #### Javakaavio
 
 ![javachart_battery-v3 drawio](https://github.com/softalaRyhma2/SR2/assets/77851668/92e1971a-f4b4-46cc-8832-25952cb2a530)
-
-<!--
-Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
-kuvataan käsitekaaviolla. Käsitemalliin sisältyy myös taulujen välisten viiteyhteyksien ja avainten
-määritykset. Tietokanta kuvataan käyttäen jotain kuvausmenetelmää, joko ER-kaaviota ja UML-luokkakaaviota.
-
-Lisäksi kukin järjestelmän tietoelementti ja sen attribuutit kuvataan
-tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elementin (taulun) ja niiden
-attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
--->
 
 ## REST-Dokumentaatio
 
@@ -287,65 +240,15 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > userId | int FK | Käyttäjän id-tunniste. Viittaus [_User_](#user)-tauluun.
 > authorityName | varchar(50) FK | Roolin nimi. Viittaus [_Authority_](#authority)-tauluun.
 
-<!--
-
-
-
-## Tekninen kuvaus
-
-Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
-ratkaisut, esim.
-
--   Missä mikäkin järjestelmän komponentti ajetaan (tietokone, palvelinohjelma)
-    ja komponenttien väliset yhteydet (vaikkapa tähän tyyliin:
-    https://security.ufl.edu/it-workers/risk-assessment/creating-an-information-systemdata-flow-diagram/)
--   Palvelintoteutuksen yleiskuvaus: teknologiat, deployment-ratkaisut yms.
--   Keskeisten rajapintojen kuvaukset, esimerkit REST-rajapinta. Tarvittaessa voidaan rajapinnan käyttöä täsmentää
-    UML-sekvenssikaavioilla.
--   Toteutuksen yleisiä ratkaisuja, esim. turvallisuus.
-
-Tämän lisäksi
-
--   ohjelmakoodin tulee olla kommentoitua
--   luokkien, metodien ja muuttujien tulee olla kuvaavasti nimettyjä ja noudattaa
-    johdonmukaisia nimeämiskäytäntöjä
--   ohjelmiston pitää olla organisoitu komponentteihin niin, että turhalta toistolta
-    vältytään
-
 ## Testaus
 
-Tässä kohdin selvitetään, miten ohjelmiston oikea toiminta varmistetaan
-testaamalla projektin aikana: millaisia testauksia tehdään ja missä vaiheessa.
-Testauksen tarkemmat sisällöt ja testisuoritusten tulosten raportit kirjataan
-erillisiin dokumentteihin.
-
-Tänne kirjataan myös lopuksi järjestelmän tunnetut ongelmat, joita ei ole korjattu.
-
-## Asennustiedot
-
-Järjestelmän asennus on syytä dokumentoida kahdesta näkökulmasta:
-
--   järjestelmän kehitysympäristö: miten järjestelmän kehitysympäristön saisi
-    rakennettua johonkin toiseen koneeseen
-
--   järjestelmän asentaminen tuotantoympäristöön: miten järjestelmän saisi
-    asennettua johonkin uuteen ympäristöön.
-
-Asennusohjeesta tulisi ainakin käydä ilmi, miten käytettävä tietokanta ja
-käyttäjät tulee ohjelmistoa asentaessa määritellä (käytettävä tietokanta,
-käyttäjätunnus, salasana, tietokannan luonti yms.).
+Käytetään JHipsterin oletuksena luomia testejä.
 
 ## Käynnistys- ja käyttöohje
 
-Tyypillisesti tässä riittää kertoa ohjelman käynnistykseen tarvittava URL sekä
-mahdolliset kirjautumiseen tarvittavat tunnukset. Jos järjestelmän
-käynnistämiseen tai käyttöön liittyy joitain muita toimenpiteitä tai toimintajärjestykseen liittyviä asioita, nekin kerrotaan tässä yhteydessä.
+Back end -sovellus käynnistyy komentorivillä komennoilla:
 
-Usko tai älä, tulet tarvitsemaan tätä itsekin, kun tauon jälkeen palaat
-järjestelmän pariin !
+- kehitysympäristö: `./mvnw`
+- tuotantoympäristö: `./mvnw -Pprod`
 
-
-Back end sovellus käynnistyy komentorivillä komennolla "./mvnw" osoitteessa "localhost:8080" ja front end -sovellus käynnistyy komennolla "npm start" osoitteessa "localhost:"
-
-Sovellus on käytettävissä myös osoitteessa: "tähän tulee heroku tms. osoite"
--->
+Front end -sovellus käynnistyy komennolla `npm start`, aja tarvittaessa `npm install`
