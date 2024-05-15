@@ -11,6 +11,27 @@ Sovelluksessa on palvelinpuolella käytössä Spring Boot ja kehitysvaiheessa k�
 
 ## Käyttöliittymä
 
+![image](https://github.com/softalaRyhma2/SR2/assets/71691245/5e29e11f-5422-4a8f-8473-6c84a0870503)
+
+![image](https://github.com/softalaRyhma2/SR2/assets/71691245/aefa306e-b81c-493c-99a2-0df9915ea461)
+
+![image](https://github.com/softalaRyhma2/SR2/assets/71691245/4b5495f9-17c7-4463-9b90-01d9ffc22b7c)
+
+![image](https://github.com/softalaRyhma2/SR2/assets/71691245/06ce2478-4b3e-4e26-8708-f43a63e27a27)
+
+![image](https://github.com/softalaRyhma2/SR2/assets/71691245/4052caf4-0031-4444-8597-47dc58e0819b)
+
+![image](https://github.com/softalaRyhma2/SR2/assets/71691245/11b4e5d1-56c6-422f-8026-1fb599a072d8)
+
+![image](https://github.com/softalaRyhma2/SR2/assets/71691245/21689905-3492-4734-8eef-49b64454cc73)
+
+![image](https://github.com/softalaRyhma2/SR2/assets/71691245/cde916be-b210-463d-96ed-9c95576b99d0)
+
+![image](https://github.com/softalaRyhma2/SR2/assets/71691245/b062ed7d-6690-479f-9b91-a3b3bf138b7a)
+
+![image](https://github.com/softalaRyhma2/SR2/assets/71691245/27c30781-96a6-4e78-96d8-bb6cb6da0c16)
+
+
 ### Käyttöliitymän prototyyppi ja julkaisu
 
 #### Prototyyppi:
