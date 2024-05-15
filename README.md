@@ -112,9 +112,11 @@ _Kuljetusliike voi:_
 
 #### Luokkakaavio
 
-<!--![batteryV2-luokkakaavio drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/e891cb36-1515-4cb8-ac70-edafe5854788)-->
+<!--![batteryV2-luokkakaavio drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/e891cb36-1515-4cb8-ac70-edafe5854788)
 
-![batteryV3-1 4 2024 versio3 drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/eb5158a7-302a-46a7-a40a-07325c8dffc7)
+![batteryV3-1 4 2024 versio3 drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/eb5158a7-302a-46a7-a40a-07325c8dffc7)-->
+
+![batteryV4-15 5 2024 drawio](https://github.com/softalaRyhma2/SR2/assets/71691245/acde7a40-1843-4ff1-b8fd-6f315555d93f)
 
 #### Javakaavio
 
