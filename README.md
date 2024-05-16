@@ -120,7 +120,8 @@ _Kuljetusliike voi:_
 
 #### Javakaavio
 
-![javachart_battery-v3 drawio](https://github.com/softalaRyhma2/SR2/assets/77851668/92e1971a-f4b4-46cc-8832-25952cb2a530)
+![javachart_battery-v4 drawio](https://github.com/softalaRyhma2/SR2/assets/77851668/a9027709-188f-494b-b0fb-8b547949a5bb)
+
 
 ## REST-Dokumentaatio
 
